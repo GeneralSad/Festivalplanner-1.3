@@ -6,5 +6,6 @@ public class Main
         System.out.println("Martijn has entered the chat");
         System.out.println("Luuk dfjkdfjsd");
         System.out.println("ook hallo, van ewout");
+        System.out.println("Kusjes van Leon");
     }
 }
