@@ -1,4 +1,5 @@
 package Simulator;
 
-public class Simulator {
+public class Simulator
+{
 }

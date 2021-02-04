@@ -1,4 +1,5 @@
 package Data;
 
-public class Data {
+public class Data
+{
 }
