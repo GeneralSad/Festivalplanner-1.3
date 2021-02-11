@@ -21,9 +21,14 @@ public class GUI extends Application
     public void start(Stage stage) throws Exception
     {
         TabPane tabPane = new TabPane();
+        tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+
         FlowPane canvasContainer = new FlowPane();
         canvasContainer.getChildren().add(new MainWindow(canvasContainer));
         tabPane.getTabs().add(new Tab("Rooster", canvasContainer));
+
+        tabPane.getTabs().add(new Tab("Testing", new FlowPane()));
+
 
         Scene scene = new Scene(tabPane, 800, 600);
         stage.setScene(scene);
