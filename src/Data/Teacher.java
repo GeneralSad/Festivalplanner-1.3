@@ -1,6 +1,8 @@
 package Data;
 
-public class Teacher
+import java.io.Serializable;
+
+public class Teacher implements Serializable
 {
 
     private String name;
