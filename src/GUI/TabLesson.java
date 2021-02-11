@@ -34,6 +34,7 @@ public class TabLesson extends PopUpTab
         //left side of the menu lesson
         Label currentLesson = new Label("Bestaande Lessen");
         ListView listView = new ListView();
+        listView.setPrefWidth(500);
 
 
         VBox leftVbox = new VBox();
@@ -54,7 +55,7 @@ public class TabLesson extends PopUpTab
         middleVbox.getChildren().addAll(selectedLesson, lessonData, deleteSelected);
         middleVbox.setSpacing(spacingDistance);
         middleVbox.setPadding(new Insets(10, 10, 10, 10));
-
+        
 
         //right side of menu lesson
         Label newLesson = new Label("Nieuwe les");
@@ -106,6 +107,10 @@ public class TabLesson extends PopUpTab
         return mainPane;
     }
 
+    /**
+     * deze methode is tijdelijk want deze moet observable worden zodat het klassen ziet als er nieuwe worden toegevoeg
+     * @return
+     */
     public VBox selectClass(){
        VBox classselector = new VBox();
        classselector.setSpacing(5);
