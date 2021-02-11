@@ -1,13 +1,18 @@
 package Data;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Schedule
+public class Schedule implements Serializable
 {
 
     private ArrayList<Lesson> lessons;
     private ArrayList<Teacher> teachers;
     private ArrayList<Group> groups;
+
+    public Schedule()
+    {
+    }
 
     public Schedule(ArrayList<Lesson> lessons, ArrayList<Teacher> teachers, ArrayList<Group> groups)
     {
@@ -16,27 +21,33 @@ public class Schedule
         this.groups = groups;
     }
 
-    public void addTeacher(Teacher teacher) {
+    public void addTeacher(Teacher teacher)
+    {
         teachers.add(teacher);
     }
 
-    public void addLesson(Lesson lesson){
+    public void addLesson(Lesson lesson)
+    {
         lessons.add(lesson);
     }
 
-    public void addGroup (Group group) {
+    public void addGroup(Group group)
+    {
         groups.add(group);
     }
 
-    public void removeTeacher(Teacher teacher) {
+    public void removeTeacher(Teacher teacher)
+    {
         teachers.remove(teacher);
     }
 
-    public void removeLesson(Lesson lesson){
+    public void removeLesson(Lesson lesson)
+    {
         lessons.remove(lesson);
     }
 
-    public void removeGroup (Group group) {
+    public void removeGroup(Group group)
+    {
         groups.remove(group);
     }
 
