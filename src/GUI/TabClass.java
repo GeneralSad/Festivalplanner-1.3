@@ -1,26 +1,19 @@
 package GUI;
 
-import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 
-public class TabTeacher extends PopUpTab
+public class TabClass extends PopUpTab
 {
-    protected TabTeacher()
+    public TabClass()
     {
-        super.setPopUpName("Docenten");
+        super.setPopUpName("Klassen");
     }
-
 
     @Override
     protected BorderPane getPane()
     {
         BorderPane mainPane = new BorderPane();
-        Scene scene = new Scene(mainPane);
         return mainPane;
 
     }
-
-
-
-
 }

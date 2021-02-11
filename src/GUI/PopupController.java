@@ -16,11 +16,13 @@ public class PopupController
 
     protected PopupController()
     {
-        TabLesson popUpLesson = new TabLesson(this);
-        TabTeacher tabTeacher = new TabTeacher(this);
+        TabLesson popUpLesson = new TabLesson();
+        TabTeacher tabTeacher = new TabTeacher();
+        TabClass tabClass = new TabClass();
 
         popups.add(popUpLesson);
         popups.add(tabTeacher);
+        popups.add(tabClass);
     }
 
     protected Stage popupWindowStage()
