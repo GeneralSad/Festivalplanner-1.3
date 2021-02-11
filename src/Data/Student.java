@@ -5,13 +5,11 @@ public class Student
 
     private String name;
     private int age;
-    private Group group;
 
     public Student(String name, int age, Group group)
     {
         this.name = name;
         this.age = age;
-        this.group = group;
     }
 
     public String getName()
@@ -34,13 +32,4 @@ public class Student
         this.age = age;
     }
 
-    public Group getGroup()
-    {
-        return group;
-    }
-
-    public void setGroup(Group group)
-    {
-        this.group = group;
-    }
 }

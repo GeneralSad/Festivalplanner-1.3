@@ -17,6 +17,10 @@ public class Group
         students.add(student);
     }
 
+    public void removeStudent(Student student) {
+        students.remove(student);
+    }
+
     public String getGroupName()
     {
         return className;

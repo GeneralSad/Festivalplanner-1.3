@@ -1,6 +1,7 @@
 package Data;
 
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class Lesson
@@ -23,8 +24,6 @@ public class Lesson
 
     public Lesson(LocalTime beginTime, LocalTime endTime, Teacher teacher, Classroom classroom, Group className)
     {
-
-
         this.beginTime = beginTime;
         this.endTime = endTime;
         this.teacher = teacher;
@@ -35,6 +34,19 @@ public class Lesson
 
     public void addGroup(Group group) {
         this.groups.add(group);
+    }
+
+    public String getFormatBeginTime() {
+        return formatTimeString(this.beginTime);
+    }
+
+    public String getFormatEndTime() {
+        return formatTimeString(this.endTime);
+    }
+
+    private String formatTimeString(LocalTime localTime) {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
+        return localTime.format(dtf);
     }
 
     @Override
