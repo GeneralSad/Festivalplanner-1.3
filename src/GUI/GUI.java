@@ -1,12 +1,14 @@
 package GUI;
 
-import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 public class GUI extends Application
@@ -23,14 +25,18 @@ public class GUI extends Application
         TabPane tabPane = new TabPane();
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
-        FlowPane canvasContainer = new FlowPane();
-        canvasContainer.getChildren().add(new MainWindow(canvasContainer));
+        BorderPane canvasContainer = new BorderPane();
+        canvasContainer.setCenter(new MainWindow(canvasContainer));
+        HBox changesButtonContainer = new HBox();
+        changesButtonContainer.getChildren().add(new Button("Wijzingen"));
+        canvasContainer.setBottom(changesButtonContainer);
         tabPane.getTabs().add(new Tab("Rooster", canvasContainer));
 
-        tabPane.getTabs().add(new Tab("Testing", new FlowPane()));
+        FlowPane test = new FlowPane();
+        test.getChildren().add(new TextField("testing"));
+        tabPane.getTabs().add(new Tab("Testing", test));
 
-
-        Scene scene = new Scene(tabPane, 800, 600);
+        Scene scene = new Scene(tabPane);
         stage.setScene(scene);
         stage.setTitle("School simulatie");
         stage.show();
