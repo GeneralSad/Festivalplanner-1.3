@@ -12,12 +12,14 @@ import javafx.stage.Stage;
 public class GUI extends Application
 {
 
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
         launch(GUI.class);
     }
 
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) throws Exception
+    {
         TabPane tabPane = new TabPane();
         FlowPane canvasContainer = new FlowPane();
         canvasContainer.getChildren().add(new MainWindow(canvasContainer));
