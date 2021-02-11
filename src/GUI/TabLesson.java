@@ -1,26 +1,24 @@
 package GUI;
 
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
-public class PopUpLesson
+public class TabLesson extends PopUpTab
 {
-    PopupWindow popupWindow;
 
 
-    public PopUpLesson(PopupWindow popupWindow)
+    protected TabLesson(PopupController popupController)
     {
-        this.popupWindow = popupWindow;
+        super.setPopUpName("Lessen");
     }
 
-    protected Scene getScene()
+    @Override
+    protected BorderPane getPane()
     {
 
         BorderPane mainPane = new BorderPane();
-        mainPane.setTop(this.popupWindow.getMenubar());
 
 
         VBox vBox = new VBox();
@@ -31,9 +29,8 @@ public class PopUpLesson
         vBox.getChildren().addAll(label, listView);
         vBox.setSpacing(10);
 
-        Scene scene = new Scene(mainPane);
 
-        return  scene;
+        return mainPane;
 
 
     }

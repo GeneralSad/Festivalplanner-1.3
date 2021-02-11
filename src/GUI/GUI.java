@@ -19,11 +19,11 @@ public class GUI extends Application
         BorderPane mainPane = new BorderPane();
         Scene scene = new Scene(mainPane);
 
-        PopupWindow popupWindow = new PopupWindow();
+        PopupController popupController = new PopupController();
         stage.setScene(scene);
         stage.setTitle("Fading image");
         //stage.show();
-        stage = popupWindow.popupWindowStage();
+        stage = popupController.popupWindowStage();
         stage.show();
 
 
