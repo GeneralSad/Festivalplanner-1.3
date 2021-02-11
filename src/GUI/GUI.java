@@ -12,13 +12,14 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
+import javax.xml.crypto.Data;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
 public class GUI extends Application
 {
-
     private Schedule schedule;
+    private String filePath = "src/Data/storedSchedule";
 
     public static void main(String[] args)
     {
@@ -29,7 +30,6 @@ public class GUI extends Application
     public void start(Stage stage) throws Exception
     {
         // probeer een schedule te laden
-
         initialise();
 
         TabPane tabPane = new TabPane();
@@ -37,9 +37,16 @@ public class GUI extends Application
 
         BorderPane canvasContainer = new BorderPane();
         canvasContainer.setCenter(new MainWindow(canvasContainer, this.schedule));
-        HBox changesButtonContainer = new HBox();
-        changesButtonContainer.getChildren().add(new Button("Wijzingen"));
-        canvasContainer.setBottom(changesButtonContainer);
+
+        HBox bottomHBox = new HBox();
+        bottomHBox.getChildren().add(new Button("Wijzingen"));
+        Button saveScheduleButton = new Button("Save Scheduel");
+        saveScheduleButton.setOnAction(event -> {
+            DataStorage.saveSchedule(this.filePath, this.schedule);
+        });
+        bottomHBox.getChildren().add(saveScheduleButton);
+        canvasContainer.setBottom(bottomHBox);
+
         tabPane.getTabs().add(new Tab("Rooster", canvasContainer));
 
         FlowPane test = new FlowPane();
@@ -53,30 +60,37 @@ public class GUI extends Application
     }
 
     private void initialise() {
-        ArrayList<Teacher> teachers = new ArrayList<>();
-        teachers.add(new Teacher("Etiënne", 30, "Hardware"));
-        teachers.add(new Teacher("Johan", 36, "Graphics"));
-        teachers.add(new Teacher("Maurice", -1, "Programmeren"));
-        ArrayList<Group> groups = new ArrayList<>();
-        groups.add(new Group("C1"));
-        groups.add(new Group("C2"));
-        groups.add(new Group("C3"));
-        groups.add(new Group("C4"));
-        ArrayList<Classroom> classrooms = new ArrayList<>();
-        classrooms.add(new Classroom(1));
-        classrooms.add(new Classroom(2));
-        classrooms.add(new Classroom(3));
-        classrooms.add(new Classroom(4));
-        classrooms.add(new Classroom(5));
-        ArrayList<Lesson> lessons = new ArrayList<>();
-        lessons.add(new Lesson(LocalTime.of(15, 30), LocalTime.of(16, 30), teachers.get(0), classrooms.get(0), groups));
-        lessons.add(new Lesson(LocalTime.of(9, 00), LocalTime.of(10, 0), teachers.get(1), classrooms.get(1), groups.get(1)));
-        lessons.add(new Lesson(LocalTime.of(10, 00), LocalTime.of(11, 0), teachers.get(2), classrooms.get(2), groups.get(0)));
-        lessons.add(new Lesson(LocalTime.of(10, 00), LocalTime.of(12, 0), teachers.get(0), classrooms.get(3), groups.get(3)));
-        lessons.add(new Lesson(LocalTime.of(12, 30), LocalTime.of(13, 30), teachers.get(1), classrooms.get(4), groups.get(2)));
-        lessons.add(new Lesson(LocalTime.of(13, 30), LocalTime.of(14, 30), teachers.get(2), classrooms.get(3), groups.get(0)));
-        lessons.add(new Lesson(LocalTime.of(16, 30), LocalTime.of(17, 30), teachers.get(0), classrooms.get(2), groups));
-        lessons.add(new Lesson(LocalTime.of(11, 00), LocalTime.of(12, 00), teachers.get(0), classrooms.get(0), groups));
-        this.schedule = new Schedule(lessons, teachers, groups);
+        this.schedule = DataStorage.loadSchedule(this.filePath);
+        if (this.schedule == null)
+        {
+            System.out.println("Couldn't load a schedule");
+            ArrayList<Teacher> teachers = new ArrayList<>();
+            teachers.add(new Teacher("Etiënne", 30, "Hardware"));
+            teachers.add(new Teacher("Johan", 36, "Graphics"));
+            teachers.add(new Teacher("Maurice", -1, "Programmeren"));
+            ArrayList<Group> groups = new ArrayList<>();
+            groups.add(new Group("C1"));
+            groups.add(new Group("C2"));
+            groups.add(new Group("C3"));
+            groups.add(new Group("C4"));
+            ArrayList<Classroom> classrooms = new ArrayList<>();
+            classrooms.add(new Classroom(1));
+            classrooms.add(new Classroom(2));
+            classrooms.add(new Classroom(3));
+            classrooms.add(new Classroom(4));
+            classrooms.add(new Classroom(5));
+            ArrayList<Lesson> lessons = new ArrayList<>();
+            lessons.add(new Lesson(LocalTime.of(15, 30), LocalTime.of(16, 30), teachers.get(0), classrooms.get(0), groups));
+            lessons.add(new Lesson(LocalTime.of(9, 00), LocalTime.of(10, 0), teachers.get(1), classrooms.get(1), groups.get(1)));
+            lessons.add(new Lesson(LocalTime.of(10, 00), LocalTime.of(11, 0), teachers.get(2), classrooms.get(2), groups.get(0)));
+            lessons.add(new Lesson(LocalTime.of(10, 00), LocalTime.of(12, 0), teachers.get(0), classrooms.get(3), groups.get(3)));
+            lessons.add(new Lesson(LocalTime.of(12, 30), LocalTime.of(13, 30), teachers.get(1), classrooms.get(4), groups.get(2)));
+            lessons.add(new Lesson(LocalTime.of(13, 30), LocalTime.of(14, 30), teachers.get(2), classrooms.get(3), groups.get(0)));
+            lessons.add(new Lesson(LocalTime.of(16, 30), LocalTime.of(17, 30), teachers.get(0), classrooms.get(2), groups));
+            lessons.add(new Lesson(LocalTime.of(11, 00), LocalTime.of(12, 00), teachers.get(0), classrooms.get(0), groups));
+            this.schedule = new Schedule(lessons, teachers, groups);
+        } else {
+            System.out.println("properly loaded a schedule");
+        }
     }
 }

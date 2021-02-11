@@ -8,7 +8,7 @@ import java.io.ObjectOutputStream;
 public class DataStorage
 {
 
-    public void saveSchedule(String filePath, Schedule schedule) throws Exception
+    public static void saveSchedule(String filePath, Schedule schedule)
     {
 
         try
@@ -24,7 +24,7 @@ public class DataStorage
 
     }
 
-    public Schedule loadSchedule(String filePath) throws Exception
+    public static Schedule loadSchedule(String filePath)
     {
 
         try
