@@ -13,9 +13,9 @@ public class DataStorage
 
         try
         {
-            FileOutputStream fos = new FileOutputStream(filePath);
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(schedule);
+            FileOutputStream fileOutputStream = new FileOutputStream(filePath);
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+            objectOutputStream.writeObject(schedule);
         }
         catch (Exception e)
         {
@@ -29,10 +29,10 @@ public class DataStorage
 
         try
         {
-            FileInputStream fis = new FileInputStream(filePath);
-            ObjectInputStream ois = new ObjectInputStream(fis);
+            FileInputStream fileInputStream = new FileInputStream(filePath);
+            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
 
-            return (Schedule) ois.readObject();
+            return (Schedule) objectInputStream.readObject();
         }
         catch (Exception e)
         {
