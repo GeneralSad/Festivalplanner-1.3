@@ -40,7 +40,6 @@ public class TabTeacher extends PopUpTab
         Label selectedTeacher = new Label("Geselecteerde Docent");
         Label teacherData = new Label();
 
-        PopupController.textEditor(selectedTeacher,-1,"test");
 
 
         Button deleteSelected = new Button("Verwijder Docent");
