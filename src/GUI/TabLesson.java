@@ -46,7 +46,7 @@ public class TabLesson extends PopUpTab
         //middle side of menu lesson
         Label selectedLesson = new Label("Geselecteerde les");
         TextArea lessonData = new TextArea();
-        lessonData.setMaxWidth(250);
+        lessonData.setMaxWidth(500);
         lessonData.setPrefHeight(400);
         lessonData.setEditable(false);
         Button deleteSelected = new Button("Verwijder les");
@@ -55,7 +55,7 @@ public class TabLesson extends PopUpTab
         middleVbox.getChildren().addAll(selectedLesson, lessonData, deleteSelected);
         middleVbox.setSpacing(spacingDistance);
         middleVbox.setPadding(new Insets(10, 10, 10, 10));
-        
+        middleVbox.setMinWidth(500);
 
         //right side of menu lesson
         Label newLesson = new Label("Nieuwe les");
