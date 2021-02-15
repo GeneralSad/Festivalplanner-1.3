@@ -100,9 +100,7 @@ public class TabLesson extends PopUpTab
         mainPane.setPadding(new Insets(10, 500, 10, 10));
 
 
-        deleteSelected.setOnAction(event -> {
 
-        });
 
         return mainPane;
     }
