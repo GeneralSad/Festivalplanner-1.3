@@ -3,6 +3,7 @@ package GUI;
 import Data.Group;
 import Data.Schedule;
 import Data.Student;
+import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
@@ -36,6 +37,7 @@ public class TabClass extends PopUpTab
 
         Label currentLesson = new Label("Bestaande klassen");
         ListView<Group> listViewClass = new ListView<>();
+        listViewClass.setItems(FXCollections.observableArrayList(schedule.getGroups()));
         listViewClass.setPrefWidth(250);
 
 
@@ -55,9 +57,10 @@ public class TabClass extends PopUpTab
         deleteClass.setOnAction(event -> {
 
             schedule.removeGroup(listViewClass.getSelectionModel().getSelectedItem());
+            listViewClass.getItems().clear();
+            listViewClass.setItems(FXCollections.observableArrayList(this.schedule.getGroups()));
 
         });
-
 
         VBox leftVboxStudent = new VBox();
         leftVboxStudent.getChildren().addAll(selectedClass, listViewStudent,deleteClass);
@@ -85,6 +88,8 @@ public class TabClass extends PopUpTab
             schedule.getGroups().get(listViewClass.getSelectionModel().getSelectedIndex()).removeStudent(listViewStudent.getSelectionModel().getSelectedItem());
 
         });
+
+
 
         VBox middleVboxStudent = new VBox();
         middleVboxStudent.getChildren().addAll(selectedStudent, studentData, deleteStudent);
