@@ -16,12 +16,14 @@ public class TabClass extends PopUpTab
 {
     private int spacingDistance = 10;
     private ArrayList<String> classes = new ArrayList<>();
+    private TabLesson tabLesson;
     Schedule schedule;
 
     public TabClass(Schedule schedule)
     {
         super.setPopUpName("Klassen");
         this.schedule = schedule;
+        this.tabLesson = new TabLesson(schedule);
     }
 
     @Override
@@ -63,6 +65,7 @@ public class TabClass extends PopUpTab
             schedule.removeGroup(listViewClass.getSelectionModel().getSelectedItem());
             listViewClass.getItems().clear();
             listViewClass.setItems(FXCollections.observableArrayList(this.schedule.getGroups()));
+            tabLesson.classUpdater();
         });
 
         VBox leftVboxStudent = new VBox();
@@ -97,6 +100,7 @@ public class TabClass extends PopUpTab
             schedule.getGroups().get(listViewClass.getSelectionModel().getSelectedIndex()).removeStudent(listViewStudent.getSelectionModel().getSelectedItem());
             listViewStudent.getItems().clear();
             listViewStudent.setItems(FXCollections.observableArrayList(group.getStudents()));
+            tabLesson.classUpdater();
         });
 
         VBox middleVboxStudent = new VBox();
@@ -127,6 +131,7 @@ public class TabClass extends PopUpTab
             schedule.getGroups().get(listViewClass.getSelectionModel().getSelectedIndex()).addStudent(new Student(inputName.getText(), Integer.parseInt(inputAge.getText()), listViewClass.getSelectionModel().getSelectedItem()));
             listViewStudent.getItems().clear();
             listViewStudent.setItems(FXCollections.observableArrayList(group.getStudents()));
+            tabLesson.classUpdater();
         });
 
         VBox addersStudenten = new VBox();

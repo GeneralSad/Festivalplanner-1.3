@@ -20,6 +20,9 @@ public class PopupController extends Stage
 
     protected PopupController(Stage mainstage, Schedule schedule)
     {
+        stage.setHeight(720);
+        stage.setWidth(1280);
+
 
         TabLesson popUpLesson = new TabLesson(schedule);
         TabTeacher tabTeacher = new TabTeacher(schedule);
@@ -30,8 +33,7 @@ public class PopupController extends Stage
         popups.add(tabClass);
 
 
-        stage.setHeight(720);
-        stage.setWidth(1280);
+
         TabPane tabPane = new TabPane();
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
@@ -48,6 +50,8 @@ public class PopupController extends Stage
         this.initModality(Modality.APPLICATION_MODAL);
         this.initOwner(mainstage);
         this.showAndWait();
+
+
     }
 
 

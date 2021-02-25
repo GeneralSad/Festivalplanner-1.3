@@ -19,8 +19,12 @@ public class TabLesson extends PopUpTab
     //components
     private ListView listView = new ListView();
     private ArrayList<Group> selectedGroups = new ArrayList<>();
+    private ComboBox<Teacher> teacherSelect = new ComboBox<>();
     private Lesson selected;
     private TextArea lessonData = new TextArea();
+    private VBox allGroups = new VBox();
+
+    //rooster
     Schedule schedule;
 
     protected TabLesson(Schedule schedule)
@@ -29,6 +33,7 @@ public class TabLesson extends PopUpTab
         this.schedule = schedule;
         this.selected = null;
         this.listView.setItems(FXCollections.observableArrayList(this.schedule.getLessons()));
+        classUpdater();
     }
 
     @Override
@@ -99,7 +104,6 @@ public class TabLesson extends PopUpTab
                 LocalTime.of(15, 30), LocalTime.of(16, 00), LocalTime.of(16, 30), LocalTime.of(17, 00), LocalTime.of(17, 30));
 
         Label teacherBox = new Label("Kies een docent");
-        ComboBox<Teacher> teacherSelect = new ComboBox<>();
         teacherSelect.setMinWidth(200);
 
         teacherSelect.getItems().addAll(schedule.getTeachers());
@@ -133,7 +137,7 @@ public class TabLesson extends PopUpTab
 
 
         VBox rightVbox = new VBox();
-        rightVbox.getChildren().addAll(newLesson, startLesson, startTimeSelect, endLesson, endTimeSelect, teacherBox, teacherSelect, locationBox, locationSelect, selectClass(), lessonAdder);
+        rightVbox.getChildren().addAll(newLesson, startLesson, startTimeSelect, endLesson, endTimeSelect, teacherBox, teacherSelect, locationBox, locationSelect, allGroups, lessonAdder);
 
         rightVbox.setSpacing(spacingDistance);
 
@@ -150,16 +154,18 @@ public class TabLesson extends PopUpTab
         return mainPane;
     }
 
-    /**
-     * deze methode is tijdelijk want deze moet observable worden zodat het klassen ziet als er nieuwe worden toegevoegd
-     *
-     * @return
-     */
-    public VBox selectClass()
-    {
-        VBox classSelector = new VBox();
-        classSelector.setSpacing(5);
-        classSelector.setPrefHeight(110);
+
+    //TODO update methodes maken zodat de data overeen komt met opgevendata in de andere tabs
+
+    public void teacherUpdater(){
+        teacherSelect.getItems().clear();
+        teacherSelect.getItems().addAll(schedule.getTeachers());
+    }
+
+    public void classUpdater(){
+        allGroups.getChildren().clear();
+        allGroups.setSpacing(5);
+        allGroups.setPrefHeight(110);
         for (int i = 0; i < this.schedule.getGroups().size(); i++)
         {
             CheckBox checkBox = new CheckBox(this.schedule.getGroups().get(i).getGroupName());
@@ -171,9 +177,8 @@ public class TabLesson extends PopUpTab
                     selectedGroups.remove(this.schedule.getGroups().get(index));
                 }
             });
-            classSelector.getChildren().add(checkBox);
+            allGroups.getChildren().add(checkBox);
         }
-        return classSelector;
     }
 
 }
