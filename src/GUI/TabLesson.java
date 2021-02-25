@@ -1,15 +1,7 @@
 package GUI;
 
-import Data.Lesson;
-import Data.Classroom;
-import Data.Lesson;
-import Data.Schedule;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableListValue;
-import javafx.beans.value.ObservableValue;
-import Data.Teacher;
-import javafx.collections.ObservableList;
-import javafx.collections.ObservableListBase;
+import Data.*;
+import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -18,52 +10,39 @@ import javafx.scene.layout.VBox;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class TabLesson extends PopUpTab
 {
-    private ListView listView = new ListView();
+    //distance
     private int spacingDistance = 10;
-    private ArrayList<String> classes = new ArrayList<>();
-    private HashMap<String, Lesson> data = new HashMap<>();
+
+    //components
+    private ListView listView = new ListView();
+    private ArrayList<Group> selectedGroups = new ArrayList<>();
     private Lesson selected;
-    private  TextArea lessonData = new TextArea();
+    private TextArea lessonData = new TextArea();
     Schedule schedule;
 
     protected TabLesson(Schedule schedule)
     {
         super.setPopUpName("Lessen");
         this.schedule = schedule;
-        classes.add("Tivt1A");
-        classes.add("Tivt1B");
-        classes.add("Tivt1C");
-
-        for (int i = 0; i < this.schedule.getLessons().size(); i++)
-        {
-            data.put(this.schedule.getLessons().get(i).toShortString(), this.schedule.getLessons().get(i));
-        }
-
         this.selected = null;
-
-
+        this.listView.setItems(FXCollections.observableArrayList(this.schedule.getLessons()));
     }
 
     @Override
     protected BorderPane getPane()
     {
-
+        //mainpane
         BorderPane mainPane = new BorderPane();
 
         //left side of the menu lesson
         Label currentLesson = new Label("Bestaande Lessen");
-        for (int i = 0; i < this.schedule.getLessons().size(); i++)
-        {
-            listView.getItems().add(this.schedule.getLessons().get(i).toShortString());
-        }
         listView.setPrefWidth(500);
 
+        //listens to your selectoin on the menu
         listView.getSelectionModel().selectedItemProperty().addListener((ov) -> {
-
             try
             {
                 int index = listView.getSelectionModel().getSelectedIndex();
@@ -72,9 +51,6 @@ public class TabLesson extends PopUpTab
             }catch (Exception e){
             }
         });
-
-
-
 
         VBox leftVbox = new VBox();
         leftVbox.getChildren().addAll(currentLesson, listView);
@@ -92,12 +68,8 @@ public class TabLesson extends PopUpTab
             if (selected != null)
             {
                 this.schedule.removeLesson(this.selected);
-                listView.getItems().clear();
                 lessonData.setText("");
-                for (int i = 0; i < this.schedule.getLessons().size(); i++)
-                {
-                    listView.getItems().add(this.schedule.getLessons().get(i).toShortString());
-                }
+                listView.getItems().remove(this.selected);
             }
         });
 
@@ -150,10 +122,15 @@ public class TabLesson extends PopUpTab
         Button lessonAdder = new Button("Voeg klas toe");
 
         lessonAdder.setOnAction(event -> {
+            try
+            {
+                this.schedule.addLesson(new Lesson(startTimeSelect.getValue(), endTimeSelect.getValue(), teacherSelect.getValue(), locationSelect.getValue(), this.selectedGroups));
+                listView.setItems(FXCollections.observableArrayList(this.schedule.getLessons()));
+            } catch (Exception e){
 
-            //schedule.addLesson(new Lesson(startTimeSelect.getValue(), endTimeSelect.getValue(), teacherSelect.getValue(), locationSelect.getValue(), ));
-
+            }
         });
+
 
         VBox rightVbox = new VBox();
         rightVbox.getChildren().addAll(newLesson, startLesson, startTimeSelect, endLesson, endTimeSelect, teacherBox, teacherSelect, locationBox, locationSelect, selectClass(), lessonAdder);
@@ -180,15 +157,23 @@ public class TabLesson extends PopUpTab
      */
     public VBox selectClass()
     {
-        VBox classselector = new VBox();
-        classselector.setSpacing(5);
-        classselector.setPrefHeight(110);
-        for (String string : classes)
+        VBox classSelector = new VBox();
+        classSelector.setSpacing(5);
+        classSelector.setPrefHeight(110);
+        for (int i = 0; i < this.schedule.getGroups().size(); i++)
         {
-            CheckBox box = new CheckBox(string);
-            classselector.getChildren().addAll(box);
+            CheckBox checkBox = new CheckBox(this.schedule.getGroups().get(i).getGroupName());
+            int index = i;
+            checkBox.setOnAction(event -> {
+                if (checkBox.isSelected()){
+                    selectedGroups.add(this.schedule.getGroups().get(index));
+                } else {
+                    selectedGroups.remove(this.schedule.getGroups().get(index));
+                }
+            });
+            classSelector.getChildren().add(checkBox);
         }
-        return classselector;
+        return classSelector;
     }
 
 }

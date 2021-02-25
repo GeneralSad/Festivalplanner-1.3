@@ -20,7 +20,11 @@ public class Lesson implements Serializable
         this.endTime = endTime;
         this.teacher = teacher;
         this.classroom = classroom;
-        this.groups = groups;
+        this.groups = new ArrayList<>();
+        for (Group group: groups)
+        {
+            this.groups.add(group);
+        }
     }
 
     public Lesson(LocalTime beginTime, LocalTime endTime, Teacher teacher, Classroom classroom, Group className)
