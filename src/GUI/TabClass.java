@@ -125,13 +125,17 @@ public class TabClass extends PopUpTab
 
         submitStudent.setOnAction(event -> {
 
-            //TODO: Error wanneer leerling wordt aangemaakt zonder klas te selecteren
+            if (listViewClass.getSelectionModel().getSelectedItem() == null) {
+                ErrorWindow errorWindow = new ErrorWindow("Error");
+                errorWindow.ErrorStage("Selecteer een klas.");
+            } else {
+                Group group = listViewClass.getSelectionModel().getSelectedItem();
+                schedule.getGroups().get(listViewClass.getSelectionModel().getSelectedIndex()).addStudent(new Student(inputName.getText(), Integer.parseInt(inputAge.getText()), listViewClass.getSelectionModel().getSelectedItem()));
+                listViewStudent.getItems().clear();
+                listViewStudent.setItems(FXCollections.observableArrayList(group.getStudents()));
+                tabLesson.classUpdater();
+            }
 
-            Group group = listViewClass.getSelectionModel().getSelectedItem();
-            schedule.getGroups().get(listViewClass.getSelectionModel().getSelectedIndex()).addStudent(new Student(inputName.getText(), Integer.parseInt(inputAge.getText()), listViewClass.getSelectionModel().getSelectedItem()));
-            listViewStudent.getItems().clear();
-            listViewStudent.setItems(FXCollections.observableArrayList(group.getStudents()));
-            tabLesson.classUpdater();
         });
 
         VBox addersStudenten = new VBox();

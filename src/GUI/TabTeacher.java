@@ -66,7 +66,6 @@ public class TabTeacher extends PopUpTab
             teacherData.setText("");
             listView.getItems().clear();
             listView.setItems(FXCollections.observableArrayList(this.schedule.getTeachers()));
-            tabLesson.teacherUpdater();
         });
 
         VBox middleVbox = new VBox();
@@ -100,13 +99,16 @@ public class TabTeacher extends PopUpTab
 
         addTeacherButton.setOnAction(event -> {
 
-            //TODO: Wanneer er een teacher wordt aangemaakt met een ongeldige leeftijd een error geven
-
-            schedule.addTeacher(new Teacher(nameField.getText(), Integer.parseInt(ageField.getText()), subjectField.getText()));
-            listView.getItems().clear();
-            teacherData.setText("");
-            listView.setItems(FXCollections.observableArrayList(this.schedule.getTeachers()));
-            tabLesson.teacherUpdater();
+            if (Integer.parseInt(ageField.getText()) <= 0) {
+                ErrorWindow errorWindow = new ErrorWindow("Error");
+                errorWindow.ErrorStage("Voer een geldige leeftijd in.");
+            } else {
+                schedule.addTeacher(new Teacher(nameField.getText(), Integer.parseInt(ageField.getText()), subjectField.getText()));
+                listView.getItems().clear();
+                teacherData.setText("");
+                listView.setItems(FXCollections.observableArrayList(this.schedule.getTeachers()));
+                tabLesson.teacherUpdater();
+            }
 
         });
 

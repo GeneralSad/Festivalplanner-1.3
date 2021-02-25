@@ -41,7 +41,7 @@ public class GUI extends Application
 
 
         HBox bottomHBox = new HBox();
-        Button wijzingen = new Button("Wijzingen");
+        Button wijzingen = new Button("Wijzigen");
         bottomHBox.getChildren().add(wijzingen);
         wijzingen.setOnAction(event ->
         {
@@ -49,7 +49,7 @@ public class GUI extends Application
         });
 
 
-        Button saveScheduleButton = new Button("Save Scheduel");
+        Button saveScheduleButton = new Button("Opslaan");
         saveScheduleButton.setOnAction(event ->
         {
             DataStorage.saveSchedule(this.filePath, this.schedule);

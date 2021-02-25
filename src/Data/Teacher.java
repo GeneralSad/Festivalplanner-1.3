@@ -52,7 +52,7 @@ public class Teacher implements Serializable
     }
 
     public String toDetailString() {
-        return "Name: " + this.name + "\nAge: " + this.age + "\nSubject: " + this.subject;
+        return "Naam: " + this.name + "\nLeeftijd: " + this.age + "\nVak: " + this.subject;
     }
 
 }
