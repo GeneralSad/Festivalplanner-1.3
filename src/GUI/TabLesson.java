@@ -154,9 +154,6 @@ public class TabLesson extends PopUpTab
         return mainPane;
     }
 
-
-    //TODO update methodes maken zodat de data overeen komt met opgevendata in de andere tabs
-
     public void teacherUpdater(){
         teacherSelect.getItems().clear();
         teacherSelect.getItems().addAll(schedule.getTeachers());

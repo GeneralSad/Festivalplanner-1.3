@@ -3,6 +3,7 @@ package GUI;
 import Data.*;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -11,6 +12,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import org.jfree.fx.FXGraphics2D;
+import sun.applet.Main;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -54,7 +57,12 @@ public class GUI extends Application
         {
             DataStorage.saveSchedule(this.filePath, this.schedule);
         });
+
+
+        Button reloadSchedule = new Button("Herladen");
+
         bottomHBox.getChildren().add(saveScheduleButton);
+        bottomHBox.getChildren().add(reloadSchedule);
         canvasContainer.setBottom(bottomHBox);
 
         tabPane.getTabs().add(new Tab("Rooster", canvasContainer));
@@ -66,6 +74,7 @@ public class GUI extends Application
         Scene scene = new Scene(tabPane);
         stage.setScene(scene);
         stage.setTitle("School simulatie");
+        stage.setMaximized(true);
         stage.show();
 
 

@@ -22,7 +22,6 @@ public class PopupController extends Stage
     {
         stage.setHeight(720);
         stage.setWidth(1280);
-
         TabLesson tabLesson = new TabLesson(schedule);
         TabLesson popUpLesson = tabLesson;
         TabTeacher tabTeacher = new TabTeacher(schedule, tabLesson);
@@ -43,7 +42,7 @@ public class PopupController extends Stage
         }
 
 
-        Scene scene = new Scene(tabPane);
+        Scene scene = new Scene(tabPane, 1280, 570);
 
         this.setScene(scene);
         this.setTitle("PopupController");

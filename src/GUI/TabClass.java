@@ -169,7 +169,7 @@ public class TabClass extends PopUpTab
         VBox addersClass = new VBox();
         addersClass.getChildren().addAll(newClass, inputClass);
         addersClass.setSpacing(spacingDistance);
-        addersClass.setPadding(new Insets(0,0, 300, 0));
+        addersClass.setPadding(new Insets(0,0, 338, 0));
 
         VBox addClass = new VBox();
         addClass.getChildren().addAll(newClas, addersClass, submitClass);
