@@ -45,4 +45,9 @@ public class Teacher implements Serializable
     {
         this.subject = subject;
     }
+
+    @Override
+    public String toString() {
+        return "Name: " + this.name + "\nAge: " + this.age + "\nSubject: " + this.subject;
+    }
 }

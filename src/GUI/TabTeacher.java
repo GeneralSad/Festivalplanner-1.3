@@ -2,6 +2,8 @@ package GUI;
 
 import Data.Schedule;
 import Data.Teacher;
+import javafx.collections.FXCollections;
+import javafx.embed.swt.FXCanvas;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -34,6 +36,7 @@ public class TabTeacher extends PopUpTab
         //left side of the menu teacher
         Label currentTeacher = new Label("Bestaande Docenten");
         ListView<Teacher> listView = new ListView<>();
+        listView.setItems(FXCollections.observableArrayList(this.schedule.getTeachers()));
 
 
         VBox leftVbox = new VBox();
@@ -45,6 +48,10 @@ public class TabTeacher extends PopUpTab
 
         Label selectedTeacher = new Label("Geselecteerde Docent");
         Label teacherData = new Label();
+        listView.getSelectionModel().selectedItemProperty().addListener((ov) -> {
+            int index = listView.getSelectionModel().getSelectedIndex();
+            teacherData.setText(listView.getItems().get(index).toString());
+        });
 
 
 
@@ -52,7 +59,11 @@ public class TabTeacher extends PopUpTab
 
         deleteSelected.setOnAction(event -> {
 
-            schedule.removeTeacher(listView.getSelectionModel().getSelectedItem());
+            this.schedule.removeTeacher(listView.getSelectionModel().getSelectedItem());
+            teacherData.setText("");
+            listView.getItems().clear();
+            listView.setItems(FXCollections.observableArrayList(this.schedule.getTeachers()));
+
 
         });
 
@@ -63,7 +74,7 @@ public class TabTeacher extends PopUpTab
         middleVbox.setMinWidth(500);
 
 
-        Label newTeacher = new Label("Nieuwe Docent");
+        Label newTeacher = new Label("Nieuwe Docent Toevoegen");
 
 
         VBox nameVBox = new VBox();
@@ -87,7 +98,10 @@ public class TabTeacher extends PopUpTab
 
         addTeacherButton.setOnAction(event -> {
 
-            schedule.addTeacher(new Teacher(teacherName.getText(), Integer.parseInt(teacherAge.getText()), teacherSubject.getText()));
+            schedule.addTeacher(new Teacher(nameField.getText(), Integer.parseInt(ageField.getText()), subjectField.getText()));
+            listView.getItems().clear();
+            teacherData.setText("");
+            listView.setItems(FXCollections.observableArrayList(this.schedule.getTeachers()));
 
         });
 
