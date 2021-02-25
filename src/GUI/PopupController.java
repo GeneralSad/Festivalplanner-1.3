@@ -23,10 +23,10 @@ public class PopupController extends Stage
         stage.setHeight(720);
         stage.setWidth(1280);
 
-
-        TabLesson popUpLesson = new TabLesson(schedule);
-        TabTeacher tabTeacher = new TabTeacher(schedule);
-        TabClass tabClass = new TabClass(schedule);
+        TabLesson tabLesson = new TabLesson(schedule);
+        TabLesson popUpLesson = tabLesson;
+        TabTeacher tabTeacher = new TabTeacher(schedule, tabLesson);
+        TabClass tabClass = new TabClass(schedule, tabLesson);
 
         popups.add(popUpLesson);
         popups.add(tabTeacher);

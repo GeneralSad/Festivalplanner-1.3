@@ -16,12 +16,14 @@ import javafx.scene.layout.VBox;
 public class TabTeacher extends PopUpTab
 {
     Schedule schedule;
+    private TabLesson tabLesson;
 
 
-    protected TabTeacher(Schedule schedule)
+    protected TabTeacher(Schedule schedule, TabLesson tabLesson)
     {
         super.setPopUpName("Docenten");
         this.schedule = schedule;
+        this.tabLesson =tabLesson;
     }
 
     private int spacingDistance = 10;
@@ -64,6 +66,7 @@ public class TabTeacher extends PopUpTab
             teacherData.setText("");
             listView.getItems().clear();
             listView.setItems(FXCollections.observableArrayList(this.schedule.getTeachers()));
+            tabLesson.teacherUpdater();
         });
 
         VBox middleVbox = new VBox();
@@ -103,7 +106,7 @@ public class TabTeacher extends PopUpTab
             listView.getItems().clear();
             teacherData.setText("");
             listView.setItems(FXCollections.observableArrayList(this.schedule.getTeachers()));
-
+            tabLesson.teacherUpdater();
 
         });
 

@@ -19,11 +19,11 @@ public class TabClass extends PopUpTab
     private TabLesson tabLesson;
     Schedule schedule;
 
-    public TabClass(Schedule schedule)
+    public TabClass(Schedule schedule, TabLesson tabLesson)
     {
         super.setPopUpName("Klassen");
         this.schedule = schedule;
-        this.tabLesson = new TabLesson(schedule);
+        this.tabLesson = tabLesson;
     }
 
     @Override
@@ -163,6 +163,7 @@ public class TabClass extends PopUpTab
             schedule.addGroup(new Group(inputClass.getText()));
             listViewClass.getItems().clear();
             listViewClass.setItems(FXCollections.observableArrayList(schedule.getGroups()));
+            tabLesson.classUpdater();
         });
 
         VBox addersClass = new VBox();
