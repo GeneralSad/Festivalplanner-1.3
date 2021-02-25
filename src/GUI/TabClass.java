@@ -133,7 +133,9 @@ public class TabClass extends PopUpTab
                 schedule.getGroups().get(listViewClass.getSelectionModel().getSelectedIndex()).addStudent(new Student(inputName.getText(), Integer.parseInt(inputAge.getText()), listViewClass.getSelectionModel().getSelectedItem()));
                 listViewStudent.getItems().clear();
                 listViewStudent.setItems(FXCollections.observableArrayList(group.getStudents()));
+
                 tabLesson.classUpdater();
+
             }
 
         });
