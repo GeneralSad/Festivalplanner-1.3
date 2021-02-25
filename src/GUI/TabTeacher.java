@@ -1,6 +1,7 @@
 package GUI;
 
 import Data.Schedule;
+import Data.Teacher;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -32,7 +33,7 @@ public class TabTeacher extends PopUpTab
 
         //left side of the menu teacher
         Label currentTeacher = new Label("Bestaande Docenten");
-        ListView listView = new ListView();
+        ListView<Teacher> listView = new ListView<>();
 
 
         VBox leftVbox = new VBox();
@@ -49,6 +50,11 @@ public class TabTeacher extends PopUpTab
 
         Button deleteSelected = new Button("Verwijder Docent");
 
+        deleteSelected.setOnAction(event -> {
+
+            schedule.removeTeacher(listView.getSelectionModel().getSelectedItem());
+
+        });
 
         VBox middleVbox = new VBox();
         middleVbox.getChildren().addAll(selectedTeacher, teacherData, deleteSelected);
@@ -78,6 +84,12 @@ public class TabTeacher extends PopUpTab
 
 
         Button addTeacherButton = new Button("Voeg docent toe");
+
+        addTeacherButton.setOnAction(event -> {
+
+            schedule.addTeacher(new Teacher(teacherName.getText(), Integer.parseInt(teacherAge.getText()), teacherSubject.getText()));
+
+        });
 
 
         VBox rightVbox = new VBox();

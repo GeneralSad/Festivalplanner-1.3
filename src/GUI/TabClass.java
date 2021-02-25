@@ -2,6 +2,7 @@ package GUI;
 
 import Data.Group;
 import Data.Schedule;
+import Data.Student;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
@@ -32,7 +33,7 @@ public class TabClass extends PopUpTab
         HBox classInfo = new HBox();
 
         Label currentLesson = new Label("Bestaande klassen");
-        ListView listViewClass = new ListView();
+        ListView<Group> listViewClass = new ListView<>();
         listViewClass.setPrefWidth(250);
 
 
@@ -44,10 +45,16 @@ public class TabClass extends PopUpTab
 
         //Geselecteerde klas listview
         Label selectedClass = new Label("Geselecteerde klas");
-        ListView listViewStudent = new ListView();
+        ListView<Student> listViewStudent = new ListView<>();
         listViewStudent.setPrefWidth(250);
 
         Button deleteClass = new Button("Verwijder klas");
+
+        deleteClass.setOnAction(event -> {
+
+            schedule.removeGroup(listViewClass.getSelectionModel().getSelectedItem());
+
+        });
 
 
         VBox leftVboxStudent = new VBox();
@@ -71,6 +78,12 @@ public class TabClass extends PopUpTab
 
         Button deleteStudent = new Button("Verwijder student");
 
+        deleteStudent.setOnAction(event -> {
+
+            schedule.getGroups().get(listViewClass.getSelectionModel().getSelectedIndex()).removeStudent(listViewStudent.getSelectionModel().getSelectedItem());
+
+        });
+
         VBox middleVboxStudent = new VBox();
         middleVboxStudent.getChildren().addAll(selectedStudent, studentData, deleteStudent);
         middleVboxStudent.setSpacing(spacingDistance);
@@ -90,6 +103,13 @@ public class TabClass extends PopUpTab
         inputAge.setMaxWidth(200);
 
         Button submitStudent = new Button("Voeg student toe");
+
+        submitStudent.setOnAction(event -> {
+
+            schedule.getGroups().get(listViewClass.getSelectionModel().getSelectedIndex()).addStudent(new Student(inputName.getText(), Integer.parseInt(inputAge.getText()), listViewClass.getSelectionModel().getSelectedItem()));
+
+        });
+
         VBox addersStudenten = new VBox();
         addersStudenten.getChildren().addAll(newName, inputName, newAge, inputAge);
         addersStudenten.setSpacing(spacingDistance);
@@ -114,6 +134,12 @@ public class TabClass extends PopUpTab
 
 
         Button submitClass = new Button("Voeg klas toe");
+
+        submitClass.setOnAction(event -> {
+
+            schedule.addGroup(new Group(inputClass.getText()));
+
+        });
 
         VBox addersClass = new VBox();
         addersClass.getChildren().addAll(newClass, inputClass);

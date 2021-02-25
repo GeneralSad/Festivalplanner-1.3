@@ -1,6 +1,9 @@
 package GUI;
 
+import Data.Classroom;
+import Data.Lesson;
 import Data.Schedule;
+import Data.Teacher;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -8,6 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 
 public class TabLesson extends PopUpTab
@@ -35,7 +39,7 @@ public class TabLesson extends PopUpTab
 
         //left side of the menu lesson
         Label currentLesson = new Label("Bestaande Lessen");
-        ListView listView = new ListView();
+        ListView<Lesson> listView = new ListView<>();
         listView.setPrefWidth(500);
 
 
@@ -53,6 +57,12 @@ public class TabLesson extends PopUpTab
         lessonData.setEditable(false);
         Button deleteSelected = new Button("Verwijder les");
 
+        deleteSelected.setOnAction(event -> {
+
+            schedule.removeLesson(listView.getSelectionModel().getSelectedItem());
+
+        });
+
         VBox middleVbox = new VBox();
         middleVbox.getChildren().addAll(selectedLesson, lessonData, deleteSelected);
         middleVbox.setSpacing(spacingDistance);
@@ -63,25 +73,52 @@ public class TabLesson extends PopUpTab
         Label newLesson = new Label("Nieuwe les");
 
         Label startLesson = new Label("Begintijd");
-        ComboBox startTimeSelect = new ComboBox();
+        ComboBox<LocalTime> startTimeSelect = new ComboBox<>();
         startTimeSelect.setMinWidth(200);
 
+        startTimeSelect.getItems().addAll(LocalTime.of(9, 00), LocalTime.of(9, 30), LocalTime.of(10, 00), LocalTime.of(10, 30), LocalTime.of(11, 00),
+                LocalTime.of(11, 30), LocalTime.of(12, 00),LocalTime.of(12, 30), LocalTime.of(13, 00), LocalTime.of(13, 30),LocalTime.of(14, 00),
+                LocalTime.of(15, 00), LocalTime.of(15, 30), LocalTime.of(16, 00), LocalTime.of(16, 30), LocalTime.of(17, 00));
+
         Label endLesson = new Label("Eindtijd");
-        ComboBox endTimeSelect = new ComboBox();
+        ComboBox<LocalTime> endTimeSelect = new ComboBox<>();
         endTimeSelect.setMinWidth(200);
 
+        endTimeSelect.getItems().addAll(LocalTime.of(9, 30), LocalTime.of(10, 00), LocalTime.of(10, 30), LocalTime.of(11, 00), LocalTime.of(11, 30),
+                LocalTime.of(12, 00),LocalTime.of(12, 30), LocalTime.of(13, 00), LocalTime.of(13, 30),LocalTime.of(14, 00), LocalTime.of(15, 00),
+                LocalTime.of(15, 30), LocalTime.of(16, 00), LocalTime.of(16, 30), LocalTime.of(17, 00), LocalTime.of(17, 30));
+
         Label teacherBox = new Label("Kies een docent");
-        ComboBox teacherSelect = new ComboBox();
+        ComboBox<Teacher> teacherSelect = new ComboBox<>();
         teacherSelect.setMinWidth(200);
 
+        teacherSelect.getItems().addAll(schedule.getTeachers());
+
         Label locationBox = new Label("Kies een lokaal");
-        ComboBox locationSelect = new ComboBox();
+        ComboBox<Classroom> locationSelect = new ComboBox<>();
         locationSelect.setMinWidth(200);
 
-        Button lessonadder = new Button("Voeg klas toe");
+        ArrayList<Classroom> classrooms = new ArrayList<>();
+
+        for (Lesson lesson : schedule.getLessons())
+        {
+            if (!classrooms.contains(lesson.getClassroom())) {
+                classrooms.add(lesson.getClassroom());
+            }
+        }
+
+        locationSelect.getItems().addAll(classrooms);
+
+        Button lessonAdder = new Button("Voeg klas toe");
+
+        lessonAdder.setOnAction(event -> {
+
+            //schedule.addLesson(new Lesson(startTimeSelect.getValue(), endTimeSelect.getValue(), teacherSelect.getValue(), locationSelect.getValue(), ));
+
+        });
 
         VBox rightVbox = new VBox();
-        rightVbox.getChildren().addAll(newLesson, startLesson, startTimeSelect, endLesson, endTimeSelect, teacherBox, teacherSelect, locationBox, locationSelect, selectClass(), lessonadder);
+        rightVbox.getChildren().addAll(newLesson, startLesson, startTimeSelect, endLesson, endTimeSelect, teacherBox, teacherSelect, locationBox, locationSelect, selectClass(), lessonAdder);
 
         rightVbox.setSpacing(spacingDistance);
 
@@ -99,7 +136,7 @@ public class TabLesson extends PopUpTab
     }
 
     /**
-     * deze methode is tijdelijk want deze moet observable worden zodat het klassen ziet als er nieuwe worden toegevoeg
+     * deze methode is tijdelijk want deze moet observable worden zodat het klassen ziet als er nieuwe worden toegevoegd
      *
      * @return
      */
