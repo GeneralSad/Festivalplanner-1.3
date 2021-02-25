@@ -1,5 +1,6 @@
 package GUI;
 
+import Data.Schedule;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
@@ -16,11 +17,13 @@ public class PopupController extends Stage
     private ArrayList<PopUpTab> popups = new ArrayList<>();
 
 
-    protected PopupController(Stage mainstage)
+
+    protected PopupController(Stage mainstage, Schedule schedule)
     {
-        TabLesson popUpLesson = new TabLesson();
-        TabTeacher tabTeacher = new TabTeacher();
-        TabClass tabClass = new TabClass();
+
+        TabLesson popUpLesson = new TabLesson(schedule);
+        TabTeacher tabTeacher = new TabTeacher(schedule);
+        TabClass tabClass = new TabClass(schedule);
 
         popups.add(popUpLesson);
         popups.add(tabTeacher);

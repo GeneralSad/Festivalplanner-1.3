@@ -45,7 +45,7 @@ public class GUI extends Application
         bottomHBox.getChildren().add(wijzingen);
         wijzingen.setOnAction(event ->
         {
-            PopupController popupController = new PopupController(stage);
+            PopupController popupController = new PopupController(stage, schedule);
         });
 
 

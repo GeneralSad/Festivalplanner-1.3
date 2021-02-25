@@ -1,5 +1,7 @@
 package GUI;
 
+import Data.Group;
+import Data.Schedule;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
@@ -12,10 +14,12 @@ public class TabClass extends PopUpTab
 {
     private int spacingDistance = 10;
     private ArrayList<String> classes = new ArrayList<>();
+    Schedule schedule;
 
-    public TabClass()
+    public TabClass(Schedule schedule)
     {
         super.setPopUpName("Klassen");
+        this.schedule = schedule;
     }
 
     @Override
@@ -86,7 +90,6 @@ public class TabClass extends PopUpTab
         inputAge.setMaxWidth(200);
 
         Button submitStudent = new Button("Voeg student toe");
-
         VBox addersStudenten = new VBox();
         addersStudenten.getChildren().addAll(newName, inputName, newAge, inputAge);
         addersStudenten.setSpacing(spacingDistance);
