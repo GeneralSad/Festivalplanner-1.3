@@ -13,6 +13,9 @@ public class Schedule implements Serializable
 
     public Schedule()
     {
+        this.lessons = new ArrayList<>();
+        this.teachers = new ArrayList<>();
+        this.groups = new ArrayList<>();
     }
 
     public Schedule(ArrayList<Lesson> lessons, ArrayList<Teacher> teachers, ArrayList<Group> groups)

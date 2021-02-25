@@ -57,9 +57,6 @@ public class GUI extends Application
         stage.setScene(scene);
         stage.setTitle("School simulatie");
         stage.show();
-
-
-
     }
 
     private void initialise() {

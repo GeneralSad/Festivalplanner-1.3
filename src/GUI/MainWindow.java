@@ -1,5 +1,6 @@
 package GUI;
 
+import Data.Classroom;
 import Data.Lesson;
 import Data.Schedule;
 import Data.Teacher;
@@ -12,7 +13,6 @@ import org.jfree.fx.ResizableCanvas;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 
 public class MainWindow extends ResizableCanvas
@@ -20,9 +20,9 @@ public class MainWindow extends ResizableCanvas
     private Schedule schedule;
     private HashMap<Rectangle2D, Lesson> lessonShapes = new HashMap<>();
 
-    private String[] classrooms = new String[]{"Lokaal 1", "Lokaal 2", "Lokaal 3", "Lokaal 4", "Lokaal 5", "Lokaal 6", "Lokaal 7", "Lokaal 8"};
     private ArrayList<String> allStartingTimes = new ArrayList<>();
     private ArrayList<String> allEndingTimes = new ArrayList<>();
+    private int amountOfClassrooms = Classroom.classRooms.values().length;
 
     private int timeStampVerticalSpacing = 90;
     private int timeStampHorizontalSpacing = 100;
@@ -80,11 +80,17 @@ public class MainWindow extends ResizableCanvas
             }
         }.start();
 
-        Collections.addAll(allStartingTimes, "09:00", "10:00", "11:00", "12:00", "12:30", "13:30", "14:30", "15:30", "16:30");
-        Collections.addAll(allEndingTimes, "10:00", "11:00", "12:00", "12:30", "13:30", "14:30", "15:30", "16:30", "17:30");
+        // populate the arraylists for the start and ending times of possible lessons
+        for (Lesson.startTimes s : Lesson.startTimes.values()) {
+            allStartingTimes.add(s.startTime);
+        }
+        for (Lesson.endTimes e : Lesson.endTimes.values()) {
+            allEndingTimes.add(e.endTime);
+        }
 
         for (Lesson lesson : this.schedule.getLessons())
         {
+
             int classroomIndex = lesson.getClassroom().getClassroom();
             int startingTimeIndex = this.allStartingTimes.indexOf(lesson.getFormatBeginTime());
             int amountOfTimeBlocks = this.allEndingTimes.indexOf(lesson.getFormatEndTime()) - startingTimeIndex + 1;
@@ -125,18 +131,18 @@ public class MainWindow extends ResizableCanvas
             graphics2D.drawString(allStartingTimes.get(i) + " -", distanceOfTimeStampsFromLeft + 10, distanceOfTimeStampsFromTop + 25 + i * timeStampVerticalSpacing);
         }
         // eindtijden tekenen
-        for (int i = 0; i < allStartingTimes.size(); i++)
+        for (int i = 0; i < allEndingTimes.size(); i++)
         {
             graphics2D.drawString(allEndingTimes.get(i), distanceOfTimeStampsFromLeft + 10, distanceOfTimeStampsFromTop + 50 + i * timeStampVerticalSpacing);
         }
 
         // bovenste horizontale lijn van het rooster
-        graphics2D.drawLine(distanceOfClassroomsFromLeft, distanceOfClassroomsFromTop, distanceOfClassroomsFromLeft + classroomTableWidth * classrooms.length, distanceOfClassroomsFromTop);
+        graphics2D.drawLine(distanceOfClassroomsFromLeft, distanceOfClassroomsFromTop, distanceOfClassroomsFromLeft + classroomTableWidth * amountOfClassrooms, distanceOfClassroomsFromTop);
         // interne horizontale lijnen van het rooster
         for (int i = 0; i < amountOfTimeStamps + 1; i++)
         {
             int y = distanceOfTimeStampsFromTop + i * timeStampVerticalSpacing;
-            graphics2D.drawLine(distanceOfClassroomsFromLeft, y, distanceOfClassroomsFromLeft + classroomTableWidth * classrooms.length, y);
+            graphics2D.drawLine(distanceOfClassroomsFromLeft, y, distanceOfClassroomsFromLeft + classroomTableWidth * amountOfClassrooms, y);
         }
 
         // Tekenen van de lessen
@@ -152,10 +158,10 @@ public class MainWindow extends ResizableCanvas
 
         // pauze tekenen
         graphics2D.setColor(Color.GRAY);
-        graphics2D.fill(new Rectangle2D.Double(distanceOfClassroomsFromLeft, distanceOfTimeStampsFromTop + 3 * timeStampVerticalSpacing, classrooms.length * classroomTableWidth, timeStampVerticalSpacing));
+        graphics2D.fill(new Rectangle2D.Double(distanceOfClassroomsFromLeft, distanceOfTimeStampsFromTop + 3 * timeStampVerticalSpacing, amountOfClassrooms * classroomTableWidth, timeStampVerticalSpacing));
         graphics2D.setColor(Color.BLACK);
         // Bij elk lokaal pauze tekenen
-        for (int i = 0; i < classrooms.length; i++)
+        for (int i = 0; i < amountOfClassrooms; i++)
         {
             graphics2D.drawString("Pauze", distanceOfClassroomsFromLeft + i * classroomTableWidth, distanceOfTimeStampsFromTop + 30 + 3 * timeStampVerticalSpacing);
         }
@@ -164,20 +170,20 @@ public class MainWindow extends ResizableCanvas
         for (int i = 0; i < 2; i++)
         {
             int y = distanceOfTimeStampsFromTop + 3 * timeStampVerticalSpacing + i * timeStampVerticalSpacing;
-            graphics2D.drawLine(distanceOfClassroomsFromLeft, y, distanceOfClassroomsFromLeft + classroomTableWidth * classrooms.length, y);
+            graphics2D.drawLine(distanceOfClassroomsFromLeft, y, distanceOfClassroomsFromLeft + classroomTableWidth * amountOfClassrooms, y);
         }
 
         // verticale lijnen van het rooster
-        for (int i = 0; i < classrooms.length + 1; i++)
+        for (int i = 0; i < amountOfClassrooms + 1; i++)
         {
             int x = distanceOfClassroomsFromLeft + i * classroomTableWidth;
             graphics2D.drawLine(x, distanceOfClassroomsFromTop, x, distanceOfTimeStampsFromTop + amountOfTimeStamps * timeStampVerticalSpacing);
         }
 
         // alle lokalen tekenen
-        for (int i = 0; i < classrooms.length; i++)
+        for (int i = 0; i < amountOfClassrooms; i++)
         {
-            graphics2D.drawString(classrooms[i], distanceOfClassroomsFromLeft + i * classroomTableWidth, distanceOfClassroomsFromTop + 20);
+            graphics2D.drawString(Classroom.classRooms.values()[i].roomName, distanceOfClassroomsFromLeft + i * classroomTableWidth, distanceOfClassroomsFromTop + 20);
         }
     }
 }
