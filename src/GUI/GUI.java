@@ -12,7 +12,6 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
-import javax.xml.crypto.Data;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
@@ -20,6 +19,7 @@ public class GUI extends Application
 {
     private Schedule schedule;
     private String filePath = "src/Data/storedSchedule";
+
 
     public static void main(String[] args)
     {
@@ -29,6 +29,7 @@ public class GUI extends Application
     @Override
     public void start(Stage stage) throws Exception
     {
+
         // probeer een schedule te laden
         initialise();
 
@@ -38,10 +39,19 @@ public class GUI extends Application
         BorderPane canvasContainer = new BorderPane();
         canvasContainer.setCenter(new MainWindow(canvasContainer, this.schedule));
 
+
         HBox bottomHBox = new HBox();
-        bottomHBox.getChildren().add(new Button("Wijzingen"));
+        Button wijzingen = new Button("Wijzingen");
+        bottomHBox.getChildren().add(wijzingen);
+        wijzingen.setOnAction(event ->
+        {
+            PopupController popupController = new PopupController(stage, schedule);
+        });
+
+
         Button saveScheduleButton = new Button("Save Scheduel");
-        saveScheduleButton.setOnAction(event -> {
+        saveScheduleButton.setOnAction(event ->
+        {
             DataStorage.saveSchedule(this.filePath, this.schedule);
         });
         bottomHBox.getChildren().add(saveScheduleButton);
@@ -59,7 +69,8 @@ public class GUI extends Application
         stage.show();
     }
 
-    private void initialise() {
+    private void initialise()
+    {
         this.schedule = DataStorage.loadSchedule(this.filePath);
         if (this.schedule == null)
         {
@@ -89,7 +100,9 @@ public class GUI extends Application
             lessons.add(new Lesson(LocalTime.of(16, 30), LocalTime.of(17, 30), teachers.get(0), classrooms.get(2), groups));
             lessons.add(new Lesson(LocalTime.of(11, 00), LocalTime.of(12, 00), teachers.get(0), classrooms.get(0), groups));
             this.schedule = new Schedule(lessons, teachers, groups);
-        } else {
+        }
+        else
+        {
             System.out.println("properly loaded a schedule");
         }
     }
