@@ -12,6 +12,7 @@ public class Group implements Serializable
     public Group(String className)
     {
         this.className = className;
+        this.students = new ArrayList<>();
     }
 
     public void addStudent(Student student) {

@@ -21,4 +21,10 @@ public class Classroom implements Serializable
     {
         this.classroom = classroom;
     }
+
+    @Override
+    public String toString()
+    {
+        return String.valueOf(this.classroom);
+    }
 }

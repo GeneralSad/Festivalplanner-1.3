@@ -24,8 +24,6 @@ public class TabClass extends PopUpTab
         this.schedule = schedule;
     }
 
-
-    
     @Override
     protected BorderPane getPane()
     {
@@ -41,6 +39,7 @@ public class TabClass extends PopUpTab
         listViewClass.setPrefWidth(250);
 
 
+
         VBox leftVboxClasses = new VBox();
         leftVboxClasses.getChildren().addAll(currentLesson, listViewClass);
         leftVboxClasses.setSpacing(spacingDistance);
@@ -52,14 +51,18 @@ public class TabClass extends PopUpTab
         ListView<Student> listViewStudent = new ListView<>();
         listViewStudent.setPrefWidth(250);
 
+        listViewClass.setOnMousePressed(event ->{
+            if (listViewClass.getSelectionModel().getSelectedItem() != null) {
+                listViewStudent.setItems(FXCollections.observableArrayList(schedule.getGroups().get(listViewClass.getSelectionModel().getSelectedIndex()).getStudents()));
+            }
+        });
+
         Button deleteClass = new Button("Verwijder klas");
 
         deleteClass.setOnAction(event -> {
-
             schedule.removeGroup(listViewClass.getSelectionModel().getSelectedItem());
             listViewClass.getItems().clear();
             listViewClass.setItems(FXCollections.observableArrayList(this.schedule.getGroups()));
-
         });
 
         VBox leftVboxStudent = new VBox();
@@ -81,15 +84,20 @@ public class TabClass extends PopUpTab
         studentData.setEditable(false);
         listViewStudent.setPrefWidth(250);
 
+        listViewStudent.setOnMousePressed(event ->{
+            if (listViewStudent.getSelectionModel().getSelectedItem() != null) {
+                studentData.setText(listViewStudent.getSelectionModel().getSelectedItem().toDetailString());
+            }
+        });
+
         Button deleteStudent = new Button("Verwijder student");
 
         deleteStudent.setOnAction(event -> {
-
+            Group group = listViewClass.getSelectionModel().getSelectedItem();
             schedule.getGroups().get(listViewClass.getSelectionModel().getSelectedIndex()).removeStudent(listViewStudent.getSelectionModel().getSelectedItem());
-
+            listViewStudent.getItems().clear();
+            listViewStudent.setItems(FXCollections.observableArrayList(group.getStudents()));
         });
-
-
 
         VBox middleVboxStudent = new VBox();
         middleVboxStudent.getChildren().addAll(selectedStudent, studentData, deleteStudent);
@@ -113,8 +121,12 @@ public class TabClass extends PopUpTab
 
         submitStudent.setOnAction(event -> {
 
-            schedule.getGroups().get(listViewClass.getSelectionModel().getSelectedIndex()).addStudent(new Student(inputName.getText(), Integer.parseInt(inputAge.getText()), listViewClass.getSelectionModel().getSelectedItem()));
+            //TODO: Error wanneer leerling wordt aangemaakt zonder klas te selecteren
 
+            Group group = listViewClass.getSelectionModel().getSelectedItem();
+            schedule.getGroups().get(listViewClass.getSelectionModel().getSelectedIndex()).addStudent(new Student(inputName.getText(), Integer.parseInt(inputAge.getText()), listViewClass.getSelectionModel().getSelectedItem()));
+            listViewStudent.getItems().clear();
+            listViewStudent.setItems(FXCollections.observableArrayList(group.getStudents()));
         });
 
         VBox addersStudenten = new VBox();
@@ -143,9 +155,9 @@ public class TabClass extends PopUpTab
         Button submitClass = new Button("Voeg klas toe");
 
         submitClass.setOnAction(event -> {
-
             schedule.addGroup(new Group(inputClass.getText()));
-
+            listViewClass.getItems().clear();
+            listViewClass.setItems(FXCollections.observableArrayList(schedule.getGroups()));
         });
 
         VBox addersClass = new VBox();

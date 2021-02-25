@@ -34,4 +34,13 @@ public class Student implements Serializable
         this.age = age;
     }
 
+    @Override
+    public String toString(){
+        return this.name;
+    }
+
+    public String toDetailString() {
+        return "Naam: " + this.name + "\nLeeftijd: " + this.age;
+    }
+
 }

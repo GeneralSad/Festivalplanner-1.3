@@ -48,6 +48,11 @@ public class Teacher implements Serializable
 
     @Override
     public String toString() {
+        return this.name;
+    }
+
+    public String toDetailString() {
         return "Name: " + this.name + "\nAge: " + this.age + "\nSubject: " + this.subject;
     }
+
 }
