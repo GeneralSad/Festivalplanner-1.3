@@ -58,12 +58,10 @@ public class TabTeacher extends PopUpTab
         Button deleteSelected = new Button("Verwijder Docent");
 
         deleteSelected.setOnAction(event -> {
-
             this.schedule.removeTeacher(listView.getSelectionModel().getSelectedItem());
             teacherData.setText("");
             listView.getItems().clear();
             listView.setItems(FXCollections.observableArrayList(this.schedule.getTeachers()));
-
 
         });
 
@@ -102,6 +100,7 @@ public class TabTeacher extends PopUpTab
             listView.getItems().clear();
             teacherData.setText("");
             listView.setItems(FXCollections.observableArrayList(this.schedule.getTeachers()));
+
 
         });
 
