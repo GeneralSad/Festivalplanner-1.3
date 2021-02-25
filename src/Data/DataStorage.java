@@ -35,7 +35,7 @@ public class DataStorage
         {
             e.printStackTrace();
         }
-        return null; //Is dit het beste om te doen?
+        return null;
     }
 
 }

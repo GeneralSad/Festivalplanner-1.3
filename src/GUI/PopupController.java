@@ -45,7 +45,7 @@ public class PopupController extends Stage
         Scene scene = new Scene(tabPane, 1280, 570);
 
         this.setScene(scene);
-        this.setTitle("PopupController");
+        this.setTitle("Editor");
         this.initModality(Modality.APPLICATION_MODAL);
         this.initOwner(mainstage);
         this.showAndWait();

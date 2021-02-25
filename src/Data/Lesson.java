@@ -57,12 +57,12 @@ public class Lesson implements Serializable
     @Override
     public String toString()
     {
-        return "Lesson: " + this.teacher.getSubject() + "\nBegins: " + beginTime + "\nEnds: " + endTime + "\nTeacher: "
-                + teacher.getName() + "\nClassroom: " + classroom.getClassroom() + "\nGroups: " + getGroupNames(groups);
+        return "Vak: " + this.teacher.getSubject() + "\nBegint: " + beginTime + "\nEindigt: " + endTime + "\nLeraar: "
+                + teacher.getName() + "\nKlaslokaal: " + classroom.getClassroom() + "\nKlassen: " + getGroupNames(groups);
     }
 
     public String toShortString(){
-        return "Les: " + this.teacher.getSubject() + ", Tijd vanaf: " + beginTime + " tot: " + endTime +", Lokaal: " + ", Groups: " + getGroupNames(groups);
+        return "Les: " + this.teacher.getSubject() + ", Tijd vanaf: " + beginTime + " tot: " + endTime +", Lokaal: " + ", Klassen: " + getGroupNames(groups);
     }
 
     public LocalTime getBeginTime()
