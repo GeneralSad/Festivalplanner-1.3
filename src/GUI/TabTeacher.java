@@ -49,8 +49,12 @@ public class TabTeacher extends PopUpTab
         Label selectedTeacher = new Label("Geselecteerde Docent");
         Label teacherData = new Label();
         listView.getSelectionModel().selectedItemProperty().addListener((ov) -> {
-            int index = listView.getSelectionModel().getSelectedIndex();
-            teacherData.setText(listView.getItems().get(index).toDetailString());
+            try
+            {
+                int index = listView.getSelectionModel().getSelectedIndex();
+                teacherData.setText(listView.getItems().get(index).toDetailString());
+            }catch (Exception e){
+            }
         });
 
         Button deleteSelected = new Button("Verwijder Docent");
