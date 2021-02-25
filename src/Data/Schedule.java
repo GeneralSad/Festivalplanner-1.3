@@ -13,6 +13,7 @@ public class Schedule implements Serializable
 
     public Schedule()
     {
+        this(new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
     }
 
     public Schedule(ArrayList<Lesson> lessons, ArrayList<Teacher> teachers, ArrayList<Group> groups)

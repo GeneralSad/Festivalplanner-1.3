@@ -5,7 +5,6 @@ import java.util.ArrayList;
 
 public class Group implements Serializable
 {
-
     private String className;
     private ArrayList<Student> students;
 

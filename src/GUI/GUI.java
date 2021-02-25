@@ -32,7 +32,6 @@ public class GUI extends Application
     @Override
     public void start(Stage stage) throws Exception
     {
-
         // probeer een schedule te laden
         initialise();
 
@@ -40,8 +39,8 @@ public class GUI extends Application
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
         BorderPane canvasContainer = new BorderPane();
-        canvasContainer.setCenter(new MainWindow(canvasContainer, this.schedule));
-
+        MainWindow mainWindow = new MainWindow(canvasContainer, this.schedule);
+        canvasContainer.setCenter(mainWindow);
 
         HBox bottomHBox = new HBox();
         Button wijzingen = new Button("Wijzigen");
@@ -76,8 +75,6 @@ public class GUI extends Application
         stage.setTitle("School simulatie");
         stage.setMaximized(true);
         stage.show();
-
-
     }
 
     private void initialise()
@@ -116,5 +113,6 @@ public class GUI extends Application
         {
             System.out.println("properly loaded a schedule");
         }
+
     }
 }
