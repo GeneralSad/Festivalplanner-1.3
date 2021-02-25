@@ -1,5 +1,7 @@
 package Data;
 
+import GUI.GUI;
+
 import java.io.Serializable;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -75,6 +77,7 @@ public class Lesson implements Serializable
 
     public void addGroup(Group group) {
         this.groups.add(group);
+        GUI.mainWindowController.update();
     }
 
     public String getFormatBeginTime() {
@@ -105,6 +108,7 @@ public class Lesson implements Serializable
     public void setBeginTime(LocalTime beginTime)
     {
         this.beginTime = beginTime;
+        GUI.mainWindowController.update();
     }
 
     public LocalTime getEndTime()
@@ -115,6 +119,7 @@ public class Lesson implements Serializable
     public void setEndTime(LocalTime endTime)
     {
         this.endTime = endTime;
+        GUI.mainWindowController.update();
     }
 
     public Teacher getTeacher()
@@ -125,6 +130,7 @@ public class Lesson implements Serializable
     public void setTeacher(Teacher teacher)
     {
         this.teacher = teacher;
+        GUI.mainWindowController.update();
     }
 
     public Classroom getClassroom()
@@ -135,6 +141,7 @@ public class Lesson implements Serializable
     public void setClassroom(Classroom classroom)
     {
         this.classroom = classroom;
+        GUI.mainWindowController.update();
     }
 
     public ArrayList<Group> getGroups()
@@ -145,6 +152,7 @@ public class Lesson implements Serializable
     public void setGroups(ArrayList<Group> groups)
     {
         this.groups = groups;
+        GUI.mainWindowController.update();
     }
 
     public String getGroupNames(ArrayList<Group> groups) {

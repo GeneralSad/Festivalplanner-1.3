@@ -1,5 +1,7 @@
 package Data;
 
+import GUI.GUI;
+
 import java.io.Serializable;
 
 public class Teacher implements Serializable
@@ -24,6 +26,7 @@ public class Teacher implements Serializable
     public void setName(String name)
     {
         this.name = name;
+        GUI.mainWindowController.update();
     }
 
     public int getAge()
@@ -34,6 +37,7 @@ public class Teacher implements Serializable
     public void setAge(int age)
     {
         this.age = age;
+        GUI.mainWindowController.update();
     }
 
     public String getSubject()
@@ -44,5 +48,6 @@ public class Teacher implements Serializable
     public void setSubject(String subject)
     {
         this.subject = subject;
+        GUI.mainWindowController.update();
     }
 }

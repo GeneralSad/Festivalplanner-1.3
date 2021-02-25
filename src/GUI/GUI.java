@@ -17,6 +17,8 @@ import java.util.ArrayList;
 
 public class GUI extends Application
 {
+    public static MainWindowController mainWindowController = new MainWindowController();
+
     private Schedule schedule;
     private String filePath = "src/Data/storedSchedule";
 
@@ -29,7 +31,6 @@ public class GUI extends Application
     @Override
     public void start(Stage stage) throws Exception
     {
-
         // probeer een schedule te laden
         initialise();
 
@@ -37,8 +38,10 @@ public class GUI extends Application
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
         BorderPane canvasContainer = new BorderPane();
-        canvasContainer.setCenter(new MainWindow(canvasContainer, this.schedule));
+        MainWindow mainWindow = new MainWindow(canvasContainer, this.schedule);
+        canvasContainer.setCenter(mainWindow);
 
+        mainWindowController.setMainWindow(mainWindow);
 
         HBox bottomHBox = new HBox();
         Button wijzingen = new Button("Wijzingen");

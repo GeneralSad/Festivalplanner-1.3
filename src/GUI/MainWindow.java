@@ -5,6 +5,8 @@ import Data.Lesson;
 import Data.Schedule;
 import Data.Teacher;
 import javafx.animation.AnimationTimer;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.layout.Pane;
 import org.jfree.fx.FXGraphics2D;
 import org.jfree.fx.Resizable;
@@ -46,7 +48,17 @@ public class MainWindow extends ResizableCanvas
         }, pane);
         this.schedule = schedule;
         initialise();
-        draw(new FXGraphics2D(getGraphicsContext2D()));
+    }
+
+    private void initialise()
+    {
+        // populate the arraylists for the start and ending times of possible lessons
+        for (Lesson.startTimes s : Lesson.startTimes.values()) {
+            allStartingTimes.add(s.startTime);
+        }
+        for (Lesson.endTimes e : Lesson.endTimes.values()) {
+            allEndingTimes.add(e.endTime);
+        }
 
         super.setOnMouseClicked(event ->
         {
@@ -56,38 +68,26 @@ public class MainWindow extends ResizableCanvas
                 }
             }
         });
-    }
 
-    private void initialise()
-    {
-        new AnimationTimer()
-        {
+        new AnimationTimer() {
             long last = -1;
 
             @Override
-            public void handle(long now)
-            {
-                if (last == -1)
-                {
+            public void handle(long now) {
+                if (last == -1) {
                     last = now;
                 }
-
-                if (now - last >= 100000000.0)
-                {
-                    draw(new FXGraphics2D(getGraphicsContext2D()));
+                if (now - last > 1e8) {
+                    update();
                     last = now;
                 }
             }
         }.start();
 
-        // populate the arraylists for the start and ending times of possible lessons
-        for (Lesson.startTimes s : Lesson.startTimes.values()) {
-            allStartingTimes.add(s.startTime);
-        }
-        for (Lesson.endTimes e : Lesson.endTimes.values()) {
-            allEndingTimes.add(e.endTime);
-        }
+        update();
+    }
 
+    public void update() {
         for (Lesson lesson : this.schedule.getLessons())
         {
 
@@ -105,13 +105,13 @@ public class MainWindow extends ResizableCanvas
                 System.out.println("classroomindex: " + classroomIndex + " startingTime index: " + lesson.getFormatBeginTime() + " " + startingTimeIndex);
             }
         }
+
+        draw(new FXGraphics2D(getGraphicsContext2D()));
     }
 
     public void draw(FXGraphics2D graphics2D)
     {
         graphics2D.setFont(new Font(Font.DIALOG, Font.PLAIN, 25));
-
-
 
         // verticale lijnen van het tijdvak
         for (int i = 0; i < 2; i++)

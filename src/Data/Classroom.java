@@ -1,5 +1,7 @@
 package Data;
 
+import GUI.GUI;
+
 import java.io.Serializable;
 
 public class Classroom implements Serializable
@@ -37,5 +39,6 @@ public class Classroom implements Serializable
     public void setClassroom(int classroom)
     {
         this.classroom = classroom;
+        GUI.mainWindowController.update();
     }
 }

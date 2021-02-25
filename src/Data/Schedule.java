@@ -1,5 +1,7 @@
 package Data;
 
+import GUI.GUI;
+
 import java.io.Serializable;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -13,9 +15,7 @@ public class Schedule implements Serializable
 
     public Schedule()
     {
-        this.lessons = new ArrayList<>();
-        this.teachers = new ArrayList<>();
-        this.groups = new ArrayList<>();
+        this(new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
     }
 
     public Schedule(ArrayList<Lesson> lessons, ArrayList<Teacher> teachers, ArrayList<Group> groups)
@@ -28,6 +28,7 @@ public class Schedule implements Serializable
     public void addTeacher(Teacher teacher)
     {
         teachers.add(teacher);
+        GUI.mainWindowController.update();
     }
 
     /**
@@ -72,26 +73,31 @@ public class Schedule implements Serializable
 
         // if an exception was thrown then the method stops so the following statement isn't reached
         lessons.add(lesson);
+        GUI.mainWindowController.update();
     }
 
     public void addGroup(Group group)
     {
         groups.add(group);
+        GUI.mainWindowController.update();
     }
 
     public void removeTeacher(Teacher teacher)
     {
         teachers.remove(teacher);
+        GUI.mainWindowController.update();
     }
 
     public void removeLesson(Lesson lesson)
     {
         lessons.remove(lesson);
+        GUI.mainWindowController.update();
     }
 
     public void removeGroup(Group group)
     {
         groups.remove(group);
+        GUI.mainWindowController.update();
     }
 
     public ArrayList<Lesson> getLessons()
@@ -102,6 +108,7 @@ public class Schedule implements Serializable
     public void setLessons(ArrayList<Lesson> lessons)
     {
         this.lessons = lessons;
+        GUI.mainWindowController.update();
     }
 
     public ArrayList<Teacher> getTeachers()
@@ -112,6 +119,7 @@ public class Schedule implements Serializable
     public void setTeachers(ArrayList<Teacher> teachers)
     {
         this.teachers = teachers;
+        GUI.mainWindowController.update();
     }
 
     public ArrayList<Group> getGroups()
@@ -122,5 +130,6 @@ public class Schedule implements Serializable
     public void setGroups(ArrayList<Group> groups)
     {
         this.groups = groups;
+        GUI.mainWindowController.update();
     }
 }

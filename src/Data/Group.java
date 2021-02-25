@@ -1,11 +1,12 @@
 package Data;
 
+import GUI.GUI;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Group implements Serializable
 {
-
     private String className;
     private ArrayList<Student> students;
 
@@ -16,10 +17,12 @@ public class Group implements Serializable
 
     public void addStudent(Student student) {
         students.add(student);
+        GUI.mainWindowController.update();
     }
 
     public void removeStudent(Student student) {
         students.remove(student);
+        GUI.mainWindowController.update();
     }
 
     public String getGroupName()
@@ -30,6 +33,7 @@ public class Group implements Serializable
     public void setGroupName(String className)
     {
         this.className = className;
+        GUI.mainWindowController.update();
     }
 
     public ArrayList<Student> getStudents()
@@ -40,6 +44,7 @@ public class Group implements Serializable
     public void setStudents(ArrayList<Student> students)
     {
         this.students = students;
+        GUI.mainWindowController.update();
     }
 
     @Override
