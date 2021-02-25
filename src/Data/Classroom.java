@@ -42,6 +42,6 @@ public class Classroom implements Serializable
     @Override
     public String toString()
     {
-        return String.valueOf(this.classroom);
+        return classRooms.values()[classroom-1].roomName;
     }
 }

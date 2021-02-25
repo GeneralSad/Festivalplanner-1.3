@@ -1,26 +1,35 @@
 package Data;
 
+import javafx.collections.ObservableArray;
+import javafx.collections.ObservableList;
+
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
 public class Schedule implements Serializable
 {
 
+
     private ArrayList<Lesson> lessons;
     private ArrayList<Teacher> teachers;
     private ArrayList<Group> groups;
+    private ArrayList<Classroom> classrooms;
 
     public Schedule()
     {
-        this(new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+        this(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(),new ArrayList<>());
     }
 
-    public Schedule(ArrayList<Lesson> lessons, ArrayList<Teacher> teachers, ArrayList<Group> groups)
+
+
+    public Schedule(ArrayList<Lesson> lessons, ArrayList<Teacher> teachers, ArrayList<Group> groups, ArrayList<Classroom> classrooms)
     {
         this.lessons = lessons;
         this.teachers = teachers;
         this.groups = groups;
+        this.classrooms = classrooms;
     }
 
     public void addTeacher(Teacher teacher)
@@ -120,5 +129,26 @@ public class Schedule implements Serializable
     public void setGroups(ArrayList<Group> groups)
     {
         this.groups = groups;
+    }
+
+
+    public ArrayList<Classroom> getClassrooms()
+    {
+        return classrooms;
+    }
+
+
+    public ArrayList<LocalTime> getLocalTimes()
+    {
+        ArrayList<LocalTime> localTimes = new ArrayList<>();
+        for (int i = 9; i < 18; i++)
+        {
+            for (int j = 0; j < 2; j++)
+            {
+                localTimes.add(LocalTime.of(i,j*30));
+            }
+        }
+
+        return localTimes;
     }
 }

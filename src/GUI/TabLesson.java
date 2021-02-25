@@ -3,9 +3,11 @@ package GUI;
 import Data.*;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 
 import java.time.LocalTime;
@@ -17,11 +19,10 @@ public class TabLesson extends PopUpTab
     private int spacingDistance = 10;
 
     //components
-    private ListView listView = new ListView();
+    private ListView<Lesson> listView = new ListView<Lesson>();
     private ArrayList<Group> selectedGroups = new ArrayList<>();
     private ComboBox<Teacher> teacherSelect = new ComboBox<>();
-    private Lesson selected;
-    private TextArea lessonData = new TextArea();
+    private Lesson selectedLesson;
     private VBox allGroups = new VBox();
 
     //rooster
@@ -31,9 +32,10 @@ public class TabLesson extends PopUpTab
     {
         super.setPopUpName("Lessen");
         this.schedule = schedule;
-        this.selected = null;
+        this.selectedLesson = null;
         this.listView.setItems(FXCollections.observableArrayList(this.schedule.getLessons()));
         classUpdater();
+        teacherUpdater();
     }
 
     @Override
@@ -46,104 +48,118 @@ public class TabLesson extends PopUpTab
         Label currentLesson = new Label("Bestaande Lessen");
         listView.setPrefWidth(500);
 
-        //listens to your selectoin on the menu
-        listView.getSelectionModel().selectedItemProperty().addListener((ov) -> {
-            try
-            {
-                int index = listView.getSelectionModel().getSelectedIndex();
-                lessonData.setText(this.schedule.getLessons().get(index).toString());
-                this.selected = this.schedule.getLessons().get(index);
-            }catch (Exception e){
-            }
-        });
 
-        VBox leftVbox = new VBox();
-        leftVbox.getChildren().addAll(currentLesson, listView);
-        leftVbox.setSpacing(spacingDistance);
-        leftVbox.setPadding(new Insets(10, 10, 10, 10));
+        VBox leftVbox = PopupController.awesomeVBox(currentLesson, listView);
 
 
         //middle side of menu lesson
         Label selectedLesson = new Label("Geselecteerde les");
-        lessonData.setMaxWidth(500);
-        lessonData.setPrefHeight(400);
-        lessonData.setEditable(false);
+        FlowPane lessonData = new FlowPane();
+        lessonData.setOrientation(Orientation.VERTICAL);
+
+        Label selectedStartLesson = new Label("Begintijd");
+        ComboBox<LocalTime> selectedStartTimeSelect = timeComboBox();
+
+        Label selectedEndLesson = new Label("Eindtijd");
+        ComboBox<LocalTime> selectedEndTimeSelect = timeComboBox();
+
+        Label selectedTeacherBox = new Label("Docent");
+        ComboBox selectedTeachterComboBox = new ComboBox();
+        selectedTeachterComboBox.setItems(FXCollections.observableArrayList(schedule.getTeachers()));
+
+        Label selectedTocationBox = new Label("Lokaal");
+        ComboBox<Classroom> selectedLocationSelect = new ComboBox<>();
+        selectedLocationSelect.setItems(FXCollections.observableArrayList(schedule.getClassrooms()));
+        selectedLocationSelect.setMinWidth(200);
+
+        lessonData.getChildren().addAll(selectedStartLesson, selectedStartTimeSelect, selectedEndLesson, selectedEndTimeSelect, selectedTeacherBox, selectedTeachterComboBox, selectedTocationBox, selectedLocationSelect);
+
+
         Button deleteSelected = new Button("Verwijder les");
-        deleteSelected.setOnAction(event -> {
-            if (selected != null)
+        Button editSelected = new Button("Wijzig les");
+        editSelected.setOnAction(event ->
+        {
+            if (this.selectedLesson != null)
             {
-                this.schedule.removeLesson(this.selected);
-                lessonData.setText("");
-                listView.getItems().remove(this.selected);
+                this.selectedLesson.setBeginTime(selectedStartTimeSelect.getSelectionModel().getSelectedItem());
+                this.selectedLesson.setEndTime(selectedEndTimeSelect.getSelectionModel().getSelectedItem());
+                this.selectedLesson.setClassroom(selectedLocationSelect.getSelectionModel().getSelectedItem());
+                this.selectedLesson.setTeacher((Teacher) selectedTeachterComboBox.getSelectionModel().getSelectedItem());
+                listView.getItems().clear();
+                this.listView.setItems(FXCollections.observableArrayList(this.schedule.getLessons()));
             }
         });
 
-        VBox middleVbox = new VBox();
-        middleVbox.getChildren().addAll(selectedLesson, lessonData, deleteSelected);
-        middleVbox.setSpacing(spacingDistance);
-        middleVbox.setPadding(new Insets(10, 10, 10, 10));
+
+        deleteSelected.setOnAction(event ->
+        {
+            schedule.removeLesson(this.selectedLesson);
+            listView.getItems().clear();
+            this.listView.setItems(FXCollections.observableArrayList(this.schedule.getLessons()));
+        });
+
+        //listens to your selectoin on the menu
+        listView.getSelectionModel().selectedItemProperty().addListener(event ->
+        {
+            Lesson lesson = listView.getSelectionModel().getSelectedItem();
+            if (this.selectedLesson != lesson)
+            {
+                this.selectedLesson = lesson;
+                if (this.selectedLesson != null)
+                {
+                    selectedStartTimeSelect.getSelectionModel().select(this.selectedLesson.getBeginTime());
+                    selectedEndTimeSelect.getSelectionModel().select(this.selectedLesson.getEndTime());
+                    selectedTeachterComboBox.getSelectionModel().select(this.selectedLesson.getTeacher());
+                    selectedLocationSelect.getSelectionModel().select(this.selectedLesson.getClassroom());
+                }
+            }
+        });
+
+
+        VBox middleVbox = PopupController.awesomeVBox(selectedLesson, lessonData, deleteSelected, editSelected);
         middleVbox.setMinWidth(500);
 
         //right side of menu lesson
         Label newLesson = new Label("Nieuwe les");
 
         Label startLesson = new Label("Begintijd");
-        ComboBox<LocalTime> startTimeSelect = new ComboBox<>();
-        startTimeSelect.setMinWidth(200);
-
-        startTimeSelect.getItems().addAll(LocalTime.of(9, 00), LocalTime.of(9, 30), LocalTime.of(10, 00), LocalTime.of(10, 30), LocalTime.of(11, 00),
-                LocalTime.of(11, 30), LocalTime.of(12, 00),LocalTime.of(12, 30), LocalTime.of(13, 00), LocalTime.of(13, 30),LocalTime.of(14, 00),
-                LocalTime.of(15, 00), LocalTime.of(15, 30), LocalTime.of(16, 00), LocalTime.of(16, 30), LocalTime.of(17, 00));
+        ComboBox<LocalTime> startTimeSelect = timeComboBox();
 
         Label endLesson = new Label("Eindtijd");
-        ComboBox<LocalTime> endTimeSelect = new ComboBox<>();
-        endTimeSelect.setMinWidth(200);
+        ComboBox<LocalTime> endTimeSelect = timeComboBox();
 
-        endTimeSelect.getItems().addAll(LocalTime.of(9, 30), LocalTime.of(10, 00), LocalTime.of(10, 30), LocalTime.of(11, 00), LocalTime.of(11, 30),
-                LocalTime.of(12, 00),LocalTime.of(12, 30), LocalTime.of(13, 00), LocalTime.of(13, 30),LocalTime.of(14, 00), LocalTime.of(15, 00),
-                LocalTime.of(15, 30), LocalTime.of(16, 00), LocalTime.of(16, 30), LocalTime.of(17, 00), LocalTime.of(17, 30));
 
         Label teacherBox = new Label("Kies een docent");
         teacherSelect.setMinWidth(200);
 
-        teacherSelect.getItems().addAll(schedule.getTeachers());
 
         Label locationBox = new Label("Kies een lokaal");
         ComboBox<Classroom> locationSelect = new ComboBox<>();
         locationSelect.setMinWidth(200);
 
-        ArrayList<Classroom> classrooms = new ArrayList<>();
 
-        for (Lesson lesson : schedule.getLessons())
-        {
-            if (!classrooms.contains(lesson.getClassroom())) {
-                classrooms.add(lesson.getClassroom());
-            }
-        }
-
-        locationSelect.getItems().addAll(classrooms);
+        locationSelect.setItems(FXCollections.observableArrayList(schedule.getClassrooms()));
 
         Button lessonAdder = new Button("Voeg klas toe");
 
-        lessonAdder.setOnAction(event -> {
+        lessonAdder.setOnAction(event ->
+        {
             try
             {
                 this.schedule.addLesson(new Lesson(startTimeSelect.getValue(), endTimeSelect.getValue(), teacherSelect.getValue(), locationSelect.getValue(), this.selectedGroups));
                 listView.setItems(FXCollections.observableArrayList(this.schedule.getLessons()));
-            } catch (Exception e){
+            }
+            catch (Exception e)
+            {
 
             }
         });
 
 
-        VBox rightVbox = new VBox();
-        rightVbox.getChildren().addAll(newLesson, startLesson, startTimeSelect, endLesson, endTimeSelect, teacherBox, teacherSelect, locationBox, locationSelect, allGroups, lessonAdder);
+        VBox rightVbox = PopupController.awesomeVBox(newLesson, startLesson, startTimeSelect, endLesson, endTimeSelect, teacherBox, teacherSelect, locationBox, locationSelect, allGroups, lessonAdder);
 
-        rightVbox.setSpacing(spacingDistance);
 
-        rightVbox.setPadding(new Insets(10, 10, 10, 10));
         rightVbox.setAlignment(Pos.TOP_LEFT);
-
 
         mainPane.setLeft(leftVbox);
         mainPane.setCenter(middleVbox);
@@ -154,12 +170,17 @@ public class TabLesson extends PopUpTab
         return mainPane;
     }
 
-    public void teacherUpdater(){
+
+
+
+    public void teacherUpdater()
+    {
         teacherSelect.getItems().clear();
         teacherSelect.getItems().addAll(schedule.getTeachers());
     }
 
-    public void classUpdater(){
+    public void classUpdater()
+    {
         allGroups.getChildren().clear();
         allGroups.setSpacing(5);
         allGroups.setPrefHeight(110);
@@ -167,15 +188,31 @@ public class TabLesson extends PopUpTab
         {
             CheckBox checkBox = new CheckBox(this.schedule.getGroups().get(i).getGroupName());
             int index = i;
-            checkBox.setOnAction(event -> {
-                if (checkBox.isSelected()){
+            checkBox.setOnAction(event ->
+            {
+                if (checkBox.isSelected())
+                {
                     selectedGroups.add(this.schedule.getGroups().get(index));
-                } else {
+                }
+                else
+                {
                     selectedGroups.remove(this.schedule.getGroups().get(index));
                 }
             });
             allGroups.getChildren().add(checkBox);
         }
     }
+
+
+    private ComboBox timeComboBox()
+    {
+        ComboBox comboBox = new ComboBox();
+        comboBox.setMinWidth(200);
+        comboBox.setItems(FXCollections.observableArrayList(schedule.getLocalTimes()));
+
+        return comboBox;
+
+    }
+
 
 }

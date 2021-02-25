@@ -1,14 +1,21 @@
 package GUI;
 
+import Data.Lesson;
 import Data.Schedule;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 
 public class PopupController extends Stage
@@ -89,6 +96,22 @@ public class PopupController extends Stage
         label.setText(String.valueOf(newText));
 
     }
+
+
+
+
+
+    public static VBox awesomeVBox(Node... elements)
+    {
+        int spacingDistance = 10;
+        VBox vBox = new VBox();
+        vBox.getChildren().addAll(elements);
+        vBox.setSpacing(spacingDistance);
+        vBox.setPadding(new Insets(10, 10, 10, 10));
+
+        return vBox;
+    }
+
 
 
 }

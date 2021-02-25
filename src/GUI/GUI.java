@@ -107,7 +107,7 @@ public class GUI extends Application
             lessons.add(new Lesson(LocalTime.of(13, 30), LocalTime.of(14, 30), teachers.get(2), classrooms.get(3), groups.get(0)));
             lessons.add(new Lesson(LocalTime.of(16, 30), LocalTime.of(17, 30), teachers.get(0), classrooms.get(2), groups));
             lessons.add(new Lesson(LocalTime.of(11, 00), LocalTime.of(12, 00), teachers.get(0), classrooms.get(0), groups));
-            this.schedule = new Schedule(lessons, teachers, groups);
+            this.schedule = new Schedule(lessons, teachers, groups,classrooms);
         }
         else
         {
