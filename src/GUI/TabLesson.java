@@ -1,10 +1,15 @@
 package GUI;
 
+import Data.Lesson;
 import Data.Classroom;
 import Data.Lesson;
 import Data.Schedule;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableListValue;
+import javafx.beans.value.ObservableValue;
 import Data.Teacher;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableListBase;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -13,12 +18,16 @@ import javafx.scene.layout.VBox;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class TabLesson extends PopUpTab
 {
-    private ObservableList timeList;
+    private ListView listView = new ListView();
     private int spacingDistance = 10;
     private ArrayList<String> classes = new ArrayList<>();
+    private HashMap<String, Lesson> data = new HashMap<>();
+    private Lesson selected;
+    private  TextArea lessonData = new TextArea();
     Schedule schedule;
 
     protected TabLesson(Schedule schedule)
@@ -28,6 +37,14 @@ public class TabLesson extends PopUpTab
         classes.add("Tivt1A");
         classes.add("Tivt1B");
         classes.add("Tivt1C");
+
+        for (int i = 0; i < this.schedule.getLessons().size(); i++)
+        {
+            data.put(this.schedule.getLessons().get(i).toShortString(), this.schedule.getLessons().get(i));
+        }
+
+        this.selected = null;
+
 
     }
 
@@ -39,8 +56,24 @@ public class TabLesson extends PopUpTab
 
         //left side of the menu lesson
         Label currentLesson = new Label("Bestaande Lessen");
-        ListView<Lesson> listView = new ListView<>();
+        for (int i = 0; i < this.schedule.getLessons().size(); i++)
+        {
+            listView.getItems().add(this.schedule.getLessons().get(i).toShortString());
+        }
         listView.setPrefWidth(500);
+
+        listView.getSelectionModel().selectedItemProperty().addListener((ov) -> {
+
+            try
+            {
+                int index = listView.getSelectionModel().getSelectedIndex();
+                lessonData.setText(this.schedule.getLessons().get(index).toString());
+                this.selected = this.schedule.getLessons().get(index);
+            }catch (Exception e){
+            }
+        });
+
+
 
 
         VBox leftVbox = new VBox();
@@ -51,16 +84,21 @@ public class TabLesson extends PopUpTab
 
         //middle side of menu lesson
         Label selectedLesson = new Label("Geselecteerde les");
-        TextArea lessonData = new TextArea();
         lessonData.setMaxWidth(500);
         lessonData.setPrefHeight(400);
         lessonData.setEditable(false);
         Button deleteSelected = new Button("Verwijder les");
-
         deleteSelected.setOnAction(event -> {
-
-            schedule.removeLesson(listView.getSelectionModel().getSelectedItem());
-
+            if (selected != null)
+            {
+                this.schedule.removeLesson(this.selected);
+                listView.getItems().clear();
+                lessonData.setText("");
+                for (int i = 0; i < this.schedule.getLessons().size(); i++)
+                {
+                    listView.getItems().add(this.schedule.getLessons().get(i).toShortString());
+                }
+            }
         });
 
         VBox middleVbox = new VBox();

@@ -57,6 +57,10 @@ public class Lesson implements Serializable
                 + teacher.getName() + "\nClassroom: " + classroom.getClassroom() + "\nGroups: " + getGroupNames(groups);
     }
 
+    public String toShortString(){
+        return "Les: " + this.teacher.getSubject() + ", Tijd vanaf: " + beginTime + " tot: " + endTime +", Lokaal: " + ", Groups: " + getGroupNames(groups);
+    }
+
     public LocalTime getBeginTime()
     {
         return beginTime;
