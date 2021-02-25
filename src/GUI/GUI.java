@@ -17,8 +17,6 @@ import java.util.ArrayList;
 
 public class GUI extends Application
 {
-    public static MainWindowController mainWindowController = new MainWindowController();
-
     private Schedule schedule;
     private String filePath = "src/Data/storedSchedule";
 
@@ -40,8 +38,6 @@ public class GUI extends Application
         BorderPane canvasContainer = new BorderPane();
         MainWindow mainWindow = new MainWindow(canvasContainer, this.schedule);
         canvasContainer.setCenter(mainWindow);
-
-        mainWindowController.setMainWindow(mainWindow);
 
         HBox bottomHBox = new HBox();
         Button wijzingen = new Button("Wijzingen");
@@ -108,5 +104,6 @@ public class GUI extends Application
         {
             System.out.println("properly loaded a schedule");
         }
+
     }
 }

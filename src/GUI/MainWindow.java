@@ -5,8 +5,6 @@ import Data.Lesson;
 import Data.Schedule;
 import Data.Teacher;
 import javafx.animation.AnimationTimer;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.layout.Pane;
 import org.jfree.fx.FXGraphics2D;
 import org.jfree.fx.Resizable;
@@ -64,9 +62,11 @@ public class MainWindow extends ResizableCanvas
         {
             for (Rectangle2D rectangle2D : this.lessonShapes.keySet()) {
                 if (rectangle2D.contains(event.getX(), event.getY())) {
-                    System.out.println(this.lessonShapes.get(rectangle2D));
+                    Lesson lesson = this.lessonShapes.get(rectangle2D);
+                    System.out.println(lesson);
                 }
             }
+
         });
 
         new AnimationTimer() {
@@ -88,9 +88,9 @@ public class MainWindow extends ResizableCanvas
     }
 
     public void update() {
+        this.lessonShapes.clear();
         for (Lesson lesson : this.schedule.getLessons())
         {
-
             int classroomIndex = lesson.getClassroom().getClassroom();
             int startingTimeIndex = this.allStartingTimes.indexOf(lesson.getFormatBeginTime());
             int amountOfTimeBlocks = this.allEndingTimes.indexOf(lesson.getFormatEndTime()) - startingTimeIndex + 1;
@@ -102,7 +102,7 @@ public class MainWindow extends ResizableCanvas
             }
             else
             {
-                System.out.println("classroomindex: " + classroomIndex + " startingTime index: " + lesson.getFormatBeginTime() + " " + startingTimeIndex);
+//                System.out.println("classroomindex: " + classroomIndex + " startingTime index: " + lesson.getFormatBeginTime() + " " + startingTimeIndex);
             }
         }
 
@@ -111,6 +111,8 @@ public class MainWindow extends ResizableCanvas
 
     public void draw(FXGraphics2D graphics2D)
     {
+        graphics2D.setBackground(Color.WHITE);
+        graphics2D.clearRect(0, 0, (int)getWidth(), (int)getHeight());
         graphics2D.setFont(new Font(Font.DIALOG, Font.PLAIN, 25));
 
         // verticale lijnen van het tijdvak
