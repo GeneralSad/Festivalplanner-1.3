@@ -4,18 +4,19 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
 
 
-public class PopupController
+public class PopupController extends Stage
 {
     private Stage stage = new Stage();
     private ArrayList<PopUpTab> popups = new ArrayList<>();
 
 
-    protected PopupController()
+    protected PopupController(Stage mainstage)
     {
         TabLesson popUpLesson = new TabLesson();
         TabTeacher tabTeacher = new TabTeacher();
@@ -24,10 +25,7 @@ public class PopupController
         popups.add(popUpLesson);
         popups.add(tabTeacher);
         popups.add(tabClass);
-    }
 
-    protected Stage popupWindowStage()
-    {
 
         stage.setHeight(720);
         stage.setWidth(1280);
@@ -42,10 +40,11 @@ public class PopupController
 
         Scene scene = new Scene(tabPane);
 
-        stage.setScene(scene);
-        stage.setTitle("PopupController");
-
-        return stage;
+        this.setScene(scene);
+        this.setTitle("PopupController");
+        this.initModality(Modality.APPLICATION_MODAL);
+        this.initOwner(mainstage);
+        this.showAndWait();
     }
 
 
@@ -58,31 +57,30 @@ public class PopupController
         }
 
 
+        String text = label.getText();
+        String[] lines = text.split("\n");
 
-            String text = label.getText();
-            String[] lines = text.split("\n");
-
-            StringBuilder newText = new StringBuilder();
+        StringBuilder newText = new StringBuilder();
 
 
-            for (int j = 0; j < line + 1; j++)
+        for (int j = 0; j < line + 1; j++)
+        {
+            if (j == line)
             {
-                if (j == line)
-                {
-                    newText.append(string).append("\n");
-                }
-                else if (j > lines.length - 1)
-                {
-                    newText.append("\n");
-                }
-                else
-                {
-                    newText.append(lines[j]).append("\n");
-                }
-
+                newText.append(string).append("\n");
+            }
+            else if (j > lines.length - 1)
+            {
+                newText.append("\n");
+            }
+            else
+            {
+                newText.append(lines[j]).append("\n");
             }
 
-            label.setText(String.valueOf(newText));
+        }
+
+        label.setText(String.valueOf(newText));
 
     }
 

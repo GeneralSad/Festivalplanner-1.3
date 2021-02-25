@@ -41,4 +41,10 @@ public class Group implements Serializable
     {
         this.students = students;
     }
+
+    @Override
+    public String toString()
+    {
+        return this.className;
+    }
 }
