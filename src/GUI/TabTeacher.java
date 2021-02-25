@@ -1,5 +1,6 @@
 package GUI;
 
+import Data.Schedule;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -11,9 +12,13 @@ import javafx.scene.layout.VBox;
 
 public class TabTeacher extends PopUpTab
 {
-    protected TabTeacher()
+    Schedule schedule;
+
+
+    protected TabTeacher(Schedule schedule)
     {
         super.setPopUpName("Docenten");
+        this.schedule = schedule;
     }
 
     private int spacingDistance = 10;

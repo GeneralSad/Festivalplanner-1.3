@@ -1,12 +1,12 @@
 package GUI;
 
+import Data.Schedule;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 
 import java.util.ArrayList;
 
@@ -15,14 +15,16 @@ public class TabLesson extends PopUpTab
     private ObservableList timeList;
     private int spacingDistance = 10;
     private ArrayList<String> classes = new ArrayList<>();
+    Schedule schedule;
 
-
-    protected TabLesson()
+    protected TabLesson(Schedule schedule)
     {
         super.setPopUpName("Lessen");
+        this.schedule = schedule;
         classes.add("Tivt1A");
         classes.add("Tivt1B");
         classes.add("Tivt1C");
+
     }
 
     @Override
@@ -79,19 +81,12 @@ public class TabLesson extends PopUpTab
         Button lessonadder = new Button("Voeg klas toe");
 
         VBox rightVbox = new VBox();
-        rightVbox.getChildren().addAll(newLesson, startLesson,
-                startTimeSelect, endLesson, endTimeSelect,
-                teacherBox, teacherSelect, locationBox, locationSelect, selectClass(), lessonadder);
+        rightVbox.getChildren().addAll(newLesson, startLesson, startTimeSelect, endLesson, endTimeSelect, teacherBox, teacherSelect, locationBox, locationSelect, selectClass(), lessonadder);
 
         rightVbox.setSpacing(spacingDistance);
 
         rightVbox.setPadding(new Insets(10, 10, 10, 10));
         rightVbox.setAlignment(Pos.TOP_LEFT);
-
-
-
-
-
 
 
         mainPane.setLeft(leftVbox);
@@ -100,22 +95,22 @@ public class TabLesson extends PopUpTab
         mainPane.setPadding(new Insets(10, 500, 10, 10));
 
 
-
-
         return mainPane;
     }
 
     /**
      * deze methode is tijdelijk want deze moet observable worden zodat het klassen ziet als er nieuwe worden toegevoeg
+     *
      * @return
      */
-    public VBox selectClass(){
-       VBox classselector = new VBox();
-       classselector.setSpacing(5);
-       classselector.setPrefHeight(110);
+    public VBox selectClass()
+    {
+        VBox classselector = new VBox();
+        classselector.setSpacing(5);
+        classselector.setPrefHeight(110);
         for (String string : classes)
         {
-            CheckBox box= new CheckBox(string);
+            CheckBox box = new CheckBox(string);
             classselector.getChildren().addAll(box);
         }
         return classselector;
