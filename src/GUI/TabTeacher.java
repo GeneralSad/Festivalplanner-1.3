@@ -99,6 +99,7 @@ public class TabTeacher extends PopUpTab
                 this.selectedTeacher.setSubject(selectedSubjectField.getText());
                 listView.getItems().clear();
                 listView.setItems(FXCollections.observableArrayList(this.schedule.getTeachers()));
+                tabLesson.teacherUpdater();
             }
         });
 
@@ -109,6 +110,7 @@ public class TabTeacher extends PopUpTab
             this.schedule.removeTeacher(listView.getSelectionModel().getSelectedItem());
             listView.getItems().clear();
             listView.setItems(FXCollections.observableArrayList(this.schedule.getTeachers()));
+            tabLesson.teacherUpdater();
         });
 
         VBox middleVbox = new VBox();
