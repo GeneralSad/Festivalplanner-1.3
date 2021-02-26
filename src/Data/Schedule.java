@@ -52,9 +52,11 @@ public class Schedule implements Serializable
             LocalTime tempBeginTime = existingLesson.getBeginTime();
             LocalTime tempEndTime = existingLesson.getEndTime();
 
+            //TODO er zijn  nog edge cases waarbij hij toch een les toevoegd waarbij het niet werkt
+
             // Time overlap with an existing lesson
             if ((beginTime.equals(tempBeginTime) && endTime.equals(tempEndTime)) ||
-                    (endTime.isBefore(tempEndTime) && endTime.equals(tempBeginTime)) ||
+                    (endTime.isBefore(tempEndTime) && endTime.isAfter(tempBeginTime)) ||
                     (beginTime.isAfter(tempBeginTime) && beginTime.isBefore(tempEndTime))) {
 
                 // Check for teacher overlap
@@ -63,7 +65,7 @@ public class Schedule implements Serializable
                 }
 
                 // Check for classroom overlap
-                if (lesson.getClassroom().equals(existingLesson.getClassroom())) {
+                if (lesson.getClassroom() == existingLesson.getClassroom()) {
                     throw new IllegalArgumentException("That classroom is already preoccupied at that moment!");
                 }
 
@@ -76,6 +78,7 @@ public class Schedule implements Serializable
                 }
             }
         }
+
 
         // if an exception was thrown then the method stops so the following statement isn't reached
         lessons.add(lesson);

@@ -24,6 +24,7 @@ public class TabLesson extends PopUpTab
     private ComboBox<Teacher> teacherSelect = new ComboBox<>();
     private Lesson selectedLesson;
     private VBox allGroups = new VBox();
+    private  BorderPane mainPane = new BorderPane();
 
     //rooster
     Schedule schedule;
@@ -41,8 +42,6 @@ public class TabLesson extends PopUpTab
     @Override
     protected BorderPane getPane()
     {
-        //mainpane
-        BorderPane mainPane = new BorderPane();
 
         //left side of the menu lesson
         Label currentLesson = new Label("Bestaande Lessen");
@@ -144,15 +143,14 @@ public class TabLesson extends PopUpTab
 
         lessonAdder.setOnAction(event ->
         {
-            try
-            {
-                this.schedule.addLesson(new Lesson(startTimeSelect.getValue(), endTimeSelect.getValue(), teacherSelect.getValue(), locationSelect.getValue(), this.selectedGroups));
-                listView.setItems(FXCollections.observableArrayList(this.schedule.getLessons()));
-            }
-            catch (Exception e)
-            {
+                try
+                {
+                    this.schedule.addLesson(new Lesson(startTimeSelect.getValue(), endTimeSelect.getValue(), teacherSelect.getValue(), locationSelect.getValue(), this.selectedGroups));
+                    listView.setItems(FXCollections.observableArrayList(this.schedule.getLessons()));
+                }catch (Exception e){
 
-            }
+                }
+
         });
 
 
@@ -177,6 +175,7 @@ public class TabLesson extends PopUpTab
     {
         teacherSelect.getItems().clear();
         teacherSelect.getItems().addAll(schedule.getTeachers());
+        listView.setItems(FXCollections.observableArrayList(this.schedule.getLessons()));
     }
 
     public void classUpdater()
@@ -212,6 +211,11 @@ public class TabLesson extends PopUpTab
 
         return comboBox;
 
+    }
+
+    public void refresh(){
+        mainPane.getChildren().clear();
+        mainPane = getPane();
     }
 
 

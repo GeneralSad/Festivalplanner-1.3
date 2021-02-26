@@ -100,6 +100,7 @@ public class TabTeacher extends PopUpTab
                 listView.getItems().clear();
                 listView.setItems(FXCollections.observableArrayList(this.schedule.getTeachers()));
                 tabLesson.teacherUpdater();
+                tabLesson.refresh();
             }
         });
 
