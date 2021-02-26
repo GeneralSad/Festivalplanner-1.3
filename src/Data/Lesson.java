@@ -10,7 +10,7 @@ public class Lesson implements Serializable
 
     // All possible start times for a lesson
     public enum startTimes {
-        nine ("9:00", 0),
+        nine ("09:00", 0),
         ten ("10:00", 1),
         eleven ("11:00", 2),
         twelve ("12:00", 3),
