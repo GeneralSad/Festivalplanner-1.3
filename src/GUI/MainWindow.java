@@ -91,7 +91,7 @@ public class MainWindow extends ResizableCanvas
         this.lessonShapes.clear();
         for (Lesson lesson : this.schedule.getLessons())
         {
-            int classroomIndex = lesson.getClassroom().getClassroom();
+            int classroomIndex = lesson.getClassroom().getClassroom() - 1;
             int startingTimeIndex = this.allStartingTimes.indexOf(lesson.getFormatBeginTime());
             int amountOfTimeBlocks = this.allEndingTimes.indexOf(lesson.getFormatEndTime()) - startingTimeIndex + 1;
             if (classroomIndex != -1 && startingTimeIndex != -1)
