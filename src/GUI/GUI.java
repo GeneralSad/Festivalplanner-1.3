@@ -52,10 +52,7 @@ public class GUI extends Application
 
 
         Button saveScheduleButton = new Button("Opslaan");
-        saveScheduleButton.setOnAction(event ->
-        {
-            DataStorage.saveSchedule(this.filePath, this.schedule);
-        });
+        saveScheduleButton.setOnAction(event -> DataStorage.saveSchedule(this.filePath, this.schedule));
 
 
         Button reloadSchedule = new Button("Herladen");
@@ -98,6 +95,9 @@ public class GUI extends Application
             classrooms.add(new Classroom(3));
             classrooms.add(new Classroom(4));
             classrooms.add(new Classroom(5));
+            classrooms.add(new Classroom(6));
+            classrooms.add(new Classroom(7));
+            classrooms.add(new Classroom(8));
             ArrayList<Lesson> lessons = new ArrayList<>();
             lessons.add(new Lesson(LocalTime.of(15, 30), LocalTime.of(16, 30), teachers.get(0), classrooms.get(0), groups));
             lessons.add(new Lesson(LocalTime.of(9, 00), LocalTime.of(10, 0), teachers.get(1), classrooms.get(1), groups.get(1)));

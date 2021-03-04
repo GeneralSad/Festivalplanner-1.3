@@ -17,6 +17,9 @@ public class Schedule implements Serializable
     private ArrayList<Group> groups;
     private ArrayList<Classroom> classrooms;
 
+    private ArrayList<LocalTime> allStartingTimes;
+    private ArrayList<LocalTime> allEndingTimes;
+
     public Schedule()
     {
         this(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(),new ArrayList<>());
@@ -30,6 +33,13 @@ public class Schedule implements Serializable
         this.teachers = teachers;
         this.groups = groups;
         this.classrooms = classrooms;
+
+
+        this.allStartingTimes = getLocalTimes();
+        this.allStartingTimes.remove(allStartingTimes.size() - 1);
+        this.allEndingTimes = getLocalTimes();
+        this.allEndingTimes.remove(0);
+
     }
 
     public void addTeacher(Teacher teacher)
@@ -141,7 +151,7 @@ public class Schedule implements Serializable
     }
 
 
-    public ArrayList<LocalTime> getLocalTimes()
+    private static ArrayList<LocalTime> getLocalTimes()
     {
         ArrayList<LocalTime> localTimes = new ArrayList<>();
         for (int i = 9; i < 18; i++)
@@ -153,5 +163,16 @@ public class Schedule implements Serializable
         }
 
         return localTimes;
+    }
+
+
+    public ArrayList<LocalTime> getAllStartingTimes()
+    {
+        return allStartingTimes;
+    }
+
+    public ArrayList<LocalTime> getAllEndingTimes()
+    {
+        return allEndingTimes;
     }
 }

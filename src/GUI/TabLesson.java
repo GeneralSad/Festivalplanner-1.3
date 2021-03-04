@@ -24,10 +24,10 @@ public class TabLesson extends PopUpTab
     private ComboBox<Teacher> teacherSelect = new ComboBox<>();
     private Lesson selectedLesson;
     private VBox allGroups = new VBox();
-    private  BorderPane mainPane = new BorderPane();
+    private BorderPane mainPane = new BorderPane();
 
     //rooster
-    Schedule schedule;
+    private Schedule schedule;
 
     protected TabLesson(Schedule schedule)
     {
@@ -57,10 +57,10 @@ public class TabLesson extends PopUpTab
         lessonData.setOrientation(Orientation.VERTICAL);
 
         Label selectedStartLesson = new Label("Begintijd");
-        ComboBox<LocalTime> selectedStartTimeSelect = timeComboBox();
+        ComboBox<LocalTime> selectedStartTimeSelect = timeComboBox(true);
 
         Label selectedEndLesson = new Label("Eindtijd");
-        ComboBox<LocalTime> selectedEndTimeSelect = timeComboBox();
+        ComboBox<LocalTime> selectedEndTimeSelect = timeComboBox(false);
 
         Label selectedTeacherBox = new Label("Docent");
         ComboBox selectedTeachterComboBox = new ComboBox();
@@ -122,10 +122,10 @@ public class TabLesson extends PopUpTab
         Label newLesson = new Label("Nieuwe les");
 
         Label startLesson = new Label("Begintijd");
-        ComboBox<LocalTime> startTimeSelect = timeComboBox();
+        ComboBox<LocalTime> startTimeSelect = timeComboBox(true);
 
         Label endLesson = new Label("Eindtijd");
-        ComboBox<LocalTime> endTimeSelect = timeComboBox();
+        ComboBox<LocalTime> endTimeSelect = timeComboBox(false);
 
 
         Label teacherBox = new Label("Kies een docent");
@@ -143,13 +143,16 @@ public class TabLesson extends PopUpTab
 
         lessonAdder.setOnAction(event ->
         {
-                try
-                {
-                    this.schedule.addLesson(new Lesson(startTimeSelect.getValue(), endTimeSelect.getValue(), teacherSelect.getValue(), locationSelect.getValue(), this.selectedGroups));
-                    listView.setItems(FXCollections.observableArrayList(this.schedule.getLessons()));
-                }catch (Exception e){
+            //todo makes this do something
+            try
+            {
+                this.schedule.addLesson(new Lesson(startTimeSelect.getValue(), endTimeSelect.getValue(), teacherSelect.getValue(), locationSelect.getValue(), this.selectedGroups));
+                listView.setItems(FXCollections.observableArrayList(this.schedule.getLessons()));
+            }
+            catch (Exception e)
+            {
 
-                }
+            }
 
         });
 
@@ -167,8 +170,6 @@ public class TabLesson extends PopUpTab
 
         return mainPane;
     }
-
-
 
 
     public void teacherUpdater()
@@ -203,17 +204,26 @@ public class TabLesson extends PopUpTab
     }
 
 
-    private ComboBox timeComboBox()
+    private ComboBox timeComboBox(boolean isStartTime)
     {
         ComboBox comboBox = new ComboBox();
         comboBox.setMinWidth(200);
-        comboBox.setItems(FXCollections.observableArrayList(schedule.getLocalTimes()));
+
+        if (isStartTime)
+        {
+            comboBox.setItems(FXCollections.observableArrayList(schedule.getAllStartingTimes()));
+        }
+        else
+        {
+            comboBox.setItems(FXCollections.observableArrayList(schedule.getAllEndingTimes()));
+        }
 
         return comboBox;
 
     }
 
-    public void refresh(){
+    public void refresh()
+    {
         mainPane.getChildren().clear();
         mainPane = getPane();
     }
