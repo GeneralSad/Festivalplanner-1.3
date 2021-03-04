@@ -1,8 +1,14 @@
 package Simulator.Maploading;
 
+import org.jfree.fx.FXGraphics2D;
+
 import javax.json.*;
 import java.util.ArrayList;
 
+/**
+ * Represents a full tiledmap with all the different tiledsets and tiledlayers
+ * Possible to draw all the tiledlayers contained within using the tiledsets contained within
+ */
 public class TiledMap
 {
     private int height;
@@ -21,9 +27,21 @@ public class TiledMap
         init();
     }
 
+    public int getTileHeight()
+    {
+        return tileHeight;
+    }
+
+    public int getTileWidth()
+    {
+        return tileWidth;
+    }
+
+    /**
+     * Read the Json file given in the constructor to make all attributes, tiledlayers, tiledsets and tiles
+     */
     private void init()
     {
-        System.out.println("File path: " + this.jsonFileName);
         JsonReader jsonReader = null;
         jsonReader = Json.createReader(getClass().getResourceAsStream(jsonFileName));
         JsonObject root = jsonReader.readObject();
@@ -33,14 +51,7 @@ public class TiledMap
         this.tileHeight = root.getInt("tileheight");
         this.tileWidth = root.getInt("tilewidth");
 
-        System.out.println("Data:");
-        System.out.println("width: " + this.width);
-        System.out.println("height: " + this.height);
-        System.out.println("tilewidth: " + this.tileWidth);
-        System.out.println("tileheight: " + this.tileHeight);
-
         JsonArray tilesets = root.getJsonArray("tilesets");
-        System.out.println("Amount of tilesets: " + tilesets.size());
         for (int i = 0; i < tilesets.size(); i++) {
             try {
                 TiledSet tiledSet = new TiledSet(tilesets.getJsonObject(i));
@@ -53,9 +64,33 @@ public class TiledMap
 
         JsonArray tileLayers = root.getJsonArray("layers");
         for (int i = 0; i < tileLayers.size(); i++) {
-            TiledLayer tiledLayer = new TiledLayer(tileLayers.getJsonObject(i));
+            TiledLayer tiledLayer = new TiledLayer(tileLayers.getJsonObject(i), this);
             tiledLayers.add(tiledLayer);
         }
-        System.out.println("Done!");
+    }
+
+    /**
+     * Draw all tiledlayers in the list of tiledlayers
+     * @param fxGraphics2D
+     */
+    public void draw(FXGraphics2D fxGraphics2D) {
+        for (TiledLayer tiledLayer : this.tiledLayers) {
+            tiledLayer.draw(fxGraphics2D);
+        }
+    }
+
+    public ArrayList<TiledSet> getTiledSets()
+    {
+        return tiledSets;
+    }
+
+    public int getHeight()
+    {
+        return height;
+    }
+
+    public int getWidth()
+    {
+        return width;
     }
 }

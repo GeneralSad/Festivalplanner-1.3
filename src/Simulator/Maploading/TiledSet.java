@@ -6,6 +6,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
 
+/**
+ * Represents a set of multiple Tiles with their associated images
+ */
 public class TiledSet
 {
     private int columns;
@@ -34,15 +37,36 @@ public class TiledSet
         init();
     }
 
+    /**
+     * Slices all the tiles from the original image and stores them as Tile objects in a list
+     */
     private void init() {
         try {
             image = ImageIO.read(getClass().getResource("/TiledMaps/" + this.imagePath));
-            System.out.println("Loaded image");
             for (int i = 0; i < this.tileCount; i++) {
                 tiles.add(new Tile(image.getSubimage(tileWidth * (i % columns),tileHeight * (i / columns), tileWidth, tileHeight)));
             }
         } catch (Exception e) {
             System.out.println(e);
         }
+    }
+
+    public int getFirstGID()
+    {
+        return firstGID;
+    }
+
+    public int getLastGID()
+    {
+        return lastGID;
+    }
+
+    /**
+     * Return the tile associated with the gid by taking that gid as an index out of the tiles list
+     * @param gid
+     * @return
+     */
+    public BufferedImage getTile(int gid) {
+        return this.tiles.get(gid).getTileImage();
     }
 }

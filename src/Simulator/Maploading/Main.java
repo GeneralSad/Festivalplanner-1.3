@@ -65,5 +65,7 @@ public class Main extends Application
         graphics2D.clearRect(0, 0, (int) this.resizableCanvas.getWidth(), (int) this.resizableCanvas.getHeight());
 
         graphics2D.draw(new Rectangle2D.Double(50, 50, 50, 50));
+
+        tiledMap.draw(graphics2D);
     }
 }
