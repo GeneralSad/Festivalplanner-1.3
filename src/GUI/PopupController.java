@@ -1,21 +1,17 @@
 package GUI;
 
-import Data.Lesson;
 import Data.Schedule;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 
 public class PopupController extends Stage
@@ -24,20 +20,17 @@ public class PopupController extends Stage
     private ArrayList<PopUpTab> popups = new ArrayList<>();
 
 
-
     protected PopupController(Stage mainstage, Schedule schedule)
     {
         stage.setHeight(720);
         stage.setWidth(1280);
         TabLesson tabLesson = new TabLesson(schedule);
-        TabLesson popUpLesson = tabLesson;
         TabTeacher tabTeacher = new TabTeacher(schedule, tabLesson);
         TabClass tabClass = new TabClass(schedule, tabLesson);
 
-        popups.add(popUpLesson);
+        popups.add(tabLesson);
         popups.add(tabTeacher);
         popups.add(tabClass);
-
 
 
         TabPane tabPane = new TabPane();
@@ -98,9 +91,6 @@ public class PopupController extends Stage
     }
 
 
-
-
-
     public static VBox awesomeVBox(Node... elements)
     {
         int spacingDistance = 10;
@@ -111,7 +101,6 @@ public class PopupController extends Stage
 
         return vBox;
     }
-
 
 
 }

@@ -8,17 +8,21 @@ public class Group implements Serializable
     private String className;
     private ArrayList<Student> students;
 
+
     public Group(String className)
     {
         this.className = className;
         this.students = new ArrayList<>();
+
     }
 
-    public void addStudent(Student student) {
+    public void addStudent(Student student)
+    {
         students.add(student);
     }
 
-    public void removeStudent(Student student) {
+    public void removeStudent(Student student)
+    {
         students.remove(student);
     }
 
@@ -26,6 +30,7 @@ public class Group implements Serializable
     {
         return className;
     }
+
 
     public void setGroupName(String className)
     {

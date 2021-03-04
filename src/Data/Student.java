@@ -7,11 +7,13 @@ public class Student implements Serializable
 
     private String name;
     private int age;
+    private Group group;
 
     public Student(String name, int age, Group group)
     {
         this.name = name;
         this.age = age;
+        this.group = group;
     }
 
     public String getName()
@@ -35,11 +37,13 @@ public class Student implements Serializable
     }
 
     @Override
-    public String toString(){
+    public String toString()
+    {
         return this.name;
     }
 
-    public String toDetailString() {
+    public String toDetailString()
+    {
         return "Naam: " + this.name + "\nLeeftijd: " + this.age;
     }
 

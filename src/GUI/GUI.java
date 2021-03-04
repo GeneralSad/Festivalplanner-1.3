@@ -3,7 +3,6 @@ package GUI;
 import Data.*;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -12,8 +11,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-import org.jfree.fx.FXGraphics2D;
-import sun.applet.Main;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -22,6 +19,7 @@ public class GUI extends Application
 {
     private Schedule schedule;
     private String filePath = "src/Data/storedSchedule";
+    private DataStorage dataStorage = new DataStorage();
 
 
     public static void main(String[] args)
@@ -30,7 +28,7 @@ public class GUI extends Application
     }
 
     @Override
-    public void start(Stage stage) throws Exception
+    public void start(Stage stage)
     {
         // probeer een schedule te laden
         initialise();
@@ -52,7 +50,7 @@ public class GUI extends Application
 
 
         Button saveScheduleButton = new Button("Opslaan");
-        saveScheduleButton.setOnAction(event -> DataStorage.saveSchedule(this.filePath, this.schedule));
+        saveScheduleButton.setOnAction(event -> dataStorage.saveSchedule(this.filePath, this.schedule));
 
 
         Button reloadSchedule = new Button("Herladen");
@@ -100,14 +98,14 @@ public class GUI extends Application
             classrooms.add(new Classroom(8));
             ArrayList<Lesson> lessons = new ArrayList<>();
             lessons.add(new Lesson(LocalTime.of(15, 30), LocalTime.of(16, 30), teachers.get(0), classrooms.get(0), groups));
-            lessons.add(new Lesson(LocalTime.of(9, 00), LocalTime.of(10, 0), teachers.get(1), classrooms.get(1), groups.get(1)));
-            lessons.add(new Lesson(LocalTime.of(10, 00), LocalTime.of(11, 0), teachers.get(2), classrooms.get(2), groups.get(0)));
-            lessons.add(new Lesson(LocalTime.of(10, 00), LocalTime.of(12, 0), teachers.get(0), classrooms.get(3), groups.get(3)));
+            lessons.add(new Lesson(LocalTime.of(9, 0), LocalTime.of(10, 0), teachers.get(1), classrooms.get(1), groups.get(1)));
+            lessons.add(new Lesson(LocalTime.of(10, 0), LocalTime.of(11, 0), teachers.get(2), classrooms.get(2), groups.get(0)));
+            lessons.add(new Lesson(LocalTime.of(9, 0), LocalTime.of(11, 0), teachers.get(0), classrooms.get(3), groups.get(3)));
             lessons.add(new Lesson(LocalTime.of(12, 30), LocalTime.of(13, 30), teachers.get(1), classrooms.get(4), groups.get(2)));
             lessons.add(new Lesson(LocalTime.of(13, 30), LocalTime.of(14, 30), teachers.get(2), classrooms.get(3), groups.get(0)));
             lessons.add(new Lesson(LocalTime.of(16, 30), LocalTime.of(17, 30), teachers.get(0), classrooms.get(2), groups));
-            lessons.add(new Lesson(LocalTime.of(11, 00), LocalTime.of(12, 00), teachers.get(0), classrooms.get(0), groups));
-            this.schedule = new Schedule(lessons, teachers, groups,classrooms);
+            lessons.add(new Lesson(LocalTime.of(11, 0), LocalTime.of(12, 0), teachers.get(0), classrooms.get(7), groups));
+            this.schedule = new Schedule(lessons, teachers, groups, classrooms);
         }
         else
         {

@@ -7,12 +7,10 @@ import Data.Teacher;
 import javafx.animation.AnimationTimer;
 import javafx.scene.layout.Pane;
 import org.jfree.fx.FXGraphics2D;
-import org.jfree.fx.Resizable;
 import org.jfree.fx.ResizableCanvas;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,8 +20,8 @@ public class MainWindow extends ResizableCanvas
     private Schedule schedule;
     private HashMap<Rectangle2D, Lesson> lessonShapes = new HashMap<>();
 
-    private ArrayList<LocalTime> allStartingTimes = new ArrayList<>();
-    private ArrayList<LocalTime> allEndingTimes = new ArrayList<>();
+    private ArrayList<LocalTime> allStartingTimes;
+    private ArrayList<LocalTime> allEndingTimes;
 
     private int amountOfClassrooms = Classroom.classRooms.values().length;
 
@@ -39,13 +37,9 @@ public class MainWindow extends ResizableCanvas
 
     public MainWindow(Pane pane, Schedule schedule)
     {
-        super(new Resizable()
+        super(fxGraphics2D ->
         {
-            @Override
-            public void draw(FXGraphics2D fxGraphics2D)
-            {
-                // this needs to be here but isn't used
-            }
+            // this needs to be here but isn't used
         }, pane);
         this.schedule = schedule;
 
@@ -71,6 +65,7 @@ public class MainWindow extends ResizableCanvas
                 if (rectangle2D.contains(event.getX(), event.getY())) {
                     Lesson lesson = this.lessonShapes.get(rectangle2D);
                     System.out.println(lesson);
+
                 }
             }
 
@@ -94,7 +89,8 @@ public class MainWindow extends ResizableCanvas
         update();
     }
 
-    public void update() {
+    private void update()
+    {
         this.lessonShapes.clear();
         for (Lesson lesson : this.schedule.getLessons())
         {
@@ -116,7 +112,7 @@ public class MainWindow extends ResizableCanvas
         draw(new FXGraphics2D(getGraphicsContext2D()));
     }
 
-    public void draw(FXGraphics2D graphics2D)
+    private void draw(FXGraphics2D graphics2D)
     {
         graphics2D.setBackground(Color.WHITE);
         graphics2D.clearRect(0, 0, (int)getWidth(), (int)getHeight());

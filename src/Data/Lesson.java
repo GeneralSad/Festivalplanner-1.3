@@ -35,19 +35,23 @@ public class Lesson implements Serializable
         addGroup(className);
     }
 
-    public void addGroup(Group group) {
+    private void addGroup(Group group)
+    {
         this.groups.add(group);
     }
 
-    public String getFormatBeginTime() {
+    public String getFormatBeginTime()
+    {
         return formatTimeString(this.beginTime);
     }
 
-    public String getFormatEndTime() {
+    public String getFormatEndTime()
+    {
         return formatTimeString(this.endTime);
     }
 
-    private String formatTimeString(LocalTime localTime) {
+    private String formatTimeString(LocalTime localTime)
+    {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
         return localTime.format(dtf);
     }
@@ -55,12 +59,12 @@ public class Lesson implements Serializable
     @Override
     public String toString()
     {
-        return "Vak: " + this.teacher.getSubject() + "\nBegint: " + beginTime + "\nEindigt: " + endTime + "\nLeraar: "
-                + teacher.getName() + "\nKlaslokaal: " + classroom.getClassroom() + "\nKlassen: " + getGroupNames(groups);
+        return "Vak: " + this.teacher.getSubject() + "\nBegint: " + beginTime + "\nEindigt: " + endTime + "\nLeraar: " + teacher.getName() + "\nKlaslokaal: " + classroom.getClassroom() + "\nKlassen: " + getGroupNames(groups);
     }
 
-    public String toShortString(){
-        return "Les: " + this.teacher.getSubject() + ", Tijd vanaf: " + beginTime + " tot: " + endTime +", Lokaal: " + ", Klassen: " + getGroupNames(groups);
+    public String toShortString()
+    {
+        return "Les: " + this.teacher.getSubject() + ", Tijd vanaf: " + beginTime + " tot: " + endTime + ", Lokaal: " + ", Klassen: " + getGroupNames(groups);
     }
 
     public LocalTime getBeginTime()
@@ -113,7 +117,8 @@ public class Lesson implements Serializable
         this.groups = groups;
     }
 
-    public String getGroupNames(ArrayList<Group> groups) {
+    public String getGroupNames(ArrayList<Group> groups)
+    {
 
         StringBuilder str = new StringBuilder();
 
@@ -124,7 +129,8 @@ public class Lesson implements Serializable
 
         String commaString = str.toString();
 
-        if (commaString.length() > 0) {
+        if (commaString.length() > 0)
+        {
             commaString = commaString.substring(0, commaString.length() - 2);
         }
 
