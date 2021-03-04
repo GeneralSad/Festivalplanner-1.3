@@ -3,6 +3,7 @@ package GUI;
 import Data.*;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -11,8 +12,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import org.jfree.fx.FXGraphics2D;
+import sun.applet.Main;
 
-import javax.xml.crypto.Data;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
@@ -20,6 +22,7 @@ public class GUI extends Application
 {
     private Schedule schedule;
     private String filePath = "src/Data/storedSchedule";
+
 
     public static void main(String[] args)
     {
@@ -36,15 +39,29 @@ public class GUI extends Application
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
         BorderPane canvasContainer = new BorderPane();
-        canvasContainer.setCenter(new MainWindow(canvasContainer, this.schedule));
+        MainWindow mainWindow = new MainWindow(canvasContainer, this.schedule);
+        canvasContainer.setCenter(mainWindow);
 
         HBox bottomHBox = new HBox();
-        bottomHBox.getChildren().add(new Button("Wijzingen"));
-        Button saveScheduleButton = new Button("Save Scheduel");
-        saveScheduleButton.setOnAction(event -> {
+        Button wijzingen = new Button("Wijzigen");
+        bottomHBox.getChildren().add(wijzingen);
+        wijzingen.setOnAction(event ->
+        {
+            PopupController popupController = new PopupController(stage, schedule);
+        });
+
+
+        Button saveScheduleButton = new Button("Opslaan");
+        saveScheduleButton.setOnAction(event ->
+        {
             DataStorage.saveSchedule(this.filePath, this.schedule);
         });
+
+
+        Button reloadSchedule = new Button("Herladen");
+
         bottomHBox.getChildren().add(saveScheduleButton);
+        bottomHBox.getChildren().add(reloadSchedule);
         canvasContainer.setBottom(bottomHBox);
 
         tabPane.getTabs().add(new Tab("Rooster", canvasContainer));
@@ -56,13 +73,12 @@ public class GUI extends Application
         Scene scene = new Scene(tabPane);
         stage.setScene(scene);
         stage.setTitle("School simulatie");
+        stage.setMaximized(true);
         stage.show();
-
-
-
     }
 
-    private void initialise() {
+    private void initialise()
+    {
         this.schedule = DataStorage.loadSchedule(this.filePath);
         if (this.schedule == null)
         {
@@ -91,9 +107,12 @@ public class GUI extends Application
             lessons.add(new Lesson(LocalTime.of(13, 30), LocalTime.of(14, 30), teachers.get(2), classrooms.get(3), groups.get(0)));
             lessons.add(new Lesson(LocalTime.of(16, 30), LocalTime.of(17, 30), teachers.get(0), classrooms.get(2), groups));
             lessons.add(new Lesson(LocalTime.of(11, 00), LocalTime.of(12, 00), teachers.get(0), classrooms.get(0), groups));
-            this.schedule = new Schedule(lessons, teachers, groups);
-        } else {
+            this.schedule = new Schedule(lessons, teachers, groups,classrooms);
+        }
+        else
+        {
             System.out.println("properly loaded a schedule");
         }
+
     }
 }

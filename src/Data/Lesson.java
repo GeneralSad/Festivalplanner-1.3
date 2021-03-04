@@ -8,6 +8,46 @@ import java.util.ArrayList;
 public class Lesson implements Serializable
 {
 
+    // All possible start times for a lesson
+    public enum startTimes {
+        nine ("09:00", 0),
+        ten ("10:00", 1),
+        eleven ("11:00", 2),
+        twelve ("12:00", 3),
+        twelveThirty ("12:30", 4),
+        thirteenThirty ("13:30",5),
+        fourteenThirty ("14:30", 6),
+        fifteenThirty ("15:30", 7),
+        sixteenThirty ("16:30", 8);
+
+        public final String startTime;
+        public final int timeBlock;
+        startTimes(String startTime, int timeBlock)
+        {
+            this.startTime = startTime;
+            this.timeBlock = timeBlock;
+        }
+    }
+
+    // All possible end times for a lesson
+    public enum endTimes {
+        ten ("10:00"),
+        eleven ("11:00"),
+        twelve ("12:00"),
+        twelveThirty ("12:30"),
+        thirteenThirty ("13:30"),
+        fourteenThirty ("14:30"),
+        fifteenThirty ("15:30"),
+        sixteenThirty ("16:30"),
+        seventeenThirty ("17:30"),;
+
+        public final String endTime;
+        endTimes(String endTime)
+        {
+            this.endTime = endTime;
+        }
+    }
+
     private LocalTime beginTime;
     private LocalTime endTime;
     private Teacher teacher;
@@ -20,7 +60,11 @@ public class Lesson implements Serializable
         this.endTime = endTime;
         this.teacher = teacher;
         this.classroom = classroom;
-        this.groups = groups;
+        this.groups = new ArrayList<>();
+        for (Group group: groups)
+        {
+            this.groups.add(group);
+        }
     }
 
     public Lesson(LocalTime beginTime, LocalTime endTime, Teacher teacher, Classroom classroom, Group className)
@@ -53,8 +97,12 @@ public class Lesson implements Serializable
     @Override
     public String toString()
     {
-        return "Lesson: " + this.teacher.getSubject() + "\nBegins: " + beginTime + "\nEnds: " + endTime + "\nTeacher: "
-                + teacher.getName() + "\nClassroom: " + classroom.getClassroom() + "\nGroups: " + getGroupNames(groups);
+        return "Vak: " + this.teacher.getSubject() + "\nBegint: " + beginTime + "\nEindigt: " + endTime + "\nLeraar: "
+                + teacher.getName() + "\nKlaslokaal: " + classroom.getClassroom() + "\nKlassen: " + getGroupNames(groups);
+    }
+
+    public String toShortString(){
+        return "Les: " + this.teacher.getSubject() + ", Tijd vanaf: " + beginTime + " tot: " + endTime +", Lokaal: " + ", Klassen: " + getGroupNames(groups);
     }
 
     public LocalTime getBeginTime()

@@ -1,9 +1,6 @@
 package Data;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 
 public class DataStorage
 {
@@ -38,7 +35,7 @@ public class DataStorage
         {
             e.printStackTrace();
         }
-        return null; //Is dit het beste om te doen?
+        return null;
     }
 
 }
