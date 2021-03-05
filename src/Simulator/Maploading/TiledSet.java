@@ -16,8 +16,8 @@ public class TiledSet
     private int lastGID;
     private String imagePath;
     private BufferedImage image;
-    private int imageHeight;
-    private int imageWidth;
+//    private int imageHeight;
+//    private int imageWidth;
     private int tileCount;
     private int tileHeight;
     private int tileWidth;
@@ -30,8 +30,8 @@ public class TiledSet
         this.tileWidth = jsonObject.getInt("tilewidth");
         this.firstGID = jsonObject.getInt("firstgid");
         this.lastGID = this.firstGID + this.tileCount;
-        this.imageHeight = jsonObject.getInt("imageheight");
-        this.imageWidth = jsonObject.getInt("imagewidth");
+//        this.imageHeight = jsonObject.getInt("imageheight");
+//        this.imageWidth = jsonObject.getInt("imagewidth");
         this.imagePath = jsonObject.getString("image");
         this.tiles = new ArrayList<>();
         init();
