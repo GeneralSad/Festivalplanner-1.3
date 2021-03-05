@@ -2,6 +2,7 @@ package GUI;
 
 import Data.*;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
@@ -12,6 +13,14 @@ import javafx.scene.layout.VBox;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Comparator;
+
+/**
+ * Auteurs:
+ *
+ * Deze klasse is voor om de tab lesson goed te weergeven
+ *
+ */
 
 public class TabLesson extends PopUpTab
 {
@@ -19,24 +28,28 @@ public class TabLesson extends PopUpTab
     private int spacingDistance = 10;
 
     //components
-    private ListView<Lesson> listView = new ListView<Lesson>();
+    private ListView<Lesson> listView = new ListView<>();
     private ArrayList<Group> selectedGroups = new ArrayList<>();
     private ComboBox<Teacher> teacherSelect = new ComboBox<>();
     private Lesson selectedLesson;
     private VBox allGroups = new VBox();
-    private  BorderPane mainPane = new BorderPane();
+    private BorderPane mainPane = new BorderPane();
+
 
     //rooster
-    Schedule schedule;
+    private Schedule schedule;
+
 
     protected TabLesson(Schedule schedule)
     {
         super.setPopUpName("Lessen");
         this.schedule = schedule;
         this.selectedLesson = null;
-        this.listView.setItems(FXCollections.observableArrayList(this.schedule.getLessons()));
+
+        this.listView.setItems(schedule.getLessons().sorted(Comparator.comparing(Lesson::getBeginTime)));
         classUpdater();
-        teacherUpdater();
+        this.teacherSelect.setItems(schedule.getTeacherObservableList());
+        schedule.getGroupObservableList().addListener(this::onClassChanged);
     }
 
     @Override
@@ -57,18 +70,18 @@ public class TabLesson extends PopUpTab
         lessonData.setOrientation(Orientation.VERTICAL);
 
         Label selectedStartLesson = new Label("Begintijd");
-        ComboBox<LocalTime> selectedStartTimeSelect = timeComboBox();
+        ComboBox<LocalTime> selectedStartTimeSelect = timeComboBox(true);
 
         Label selectedEndLesson = new Label("Eindtijd");
-        ComboBox<LocalTime> selectedEndTimeSelect = timeComboBox();
+        ComboBox<LocalTime> selectedEndTimeSelect = timeComboBox(false);
 
         Label selectedTeacherBox = new Label("Docent");
-        ComboBox selectedTeachterComboBox = new ComboBox();
-        selectedTeachterComboBox.setItems(FXCollections.observableArrayList(schedule.getTeachers()));
+        ComboBox<Teacher> selectedTeachterComboBox = new ComboBox<>();
+        selectedTeachterComboBox.setItems(schedule.getTeacherObservableList());
 
         Label selectedTocationBox = new Label("Lokaal");
         ComboBox<Classroom> selectedLocationSelect = new ComboBox<>();
-        selectedLocationSelect.setItems(FXCollections.observableArrayList(schedule.getClassrooms()));
+        selectedLocationSelect.setItems(FXCollections.observableArrayList(schedule.getClassroomArrayList()));
         selectedLocationSelect.setMinWidth(200);
 
         lessonData.getChildren().addAll(selectedStartLesson, selectedStartTimeSelect, selectedEndLesson, selectedEndTimeSelect, selectedTeacherBox, selectedTeachterComboBox, selectedTocationBox, selectedLocationSelect);
@@ -80,22 +93,44 @@ public class TabLesson extends PopUpTab
         {
             if (this.selectedLesson != null)
             {
-                this.selectedLesson.setBeginTime(selectedStartTimeSelect.getSelectionModel().getSelectedItem());
-                this.selectedLesson.setEndTime(selectedEndTimeSelect.getSelectionModel().getSelectedItem());
-                this.selectedLesson.setClassroom(selectedLocationSelect.getSelectionModel().getSelectedItem());
-                this.selectedLesson.setTeacher((Teacher) selectedTeachterComboBox.getSelectionModel().getSelectedItem());
-                listView.getItems().clear();
-                this.listView.setItems(FXCollections.observableArrayList(this.schedule.getLessons()));
+                LocalTime beginTime = selectedStartTimeSelect.getSelectionModel().getSelectedItem();
+                LocalTime endTime = selectedEndTimeSelect.getSelectionModel().getSelectedItem();
+
+                Lesson lesson = this.selectedLesson.clone();
+
+                ArrayList<Lesson> overlappingLessons = this.schedule.getOverlappingTime(beginTime, endTime);
+                overlappingLessons.remove(this.selectedLesson);
+
+                lesson.setBeginTime(beginTime);
+                lesson.setEndTime(endTime);
+                lesson.setClassroom(selectedLocationSelect.getSelectionModel().getSelectedItem());
+                lesson.setTeacher(selectedTeachterComboBox.getSelectionModel().getSelectedItem());
+
+
+                try
+                {
+                    if (this.schedule.checkLesson(lesson, overlappingLessons))
+                    {
+                        schedule.removeLesson(this.selectedLesson);
+                        schedule.addLesson(lesson);
+                    }
+                }
+                catch (IllegalArgumentException e)
+                {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText("Er is iets fout gegaan");
+                    alert.setContentText(e.getMessage());
+                    alert.showAndWait();
+                }
+
+
+                this.listView.refresh();
             }
         });
 
 
-        deleteSelected.setOnAction(event ->
-        {
-            schedule.removeLesson(this.selectedLesson);
-            listView.getItems().clear();
-            this.listView.setItems(FXCollections.observableArrayList(this.schedule.getLessons()));
-        });
+        deleteSelected.setOnAction(event -> schedule.removeLesson(this.selectedLesson));
 
         //listens to your selectoin on the menu
         listView.getSelectionModel().selectedItemProperty().addListener(event ->
@@ -122,10 +157,10 @@ public class TabLesson extends PopUpTab
         Label newLesson = new Label("Nieuwe les");
 
         Label startLesson = new Label("Begintijd");
-        ComboBox<LocalTime> startTimeSelect = timeComboBox();
+        ComboBox<LocalTime> startTimeSelect = timeComboBox(true);
 
         Label endLesson = new Label("Eindtijd");
-        ComboBox<LocalTime> endTimeSelect = timeComboBox();
+        ComboBox<LocalTime> endTimeSelect = timeComboBox(false);
 
 
         Label teacherBox = new Label("Kies een docent");
@@ -137,19 +172,36 @@ public class TabLesson extends PopUpTab
         locationSelect.setMinWidth(200);
 
 
-        locationSelect.setItems(FXCollections.observableArrayList(schedule.getClassrooms()));
+        locationSelect.setItems(FXCollections.observableArrayList(schedule.getClassroomArrayList()));
 
-        Button lessonAdder = new Button("Voeg klas toe");
+        Button lessonAdder = new Button("Voeg les toe");
 
         lessonAdder.setOnAction(event ->
         {
-                try
-                {
-                    this.schedule.addLesson(new Lesson(startTimeSelect.getValue(), endTimeSelect.getValue(), teacherSelect.getValue(), locationSelect.getValue(), this.selectedGroups));
-                    listView.setItems(FXCollections.observableArrayList(this.schedule.getLessons()));
-                }catch (Exception e){
+            try
+            {
+                this.schedule.addLesson(new Lesson(startTimeSelect.getValue(), endTimeSelect.getValue(), teacherSelect.getValue(), locationSelect.getValue(), this.selectedGroups));
 
-                }
+            }
+            catch (NullPointerException e)
+            {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Er is iets fout gegaan");
+                alert.setContentText("Niet alles is ingevuld");
+
+                alert.showAndWait();
+            }
+            catch (IllegalArgumentException e)
+            {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Er is iets fout gegaan");
+                alert.setContentText(e.getMessage());
+
+                alert.showAndWait();
+            }
+
 
         });
 
@@ -169,33 +221,24 @@ public class TabLesson extends PopUpTab
     }
 
 
-
-
-    public void teacherUpdater()
-    {
-        teacherSelect.getItems().clear();
-        teacherSelect.getItems().addAll(schedule.getTeachers());
-        listView.setItems(FXCollections.observableArrayList(this.schedule.getLessons()));
-    }
-
-    public void classUpdater()
+    private void classUpdater()
     {
         allGroups.getChildren().clear();
         allGroups.setSpacing(5);
         allGroups.setPrefHeight(110);
-        for (int i = 0; i < this.schedule.getGroups().size(); i++)
+        for (int i = 0; i < this.schedule.getGroupArrayList().size(); i++)
         {
-            CheckBox checkBox = new CheckBox(this.schedule.getGroups().get(i).getGroupName());
+            CheckBox checkBox = new CheckBox(this.schedule.getGroupArrayList().get(i).getGroupName());
             int index = i;
             checkBox.setOnAction(event ->
             {
                 if (checkBox.isSelected())
                 {
-                    selectedGroups.add(this.schedule.getGroups().get(index));
+                    selectedGroups.add(this.schedule.getGroupArrayList().get(index));
                 }
                 else
                 {
-                    selectedGroups.remove(this.schedule.getGroups().get(index));
+                    selectedGroups.remove(this.schedule.getGroupArrayList().get(index));
                 }
             });
             allGroups.getChildren().add(checkBox);
@@ -203,19 +246,32 @@ public class TabLesson extends PopUpTab
     }
 
 
-    private ComboBox timeComboBox()
+    private void onClassChanged(ListChangeListener.Change c)
     {
-        ComboBox comboBox = new ComboBox();
+
+        if (c.next())
+        {
+            classUpdater();
+        }
+    }
+
+
+    private ComboBox<LocalTime> timeComboBox(boolean isStartTime)
+    {
+        ComboBox<LocalTime> comboBox = new ComboBox<>();
         comboBox.setMinWidth(200);
-        comboBox.setItems(FXCollections.observableArrayList(schedule.getLocalTimes()));
+
+        if (isStartTime)
+        {
+            comboBox.setItems(FXCollections.observableArrayList(schedule.getAllStartingTimes()));
+        }
+        else
+        {
+            comboBox.setItems(FXCollections.observableArrayList(schedule.getAllEndingTimes()));
+        }
 
         return comboBox;
 
-    }
-
-    public void refresh(){
-        mainPane.getChildren().clear();
-        mainPane = getPane();
     }
 
 

@@ -4,20 +4,27 @@ import Data.Group;
 import Data.Schedule;
 import Data.Student;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-import java.util.ArrayList;
+/**
+ * Auteurs:
+ *
+ * Deze klasse is voor om de tab class goed te weergeven
+ *
+ */
 
 public class TabClass extends PopUpTab
 {
     private int spacingDistance = 10;
-    private ArrayList<String> classes = new ArrayList<>();
+    // private ArrayList<String> classes = new ArrayList<>();
     private TabLesson tabLesson;
-    Schedule schedule;
+    private Schedule schedule;
+    private ObservableList<Student> studentObservableList;
 
     public TabClass(Schedule schedule, TabLesson tabLesson)
     {
@@ -37,9 +44,8 @@ public class TabClass extends PopUpTab
 
         Label currentLesson = new Label("Bestaande klassen");
         ListView<Group> listViewClass = new ListView<>();
-        listViewClass.setItems(FXCollections.observableArrayList(schedule.getGroups()));
+        listViewClass.setItems(schedule.getGroupObservableList());
         listViewClass.setPrefWidth(250);
-
 
 
         VBox leftVboxClasses = new VBox();
@@ -53,23 +59,22 @@ public class TabClass extends PopUpTab
         ListView<Student> listViewStudent = new ListView<>();
         listViewStudent.setPrefWidth(250);
 
-        listViewClass.setOnMousePressed(event ->{
-            if (listViewClass.getSelectionModel().getSelectedItem() != null) {
-                listViewStudent.setItems(FXCollections.observableArrayList(schedule.getGroups().get(listViewClass.getSelectionModel().getSelectedIndex()).getStudents()));
+        listViewClass.getSelectionModel().selectedItemProperty().addListener(event ->
+        {
+            if (listViewClass.getSelectionModel().getSelectedItem() != null)
+            {
+                studentObservableList = FXCollections.observableList(listViewClass.getSelectionModel().getSelectedItem().getStudents());
+                listViewStudent.setItems(studentObservableList);
             }
         });
 
+
         Button deleteClass = new Button("Verwijder klas");
 
-        deleteClass.setOnAction(event -> {
-            schedule.removeGroup(listViewClass.getSelectionModel().getSelectedItem());
-            listViewClass.getItems().clear();
-            listViewClass.setItems(FXCollections.observableArrayList(this.schedule.getGroups()));
-            tabLesson.classUpdater();
-        });
+        deleteClass.setOnAction(event -> schedule.removeGroup(listViewClass.getSelectionModel().getSelectedItem()));
 
         VBox leftVboxStudent = new VBox();
-        leftVboxStudent.getChildren().addAll(selectedClass, listViewStudent,deleteClass);
+        leftVboxStudent.getChildren().addAll(selectedClass, listViewStudent, deleteClass);
         leftVboxStudent.setSpacing(spacingDistance);
         leftVboxStudent.setPadding(new Insets(10, 10, 10, 10));
 
@@ -87,20 +92,27 @@ public class TabClass extends PopUpTab
         studentData.setEditable(false);
         listViewStudent.setPrefWidth(250);
 
-        listViewStudent.setOnMousePressed(event ->{
-            if (listViewStudent.getSelectionModel().getSelectedItem() != null) {
+        listViewStudent.setOnMousePressed(event ->
+        {
+            if (listViewStudent.getSelectionModel().getSelectedItem() != null)
+            {
                 studentData.setText(listViewStudent.getSelectionModel().getSelectedItem().toDetailString());
             }
         });
 
         Button deleteStudent = new Button("Verwijder student");
 
-        deleteStudent.setOnAction(event -> {
+        deleteStudent.setOnAction(event ->
+        {
             Group group = listViewClass.getSelectionModel().getSelectedItem();
-            schedule.getGroups().get(listViewClass.getSelectionModel().getSelectedIndex()).removeStudent(listViewStudent.getSelectionModel().getSelectedItem());
-            listViewStudent.getItems().clear();
-            listViewStudent.setItems(FXCollections.observableArrayList(group.getStudents()));
-            tabLesson.classUpdater();
+
+            //listViewStudent.getItems().clear();
+            //group.removeStudent(listViewStudent.getSelectionModel().getSelectedItem());
+
+
+            studentObservableList = FXCollections.observableList(listViewClass.getSelectionModel().getSelectedItem().getStudents());
+            studentObservableList.remove(listViewStudent.getSelectionModel().getSelectedItem());
+            listViewStudent.setItems(studentObservableList);
         });
 
         VBox middleVboxStudent = new VBox();
@@ -123,18 +135,20 @@ public class TabClass extends PopUpTab
 
         Button submitStudent = new Button("Voeg student toe");
 
-        submitStudent.setOnAction(event -> {
+        submitStudent.setOnAction(event ->
+        {
 
-            if (listViewClass.getSelectionModel().getSelectedItem() == null) {
+            if (listViewClass.getSelectionModel().getSelectedItem() == null)
+            {
                 ErrorWindow errorWindow = new ErrorWindow("Error");
                 errorWindow.ErrorStage("Selecteer een klas.");
-            } else {
+            }
+            else
+            {
                 Group group = listViewClass.getSelectionModel().getSelectedItem();
-                schedule.getGroups().get(listViewClass.getSelectionModel().getSelectedIndex()).addStudent(new Student(inputName.getText(), Integer.parseInt(inputAge.getText()), listViewClass.getSelectionModel().getSelectedItem()));
-                listViewStudent.getItems().clear();
-                listViewStudent.setItems(FXCollections.observableArrayList(group.getStudents()));
-
-                tabLesson.classUpdater();
+                schedule.getGroupObservableList().get(listViewClass.getSelectionModel().getSelectedIndex()).addStudent(new Student(inputName.getText(), Integer.parseInt(inputAge.getText()), listViewClass.getSelectionModel().getSelectedItem()));
+                studentObservableList = FXCollections.observableList(listViewClass.getSelectionModel().getSelectedItem().getStudents());
+                listViewStudent.setItems(studentObservableList);
 
             }
 
@@ -143,7 +157,7 @@ public class TabClass extends PopUpTab
         VBox addersStudenten = new VBox();
         addersStudenten.getChildren().addAll(newName, inputName, newAge, inputAge);
         addersStudenten.setSpacing(spacingDistance);
-        addersStudenten.setPadding(new Insets(0,0, 265, 0));
+        addersStudenten.setPadding(new Insets(0, 0, 265, 0));
 
         VBox addStudent = new VBox();
         addStudent.getChildren().addAll(newStudent, addersStudenten, submitStudent);
@@ -162,20 +176,28 @@ public class TabClass extends PopUpTab
         inputName.setMaxWidth(200);
 
 
-
         Button submitClass = new Button("Voeg klas toe");
 
-        submitClass.setOnAction(event -> {
-            schedule.addGroup(new Group(inputClass.getText()));
-            listViewClass.getItems().clear();
-            listViewClass.setItems(FXCollections.observableArrayList(schedule.getGroups()));
-            tabLesson.classUpdater();
+        submitClass.setOnAction(event ->
+        {
+            try
+            {
+                schedule.addGroup(new Group(inputClass.getText()));
+            }
+            catch (IllegalArgumentException e)
+            {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Er is iets fout gegaan");
+                alert.setContentText(e.getMessage());
+                alert.showAndWait();
+            }
         });
 
         VBox addersClass = new VBox();
         addersClass.getChildren().addAll(newClass, inputClass);
         addersClass.setSpacing(spacingDistance);
-        addersClass.setPadding(new Insets(0,0, 338, 0));
+        addersClass.setPadding(new Insets(0, 0, 338, 0));
 
         VBox addClass = new VBox();
         addClass.getChildren().addAll(newClas, addersClass, submitClass);

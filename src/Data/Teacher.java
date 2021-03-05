@@ -2,6 +2,13 @@ package Data;
 
 import java.io.Serializable;
 
+/**
+ * Auteurs: Leon
+ *
+ * Deze code zorgt ervoor dat een leraar aangemaakt kan worden en de nodige functies heeft die later nodig zijn
+ *
+ */
+
 public class Teacher implements Serializable
 {
 

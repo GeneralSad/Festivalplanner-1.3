@@ -3,6 +3,13 @@ import Data.*;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
+/**
+ * Auteurs: Leon, Martijn, Luuk, Ewout, Eddy
+ *
+ * Deze klasse is het begin van ons project, de code hier wordt niet gebruikt
+ *
+ */
+
 public class Main
 {
 

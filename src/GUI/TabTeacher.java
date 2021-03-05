@@ -2,7 +2,6 @@ package GUI;
 
 import Data.Schedule;
 import Data.Teacher;
-import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
@@ -14,9 +13,16 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 
+/**
+ * Auteurs:
+ *
+ * Deze klasse is voor om de tab teacher goed te weergeven
+ *
+ */
+
 public class TabTeacher extends PopUpTab
 {
-    Schedule schedule;
+    private Schedule schedule;
     private TabLesson tabLesson;
     private Teacher selectedTeacher;
 
@@ -40,7 +46,7 @@ public class TabTeacher extends PopUpTab
         //left side of the menu teacher
         Label currentTeacher = new Label("Bestaande Docenten");
         ListView<Teacher> listView = new ListView<>();
-        listView.setItems(FXCollections.observableArrayList(this.schedule.getTeachers()));
+        listView.setItems(schedule.getTeacherObservableList());
 
 
         VBox leftVbox = PopupController.awesomeVBox(currentTeacher, listView);
@@ -97,25 +103,15 @@ public class TabTeacher extends PopUpTab
                 this.selectedTeacher.setName(selectedNameField.getText());
                 this.selectedTeacher.setAge(Integer.parseInt(selectedAgeField.getText()));
                 this.selectedTeacher.setSubject(selectedSubjectField.getText());
-                listView.getItems().clear();
-                listView.setItems(FXCollections.observableArrayList(this.schedule.getTeachers()));
-                tabLesson.teacherUpdater();
-                tabLesson.refresh();
             }
         });
 
 
         Button deleteSelected = new Button("Verwijder Docent");
-        deleteSelected.setOnAction(event ->
-        {
-            this.schedule.removeTeacher(listView.getSelectionModel().getSelectedItem());
-            listView.getItems().clear();
-            listView.setItems(FXCollections.observableArrayList(this.schedule.getTeachers()));
-            tabLesson.teacherUpdater();
-        });
+        deleteSelected.setOnAction(event -> this.schedule.removeTeacher(listView.getSelectionModel().getSelectedItem()));
 
         VBox middleVbox = new VBox();
-        middleVbox.getChildren().addAll(selectedTeacher, selectedFlowpane, deleteSelected,editSelected);
+        middleVbox.getChildren().addAll(selectedTeacher, selectedFlowpane, deleteSelected, editSelected);
         middleVbox.setSpacing(spacingDistance);
         middleVbox.setPadding(new Insets(10, 10, 10, 10));
         middleVbox.setMinWidth(500);
@@ -154,13 +150,7 @@ public class TabTeacher extends PopUpTab
             else
             {
                 schedule.addTeacher(new Teacher(nameField.getText(), Integer.parseInt(ageField.getText()), subjectField.getText()));
-                listView.getItems().clear();
-                listView.setItems(FXCollections.observableArrayList(this.schedule.getTeachers()));
-
-                tabLesson.teacherUpdater();
-
             }
-
         });
 
 
