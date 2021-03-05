@@ -13,6 +13,12 @@ import javafx.stage.Stage;
 
 import java.util.ArrayList;
 
+/**
+ * Auteurs:
+ *
+ * Deze code zorgt ervoor dat er een popup wordt aangemaakt
+ *
+ */
 
 public class PopupController extends Stage
 {
@@ -90,7 +96,7 @@ public class PopupController extends Stage
 
     }
 
-
+    //Zorgt ervoor dat een nieuwe VBox die aangemaakt wordt de goede dimensies krijgt
     public static VBox awesomeVBox(Node... elements)
     {
         int spacingDistance = 10;

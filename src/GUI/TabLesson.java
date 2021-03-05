@@ -15,6 +15,13 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 
+/**
+ * Auteurs:
+ *
+ * Deze klasse is voor om de tab lesson goed te weergeven
+ *
+ */
+
 public class TabLesson extends PopUpTab
 {
     //distance
@@ -167,7 +174,7 @@ public class TabLesson extends PopUpTab
 
         locationSelect.setItems(FXCollections.observableArrayList(schedule.getClassroomArrayList()));
 
-        Button lessonAdder = new Button("Voeg klas toe");
+        Button lessonAdder = new Button("Voeg les toe");
 
         lessonAdder.setOnAction(event ->
         {

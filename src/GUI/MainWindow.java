@@ -15,6 +15,13 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * Auteurs:
+ *
+ * Deze code zorgt ervoor dat de mainwindow goed wordt ingericht met alle delen op de goede plaats
+ *
+ */
+
 public class MainWindow extends ResizableCanvas
 {
     private Schedule schedule;

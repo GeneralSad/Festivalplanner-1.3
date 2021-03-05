@@ -8,6 +8,13 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+/**
+ * Auteurs: Leon
+ *
+ * Deze code zorgt ervoor dat een popupwindow aangemaakt kan worden en laten zien kan worden met een bepaalde tekst
+ *
+ */
+
 public class ErrorWindow
 {
 

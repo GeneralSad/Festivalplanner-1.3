@@ -15,6 +15,13 @@ import javafx.stage.Stage;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
+/**
+ * Auteurs:
+ *
+ * Hier wordt ervoor gezorgd dat de applicatie goed wordt opgestart en hier worden ook wat test dingen in het programma gezet
+ *
+ */
+
 public class GUI extends Application
 {
     private Schedule schedule;

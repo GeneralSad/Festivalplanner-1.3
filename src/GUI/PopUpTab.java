@@ -2,6 +2,13 @@ package GUI;
 
 import javafx.scene.layout.BorderPane;
 
+/**
+ * Auteurs:
+ *
+ * Deze klasse is een abstracte klasse met de nodige methodes voor de specialisaties
+ *
+ */
+
 public abstract class PopUpTab
 {
     private String popUpName;

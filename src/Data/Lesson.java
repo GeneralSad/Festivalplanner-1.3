@@ -5,6 +5,13 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
+/**
+ * Auteurs: Leon
+ *
+ * Deze code zorgt ervoor dat een les aangemaakt kan worden en de nodige functies heeft die later nodig zijn
+ *
+ */
+
 public class Lesson implements Serializable
 {
 

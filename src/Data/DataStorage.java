@@ -5,6 +5,13 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+/**
+ * Auteurs: Leon
+ *
+ * Deze code zorgt ervoor dat een schedule ingeladen en opgeslagen kan worden
+ *
+ */
+
 public class DataStorage
 {
 

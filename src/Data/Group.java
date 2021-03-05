@@ -3,6 +3,13 @@ package Data;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/**
+ * Auteurs: Leon
+ *
+ * Deze code zorgt ervoor dat een klas aangemaakt kan worden en de nodige functies heeft die later nodig zijn
+ *
+ */
+
 public class Group implements Serializable
 {
     private String className;

@@ -13,6 +13,13 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 
+/**
+ * Auteurs:
+ *
+ * Deze klasse is voor om de tab teacher goed te weergeven
+ *
+ */
+
 public class TabTeacher extends PopUpTab
 {
     private Schedule schedule;

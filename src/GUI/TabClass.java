@@ -11,6 +11,13 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+/**
+ * Auteurs:
+ *
+ * Deze klasse is voor om de tab class goed te weergeven
+ *
+ */
+
 public class TabClass extends PopUpTab
 {
     private int spacingDistance = 10;

@@ -9,6 +9,13 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Auteurs: Leon
+ *
+ * Deze code zorgt ervoor dat een schedule aangemaakt kan worden en de nodige functies heeft die later nodig zijn
+ *
+ */
+
 public class Schedule implements Serializable
 {
 

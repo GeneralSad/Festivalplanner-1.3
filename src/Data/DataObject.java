@@ -4,6 +4,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Auteurs: Ewout
+ *
+ * Deze code zorgt ervoor dat de inhoud van een schedule later opgeslagen kan worden en de nodige functies heeft die later nodig zijn
+ *
+ */
+
 public class DataObject implements Serializable
 {
     private List<Lesson> lessons;

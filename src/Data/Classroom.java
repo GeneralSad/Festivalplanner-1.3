@@ -2,6 +2,14 @@ package Data;
 
 import java.io.Serializable;
 
+/**
+ * Auteurs: Leon
+ *
+ * Deze code zorgt ervoor dat een klaslokaal aangemaakt kan worden en de nodige functies heeft die later nodig zijn
+ *
+ */
+
+
 public class Classroom implements Serializable
 {
     @Override
