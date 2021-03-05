@@ -17,6 +17,8 @@ In week vier ben ik gaan werken met het inladen en tekenen van de tiledmaps. Dez
 
 Hiervoor heb ik de powerpoints van het opstart college erbij gepakt, hierin stonden een aantal punten over de structuur waarin dit kan en wat er moet gebeuren.
 
+![TiledMapStructure.png](TiledMapStructure.png)
+
 Verder heb ik Tiled erbij gepakt en een willekeurige tiledmap gemaakt met verschillende layers om te gebruiken om mee te testen.
 
 Voor het werken heb ik in de simulatie package een nieuwe package bijgemaakt met daarin alles over de tiledmaps met ook een uitvoerbare Main klasse om puur deze functionaliteiten te testen los van de andere code.
@@ -31,4 +33,26 @@ Dit heb ik opgelost door eerst te kijken of de filepath string wel mee werd gege
 Het volgende vermoeden is dat de filepath niet is herkend, om dit te testen heb ik de string een aantal keer aangepast en getest. 
 Uiteindelijk heb ik de relative path copy gebruikt, deze werkte ook nog net niet, maar door een / ervoor te zetten werkte het wel.
 
-- Tijdens het lezen van de tileset array
+- Tijdens het lezen van de array met tilesets kreeg ik een nullpointer exception bij het uitlezen van een specifieke waarde.
+
+Met debuggen doormiddel van een paar breakpoints heb ik gevonden dat omdat een van de tilesets alleen "firstgid" en "source" als waardes heeft een nullpointer geeft wanneer bijvoorbeeld de "columns" wordt gevraagd.
+Als oplossing heb ik de constructor een nullpointerexception laten throwen en bij het uitlezen van de array in een for loop een try catch gezet waarbij de tiledset alleen wordt toegevoegd als er geen nullpointer komt.
+
+Uiteindelijk is het wel gelukt om de TiledMap in te lezen en te tekenen!
+
+![TiledMapWorkingWK4.PNG](TiledMapWorkingWK4.PNG)
+
+#Applicaties die Json gebruiken
+
+- Proglet
+
+Json wordt gebruikt voor onder andere de configuratie, voor het parsen van de opgaven en voor het parsen van de resultaten.
+
+- Visual studio code
+
+Json wordt gebruikt voor de instellingen.
+
+- Tiled
+
+Hier hebben we gebruik van gemaakt met de proftaak.
+
