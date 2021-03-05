@@ -5,7 +5,9 @@ import javafx.collections.ObservableList;
 
 import java.io.Serializable;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Schedule implements Serializable
 {
@@ -92,6 +94,11 @@ public class Schedule implements Serializable
 
         if (beginTime.isBefore(endTime))
         {
+            if (beginTime.until(endTime, ChronoUnit.MINUTES) < 60)
+            {
+                throw new IllegalArgumentException("Lesson moeten minimaal een uur duren");
+            }
+
             if (isTeacherOverlap(lesson.getTeacher(), overLappingLessons))
             {
                 throw new IllegalArgumentException("The teacher already has a lesson at that moment!");
@@ -113,7 +120,7 @@ public class Schedule implements Serializable
         return true;
     }
 
-    public boolean isGroupOverlap(ArrayList<Group> newLessonGroups, ArrayList<Lesson> overLappingLessons)
+    private boolean isGroupOverlap(ArrayList<Group> newLessonGroups, ArrayList<Lesson> overLappingLessons)
     {
         for (Lesson overLappingLesson : overLappingLessons)
         {
@@ -128,7 +135,7 @@ public class Schedule implements Serializable
         return false;
     }
 
-    public boolean isClassroomOverLap(Classroom classroom, ArrayList<Lesson> overLappingLessons)
+    private boolean isClassroomOverLap(Classroom classroom, ArrayList<Lesson> overLappingLessons)
     {
         for (Lesson overLappingLesson : overLappingLessons)
         {
@@ -143,7 +150,7 @@ public class Schedule implements Serializable
     }
 
     //returns true if overlapping
-    public boolean isTeacherOverlap(Teacher teacher, ArrayList<Lesson> overLappingLessons)
+    private boolean isTeacherOverlap(Teacher teacher, ArrayList<Lesson> overLappingLessons)
     {
         for (Lesson overLappingLesson : overLappingLessons)
         {
@@ -177,7 +184,27 @@ public class Schedule implements Serializable
 
     public void addGroup(Group group)
     {
-        groupObservableList.add(group);
+        if (!groupDuplicateCheck(group))
+        {
+            groupObservableList.add(group);
+        }
+        else
+        {
+            throw new IllegalArgumentException("groep met die naam bestaad al");
+        }
+
+    }
+
+    private boolean groupDuplicateCheck(Group group)
+    {
+        for (Group groupFromList : this.getGroupObservableList())
+        {
+            if (groupFromList.getGroupName().equals(group.getGroupName()))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     public ArrayList<Lesson> getLessonArrayList()
@@ -187,6 +214,14 @@ public class Schedule implements Serializable
 
     public void removeTeacher(Teacher teacher)
     {
+        List<Lesson> lessonList = new ArrayList<>(lessonObservableList);
+        for (Lesson lesson : lessonList)
+        {
+            if (lesson.getTeacher() == teacher)
+            {
+                removeLesson(lesson);
+            }
+        }
         teacherObservableList.remove(teacher);
     }
 
@@ -197,6 +232,14 @@ public class Schedule implements Serializable
 
     public void removeGroup(Group group)
     {
+        List<Lesson> lessonList = new ArrayList<>(lessonObservableList);
+        for (Lesson lesson : lessonList)
+        {
+            if (lesson.getGroups().contains(group))
+            {
+                removeLesson(lesson);
+            }
+        }
         groupObservableList.remove(group);
     }
 

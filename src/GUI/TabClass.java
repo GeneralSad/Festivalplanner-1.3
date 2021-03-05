@@ -173,8 +173,18 @@ public class TabClass extends PopUpTab
 
         submitClass.setOnAction(event ->
         {
-            schedule.addGroup(new Group(inputClass.getText()));
-            listViewClass.setItems(schedule.getGroupObservableList());
+            try
+            {
+                schedule.addGroup(new Group(inputClass.getText()));
+            }
+            catch (IllegalArgumentException e)
+            {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Er is iets fout gegaan");
+                alert.setContentText(e.getMessage());
+                alert.showAndWait();
+            }
         });
 
         VBox addersClass = new VBox();
