@@ -86,10 +86,38 @@ public class TabLesson extends PopUpTab
         {
             if (this.selectedLesson != null)
             {
-                this.selectedLesson.setBeginTime(selectedStartTimeSelect.getSelectionModel().getSelectedItem());
-                this.selectedLesson.setEndTime(selectedEndTimeSelect.getSelectionModel().getSelectedItem());
-                this.selectedLesson.setClassroom(selectedLocationSelect.getSelectionModel().getSelectedItem());
-                this.selectedLesson.setTeacher(selectedTeachterComboBox.getSelectionModel().getSelectedItem());
+                LocalTime beginTime = selectedStartTimeSelect.getSelectionModel().getSelectedItem();
+                LocalTime endTime = selectedEndTimeSelect.getSelectionModel().getSelectedItem();
+
+                Lesson lesson = this.selectedLesson.clone();
+
+                ArrayList<Lesson> overlappingLessons = this.schedule.getOverlappingTime(beginTime, endTime);
+                overlappingLessons.remove(this.selectedLesson);
+
+                lesson.setBeginTime(beginTime);
+                lesson.setEndTime(endTime);
+                lesson.setClassroom(selectedLocationSelect.getSelectionModel().getSelectedItem());
+                lesson.setTeacher(selectedTeachterComboBox.getSelectionModel().getSelectedItem());
+
+
+                try
+                {
+                    if (this.schedule.checkLesson(lesson, overlappingLessons))
+                    {
+                        schedule.removeLesson(this.selectedLesson);
+                        schedule.addLesson(lesson);
+                    }
+                }
+                catch (IllegalArgumentException e)
+                {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText("Er is iets fout gegaan");
+                    alert.setContentText(e.getMessage());
+                    alert.showAndWait();
+                }
+
+
                 this.listView.refresh();
             }
         });

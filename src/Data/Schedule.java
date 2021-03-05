@@ -75,48 +75,105 @@ public class Schedule implements Serializable
         // First check if there are no conflicts with other lessonArrayList
         LocalTime beginTime = lesson.getBeginTime();
         LocalTime endTime = lesson.getEndTime();
+        ArrayList<Lesson> overLappingLesson = getOverlappingTime(beginTime, endTime);
 
-        for (Lesson existingLesson : this.lessonArrayList)
-        {
-            LocalTime tempBeginTime = existingLesson.getBeginTime();
-            LocalTime tempEndTime = existingLesson.getEndTime();
-
-            //TODO er zijn  nog edge cases waarbij hij toch een les toevoegd waarbij het niet werkt
-
-            // Time overlap with an existing lesson
-            if ((beginTime.equals(tempBeginTime) && endTime.equals(tempEndTime)) || (endTime.isBefore(tempEndTime) && endTime.isAfter(tempBeginTime)) || (beginTime.isAfter(tempBeginTime) && beginTime.isBefore(tempEndTime)))
-            {
-
-                // Check for teacher overlap
-                if (lesson.getTeacher().equals(existingLesson.getTeacher()))
-                {
-                    throw new IllegalArgumentException("The teacher already has a lesson at that moment!");
-                }
-
-                // Check for classroom overlap
-                if (lesson.getClassroom() == existingLesson.getClassroom())
-                {
-                    throw new IllegalArgumentException("That classroom is already preoccupied at that moment!");
-                }
-
-                // Check for group overlap
-                ArrayList<Group> newLessonGroups = lesson.getGroups();
-                for (Group group : existingLesson.getGroups())
-                {
-                    if (newLessonGroups.contains(group))
-                    {
-                        throw new IllegalArgumentException("The group " + group + " already has a different lesson at that moment!");
-                    }
-                }
-            }
-        }
-
-
+        checkLesson(lesson, overLappingLesson);
         // if an exception was thrown then the method stops so the following statement isn't reached
         lessonObservableList.add(lesson);
 
 
     }
+
+
+    public boolean checkLesson(Lesson lesson, ArrayList<Lesson> overLappingLessons) throws IllegalArgumentException
+    {
+        LocalTime beginTime = lesson.getBeginTime();
+        LocalTime endTime = lesson.getEndTime();
+
+        if (beginTime.isBefore(endTime))
+        {
+            if (isTeacherOverlap(lesson.getTeacher(), overLappingLessons))
+            {
+                throw new IllegalArgumentException("The teacher already has a lesson at that moment!");
+            }
+
+            if (isClassroomOverLap(lesson.getClassroom(), overLappingLessons))
+            {
+                throw new IllegalArgumentException("That classroom is already preoccupied at that moment!");
+            }
+            if (isGroupOverlap(lesson.getGroups(), overLappingLessons))
+            {
+                throw new IllegalArgumentException("The group " + " " + " already has a different lesson at that moment!");
+            }
+        }
+        else
+        {
+            throw new IllegalArgumentException("Begin tijd is na eind tijd");
+        }
+        return true;
+    }
+
+    public boolean isGroupOverlap(ArrayList<Group> newLessonGroups, ArrayList<Lesson> overLappingLessons)
+    {
+        for (Lesson overLappingLesson : overLappingLessons)
+        {
+            for (Group group : overLappingLesson.getGroups())
+            {
+                if (newLessonGroups.contains(group))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean isClassroomOverLap(Classroom classroom, ArrayList<Lesson> overLappingLessons)
+    {
+        for (Lesson overLappingLesson : overLappingLessons)
+        {
+            // Check for classroom overlap
+            if (classroom == overLappingLesson.getClassroom())
+            {
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+    //returns true if overlapping
+    public boolean isTeacherOverlap(Teacher teacher, ArrayList<Lesson> overLappingLessons)
+    {
+        for (Lesson overLappingLesson : overLappingLessons)
+        {
+            // Check for teacher overlap
+            if (teacher.equals(overLappingLesson.getTeacher()))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+    public ArrayList<Lesson> getOverlappingTime(LocalTime beginTime, LocalTime endTime)
+    {
+
+        ArrayList<Lesson> overlappingTimeLesson = new ArrayList<>();
+        for (Lesson existingLesson : this.lessonArrayList)
+        {
+            LocalTime tempBeginTime = existingLesson.getBeginTime();
+            LocalTime tempEndTime = existingLesson.getEndTime();
+            if ((beginTime.equals(tempBeginTime) && endTime.equals(tempEndTime)) || (endTime.isBefore(tempEndTime) && endTime.isAfter(tempBeginTime)) || (beginTime.isAfter(tempBeginTime) && beginTime.isBefore(tempEndTime)))
+            {
+                overlappingTimeLesson.add(existingLesson);
+            }
+        }
+        return overlappingTimeLesson;
+    }
+
 
     public void addGroup(Group group)
     {

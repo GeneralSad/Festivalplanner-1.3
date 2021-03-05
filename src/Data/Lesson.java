@@ -137,4 +137,9 @@ public class Lesson implements Serializable
         return commaString;
     }
 
+
+    public Lesson clone()
+    {
+        return new Lesson(this.beginTime, this.endTime, this.teacher, this.classroom, this.groups);
+    }
 }
