@@ -42,6 +42,36 @@ Uiteindelijk is het wel gelukt om de TiledMap in te lezen en te tekenen!
 
 ![TiledMapWorkingWK4.PNG](TiledMapWorkingWK4.PNG)
 
+Verder ben ik ook gaan kijken of het mogelijk is om geroteerde tiles te herkennen en tekenen naar vraag van degene die het ontwerp van de simulatie maakt.
+
+Problemen die ik daarbij ben tegengekomen zijn:
+
+Met het lezen van geroteerde tiles, tegen het probleem aangekomen dat tijdens het lezen met de JsonReader de int waardes een overflow gaven (bij grote getallen werden deze negatief).
+
+Het printen van de uitgelezen waardes bevestigd dat de getallen negatief zijn
+Kijkend naar de getallen in Json en een google search geeft dat de getallen groter dan de int limiet zijn, namelijk groter dan 2,15 miljard.
+
+Dus in plaats van lezen als een int moeten de getallen op een andere manier worden ingelezen.
+Bij de jsonarray waaruit wordt gelezen zit een methode om als een jsonNumber te lezen, hiermee testen geeft dat dit de goede volledige decimale getallen geeft.
+Van de jsonnumber kan ook de long value worden gepakt om in een data lijst te zetten.
+Testen van de waardes geeft dat deze manier werkt!
+
+Nu met het detecteren van de rotatie doormiddel van bit rekenen kan het programma alle geroteerde getallen zien
+
+Uiteindelijke oplossing was dus het omzetten van de code van:
+~~~
+for (int i = 0; i < jsonArraySize; i++) {
+    this.data.add(jsonArray.getInt(i));
+}
+~~~
+Naar:
+~~~
+for (int i = 0; i < jsonArraySize; i++) {
+    this.data.add(jsonArray.getJsonNumber(i).longValue());
+}
+~~~
+Samen met het omzetten van de data ArrayList, van een Integer lijst naar een Long lijst.
+
 #Applicaties die Json gebruiken
 
 - Proglet
