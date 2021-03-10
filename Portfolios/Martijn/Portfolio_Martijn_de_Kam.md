@@ -72,6 +72,24 @@ for (int i = 0; i < jsonArraySize; i++) {
 ~~~
 Samen met het omzetten van de data ArrayList, van een Integer lijst naar een Long lijst.
 
+## Week 5
+
+Het begin van week 5 was nog wat afronden van week 4, namelijk het laten zien van de tiledmap rotaties.
+
+Tijdens dit implementeren is opgevallen dat er twee rotaties mogelijk waren die nog niet hiervoor waren gezien.
+Namelijk een gespiegelde tile (horizontaal of verticaal gespiegeld) roteren links of rechtsom. Dit is nu wel toegevoegd.
+
+Verder is dit onderdeel goed gegaan. Ik heb in een ander project met een simpele afbeelding getest hoe het roteren en spiegelen kan werken met de affinetransform en daarbij gekeken naar hoe het tekenen daarbij moet compenseren in de translatie.
+Met die informatie ben ik begonnen met het daadwerkelijke project om daar het tekenen te implementeren, waarbij er nu aan de hand van de gedecteerde rotatie op de affinetransform rotaties, schalingen en translaties worden gemaakt om de tiles goed weer te geven.
+
+Tijdens het implementeren ben ik tegen twee dingen aangelopen.
+
+Een is dat in de tiledmap de tiledset niet altijd goed wordt meegegeven, door een beetje door de GUI knoppen van Tiled te spitten en proberen ben ik erachter gekomen dat de tiledset moet worden geëmbed in de tiledmap, anders wordt het niet meegenomen in de json.
+
+Het tweede waar ik tegen aan ben gelopen is dat na de export naar json en het plakken in intelliJ de jsonreader het json bestand niet herkent, na meerdere malen nieuwe exports te proberen, de file directory aan te passen en de bestandsnaam aan te passen ben ik naar een vermoeden gekomen van het probleem.
+Namelijk wanneer ik de bestandsnaam refactor werkt het laden wel en wanneer ik het nog een keer refactor naar het origineel werkt het nog steeds. Dus ik denk dat er iets mis gaat met het overzetten naar intelliJ. 
+Hier ga ik bij de senior begeleiding over vragen of de senior een antwoord weet.
+
 #Applicaties die Json gebruiken
 
 - Proglet
