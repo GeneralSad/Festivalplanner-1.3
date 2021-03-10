@@ -19,10 +19,10 @@ public class TiledLayer
     private static final long ROTATION_LEFT_THRICE =    0b101;
     private static final long ROTATION_VERTICAL =       0b100;
     private static final long ROTATION_HORIZONTAL =     0b010;
-    // check for any rotation at all
-    private static final long ROTATED =                 0b111;
-//    private static final long ROTATED_CHECK =           0b00010000000000000000000000000000;
+    private static final long ROTATION_HORIZONTAL_AND_LEFT_ONCE =     0b001;
+    private static final long ROTATION_HORIZONTAL_AND_LEFT_THRICE =     0b111;
 
+// These attributes are for an infinite map which has tiledlayers with defined coordinates, for now they're not in use
 //    private int x;
 //    private int y;
 //    private int width;
@@ -55,28 +55,19 @@ public class TiledLayer
      */
     public void draw(FXGraphics2D fxGraphics2D) {
         if (visible) {
-            for (int i = 0; i < 12/*data.size()*/; i++) {
+            for (int i = 0; i < data.size(); i++) {
                 long gid = this.data.get(i);
                 if (gid != 0) {
-                    long tempGid = gid >> (32 - 3);
-                    if (tempGid > 0) {
-                        if ((tempGid & ROTATION_LEFT_ONCE) == ROTATION_LEFT_ONCE) {
-                            System.out.println("left once flip at " + i);
-                        } else if ((tempGid & ROTATION_LEFT_TWICE) == ROTATION_LEFT_TWICE) {
-                            System.out.println("left twice flip at " + i);
-                        } else if ((tempGid & ROTATION_LEFT_THRICE) == ROTATION_LEFT_THRICE) {
-                            System.out.println("left thrice flip at " + i);
-                        } else if ((tempGid & ROTATION_HORIZONTAL) == ROTATION_HORIZONTAL) {
-                            System.out.println("horizontal flip at " + i);
-                        } else if ((tempGid & ROTATION_VERTICAL) == ROTATION_VERTICAL) {
-                            System.out.println("vertical flip at " + i);
-                        }
-                    }
+                    // Take the first 3 its of the gid
+                    // these are the rotation bits
+                    long currentRotation = gid >> (32 - 3);
 
-                    // Reset the rotation bits to be able to find the tile
-                    gid &= ROTATED;
+                    // Take the rotation bits out of the gid
+                    // uses a XOR operator using the detected rotation,
+                    // this returns all differing bits as 1 and common bits as 0, meaning the rotation bits are removed but the tile id bits stay
+                    gid ^= currentRotation << (32 - 3);
 
-                    // look if the base tile exists
+                    // looks for the tiledset that contains the tile id for the current tile
                     TiledSet tiledSet = null;
                     for (TiledSet tempTiledSet : this.tiledMap.getTiledSets()) {
                         if (gid >= tempTiledSet.getFirstGID() && gid <= tempTiledSet.getLastGID()) {
@@ -84,8 +75,58 @@ public class TiledLayer
                             break;
                         }
                     }
+                    // if a tiledset was found draw the current tile
                     if (tiledSet != null) {
-                        fxGraphics2D.drawImage(tiledSet.getTile((int)gid), this.tiledMap.getTileWidth() * (i % tiledMap.getWidth()), this.tiledMap.getTileHeight() * (i / tiledMap.getHeight()), null);
+                        AffineTransform affineTransform = new AffineTransform();
+                        affineTransform.translate(this.tiledMap.getTileWidth() * (i % tiledMap.getWidth()), this.tiledMap.getTileHeight() * (i / tiledMap.getHeight()));
+
+                        // if there is any rotation change the affinetransform accordingly
+                        if (currentRotation != 0) {
+                            if (currentRotation == ROTATION_LEFT_ONCE) {
+                                // Rotate once to the left, so -0.5 PI
+                                // image is a bit up so compensate on the y
+                                affineTransform.translate(0, this.tiledMap.getTileHeight());
+                                affineTransform.rotate(Math.PI * -0.5);
+
+                            } else if (currentRotation == ROTATION_LEFT_TWICE) {
+                                // Rotate twice to the left, so -1 PI
+                                // image is a bit up and to the left so compensate on the y and x
+                                affineTransform.translate(this.tiledMap.getTileWidth(), this.tiledMap.getTileHeight());
+                                affineTransform.rotate(Math.PI * -1);
+
+                            } else if (currentRotation == ROTATION_LEFT_THRICE) {
+                                // Rotate three times to the left, so -1.5 PI
+                                // image is a bit to the left so compensate on the x
+                                affineTransform.translate(this.tiledMap.getTileWidth(), 0);
+                                affineTransform.rotate(Math.PI * -1.5);
+
+
+                            } else if (currentRotation == ROTATION_HORIZONTAL) {
+                                // Scale the y axis to be reversed and compensate the translation for the reversed axis
+                                affineTransform.scale(1, -1);
+                                affineTransform.translate(0, -this.tiledMap.getTileHeight());
+
+                            } else if (currentRotation == ROTATION_VERTICAL) {
+                                // Scale the x axis to be reversed and compensate the translation of the reversed axis
+                                affineTransform.scale(-1, 1);
+                                affineTransform.translate(-this.tiledMap.getTileWidth(), 0);
+
+                            } else if (currentRotation == ROTATION_HORIZONTAL_AND_LEFT_ONCE) {
+                                // Scale the y axis to be reversed and rotate once to the left
+                                affineTransform.scale(1, -1);
+                                affineTransform.rotate(Math.PI * -0.5);
+
+                            } else if (currentRotation == ROTATION_HORIZONTAL_AND_LEFT_THRICE) {
+                                // Scale the y axis to be reversed and rotate three times to the left
+                                // compensate in the x and y axis
+                                affineTransform.scale(1, -1);
+                                affineTransform.translate(this.tiledMap.getTileWidth(), -this.tiledMap.getTileHeight());
+                                affineTransform.rotate(Math.PI * -1.5);
+
+                            }
+                        }
+                        // -1 compensation because gid starts at 1 and arrays start at 0
+                        fxGraphics2D.drawImage(tiledSet.getTile((int)gid - 1), affineTransform , null);
                     }
                 }
             }

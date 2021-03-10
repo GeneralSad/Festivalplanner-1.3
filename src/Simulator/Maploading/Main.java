@@ -9,7 +9,6 @@ import org.jfree.fx.FXGraphics2D;
 import org.jfree.fx.ResizableCanvas;
 
 import java.awt.*;
-import java.awt.geom.Rectangle2D;
 
 // for testing purposes
 public class Main extends Application
@@ -42,7 +41,7 @@ public class Main extends Application
                 {
                     last = now;
                 }
-                if (now - last > 1e8)
+                if (now - last > 1e9)
                 {
                     draw(fxGraphics2D);
                     last = now;
@@ -56,16 +55,13 @@ public class Main extends Application
 
     public void init()
     {
-//        tiledMap = new TiledMap("/TiledMaps/TiledMap.json");
-        tiledMap = new TiledMap("/TiledMaps/TiledMapWithRotations.json");
+        tiledMap = new TiledMap("/TiledMaps/TiledMapFinalTest.json");
     }
 
     private void draw(FXGraphics2D graphics2D)
     {
         graphics2D.setBackground(Color.WHITE);
         graphics2D.clearRect(0, 0, (int) this.resizableCanvas.getWidth(), (int) this.resizableCanvas.getHeight());
-
-        graphics2D.draw(new Rectangle2D.Double(50, 50, 50, 50));
 
         tiledMap.draw(graphics2D);
     }
