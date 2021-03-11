@@ -14,7 +14,6 @@ import javafx.scene.control.TabPane;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.transform.Translate;
 import javafx.stage.Stage;
 import org.jfree.fx.FXGraphics2D;
 
@@ -33,7 +32,6 @@ public class GUI extends Application
     private Schedule schedule;
     private String filePath = "src/Data/storedSchedule";
     private DataStorage dataStorage = new DataStorage();
-    private int zoom = 0;
 
     public static void main(String[] args)
     {
