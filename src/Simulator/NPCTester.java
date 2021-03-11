@@ -16,7 +16,6 @@ import java.awt.*;
 public class NPCTester extends Application
 {
     private ResizableCanvas resizableCanvas;
-    //    private TiledMap tiledMap;
     private NPCManager npcManager;
 
     public static void main(String[] args)
@@ -44,12 +43,9 @@ public class NPCTester extends Application
                 {
                     last = now;
                 }
-                //                if (now - last > 1e9)
-                //                {
                 update((now - last) / 1e9);
                 draw(fxGraphics2D);
                 last = now;
-                //                }
             }
         }.start();
 
@@ -60,6 +56,9 @@ public class NPCTester extends Application
     public void init()
     {
         npcManager = new NPCManager();
+        Person person = new Person("Test", 0);
+        npcManager.addNPC(person, 500, 500, 0, 0, 10, 10, 0);
+        npcManager.getNPC(person).goToDestination(150, 180);
         npcManager.addNPC(new Person("Test", 0), 100, 100, 10, 0, 10, 10, 0);
         npcManager.addNPC(new Person("Test", 0), 200, 100, -10, 0, 10, 10, 0);
         npcManager.addNPC(new Person("Test", 0), 400, 100, 0, 5, 10, 10, 0);

@@ -18,8 +18,41 @@ public class NPCManager
         this.npcs.add(new NPC(person, x, y, xSpeed, ySpeed, width, height, rotation));
     }
 
+    public void addNPC(NPC npc) {
+        this.npcs.add(npc);
+    }
+
     public void removeNPC(NPC npc) {
         this.npcs.remove(npc);
+    }
+
+    public void removeNPC(Person person) {
+        NPC npc = getNPCFromPerson(person);
+        if (npc != null) {
+            this.npcs.remove(npc);
+        }
+    }
+
+    public NPC getNPC(int index) {
+        try
+        {
+            return this.npcs.get(index);
+        } catch (IndexOutOfBoundsException e) {
+            return null;
+        }
+    }
+
+    public NPC getNPC(Person person) {
+        return getNPCFromPerson(person);
+    }
+
+    private NPC getNPCFromPerson(Person person) {
+        for (NPC npc : npcs) {
+            if (npc.getPerson() == person) {
+                return npc;
+            }
+        }
+        return null;
     }
 
     public void update(double deltaTime) {
