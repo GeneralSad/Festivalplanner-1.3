@@ -55,7 +55,7 @@ public class Main extends Application
 
     public void init()
     {
-        tiledMap = new TiledMap("/TiledMaps/TiledMapFinalTest.json");
+        tiledMap = new TiledMap("/TiledMaps/MapFinal.json");
     }
 
     private void draw(FXGraphics2D graphics2D)

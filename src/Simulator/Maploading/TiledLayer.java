@@ -5,7 +5,9 @@ import org.jfree.fx.FXGraphics2D;
 import javax.json.JsonArray;
 import javax.json.JsonNumber;
 import javax.json.JsonObject;
+import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 /**
@@ -54,6 +56,9 @@ public class TiledLayer
      * @param fxGraphics2D
      */
     public void draw(FXGraphics2D fxGraphics2D) {
+        BufferedImage cash = new BufferedImage(tiledMap.getWidth() * tiledMap.getTileWidth(), tiledMap.getHeight() * tiledMap.getTileHeight(), BufferedImage.TYPE_INT_ARGB);
+        Graphics2D cashGraphics = cash.createGraphics();
+
         if (visible) {
             for (int i = 0; i < data.size(); i++) {
                 long gid = this.data.get(i);
@@ -126,11 +131,11 @@ public class TiledLayer
                             }
                         }
                         // -1 compensation because gid starts at 1 and arrays start at 0
-                        fxGraphics2D.drawImage(tiledSet.getTile((int)gid - 1), affineTransform , null);
+                        cashGraphics.drawImage(tiledSet.getTile((int)gid - tiledSet.getFirstGID()), affineTransform , null);
                     }
                 }
             }
         }
-
+        fxGraphics2D.drawImage(cash, 0, 0, null);
     }
 }
