@@ -165,7 +165,6 @@ public class GUI extends Application
             }
 
             if (!(node.getScaleY() * zoomFactor > 5) && !(node.getScaleY() * zoomFactor < 0.9)) {
-                this.zoom += deltaY;
                 System.out.println("X: " + node.getScaleX());
                 System.out.println("Y: " + node.getScaleY());
 
