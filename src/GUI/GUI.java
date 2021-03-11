@@ -1,16 +1,22 @@
 package GUI;
 
 import Data.*;
+import Simulator.Maploading.TiledMap;
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.control.TextField;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.transform.Translate;
 import javafx.stage.Stage;
+import org.jfree.fx.FXGraphics2D;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -27,7 +33,7 @@ public class GUI extends Application
     private Schedule schedule;
     private String filePath = "src/Data/storedSchedule";
     private DataStorage dataStorage = new DataStorage();
-
+    private int zoom = 0;
 
     public static void main(String[] args)
     {
@@ -44,6 +50,7 @@ public class GUI extends Application
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
         BorderPane canvasContainer = new BorderPane();
+        BorderPane simulator = new BorderPane();
         MainWindow mainWindow = new MainWindow(canvasContainer, this.schedule);
         canvasContainer.setCenter(mainWindow);
 
@@ -66,13 +73,44 @@ public class GUI extends Application
         bottomHBox.getChildren().add(reloadSchedule);
         canvasContainer.setBottom(bottomHBox);
 
-        tabPane.getTabs().add(new Tab("Rooster", canvasContainer));
+        BorderPane borderPane = new BorderPane();
 
-        FlowPane test = new FlowPane();
-        test.getChildren().add(new TextField("testing"));
-        tabPane.getTabs().add(new Tab("Testing", test));
+        Tab simulatorTab = new Tab("Simulator");
+        Canvas canvas = new Canvas(2000, 2000);
+        GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
+
+        borderPane.setCenter(canvas);
+        simulatorTab.setContent(borderPane);
+
+        tabPane.getTabs().add(new Tab("Rooster", canvasContainer));
+        tabPane.getTabs().add(simulatorTab);
 
         Scene scene = new Scene(tabPane);
+        TiledMap tiledmap = new TiledMap("/TiledMaps/MapFinal.json");
+
+        new AnimationTimer()
+        {
+            long last = -1;
+
+            @Override
+            public void handle(long now)
+            {
+                if (last == -1)
+                {
+                    last = now;
+                }
+                if (now - last > 1e9)
+                {
+                    FXGraphics2D fxGraphics2D =  new FXGraphics2D(graphicsContext);
+                    fxGraphics2D.setBackground(java.awt.Color.WHITE);
+                    fxGraphics2D.clearRect(0, 0, (int) canvas.getWidth(), (int) canvas.getHeight());
+                    tiledmap.draw(fxGraphics2D);
+                    addMouseScrolling(canvas);
+                    last = now;
+                }
+            }
+        }.start();
+
         stage.setScene(scene);
         stage.setTitle("School simulatie");
         stage.setMaximized(true);
@@ -118,6 +156,27 @@ public class GUI extends Application
         {
             System.out.println("properly loaded a schedule");
         }
-
     }
+
+    public void addMouseScrolling(Node node) {
+        node.setOnScroll((ScrollEvent event) -> {
+            double zoomFactor = 1.05;
+            double deltaY = event.getDeltaY();
+            if (deltaY < 0){
+                zoomFactor = 2.0 - zoomFactor;
+            }
+
+            if (!(node.getScaleY() * zoomFactor > 5) && !(node.getScaleY() * zoomFactor < 0.9)) {
+                this.zoom += deltaY;
+                System.out.println("X: " + node.getScaleX());
+                System.out.println("Y: " + node.getScaleY());
+
+
+                node.setScaleX(node.getScaleX() * zoomFactor);
+                node.setScaleY(node.getScaleY() * zoomFactor);
+            }
+
+        });
+    }
+
 }
