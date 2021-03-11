@@ -74,6 +74,7 @@ Samen met het omzetten van de data ArrayList, van een Integer lijst naar een Lon
 
 ## Week 5
 
+### Resterende punten week 4
 Het begin van week 5 was nog wat afronden van week 4, namelijk het laten zien van de tiledmap rotaties.
 
 Tijdens dit implementeren is opgevallen dat er twee rotaties mogelijk waren die nog niet hiervoor waren gezien.
@@ -89,6 +90,27 @@ Een is dat in de tiledmap de tiledset niet altijd goed wordt meegegeven, door ee
 Het tweede waar ik tegen aan ben gelopen is dat na de export naar json en het plakken in intelliJ de jsonreader het json bestand niet herkent, na meerdere malen nieuwe exports te proberen, de file directory aan te passen en de bestandsnaam aan te passen ben ik naar een vermoeden gekomen van het probleem.
 Namelijk wanneer ik de bestandsnaam refactor werkt het laden wel en wanneer ik het nog een keer refactor naar het origineel werkt het nog steeds. Dus ik denk dat er iets mis gaat met het overzetten naar intelliJ. 
 Hier ga ik bij de senior begeleiding over vragen of de senior een antwoord weet.
+
+### Nieuwe punten week 5
+
+In week 5 ben ik aan de slag gegaan met de NPC logica.
+
+Hiervoor heb ik een NPC klasse aangemaakt en een NPCManager klasse die de NPCs beheert en kan updaten en tekenen.
+
+Verder heb ik om de functionaliteiten te testen een uitvoerbare klasse gemaakt: NPCTester, die de NPCs als simpele rechthoeken kan tekenen om het bewegen te laten zien.
+
+Tijdens de implementatie ben ik niet tegen grote problemen of beslissingsmomenten gekomen.
+Het is allemaal redelijk recht aan direct dingen implementeren van wat ik al weet van ogp of 2dgraphics.
+
+De punten die ik heb geimplementeerd zijn:
+
+Een NPC heeft wat simpele data, hierbij is het vooral belangrijk dat een NPC altijd een persoon is en daarop geidentificeerd wordt.
+
+Een NPC kan bewegen doormiddel van een x en y snelheid attribuut en een x en y positie.
+
+Een NPC kan collision zien met andere npcs, waarbij de npcs dan niet verder kunnen bewegen.
+
+Een NPC kan naar een bepaald punt worden gestuurd, waarbij die dan in een rechte lijn daarnaartoe loopt.
 
 #Applicaties die Json gebruiken
 
