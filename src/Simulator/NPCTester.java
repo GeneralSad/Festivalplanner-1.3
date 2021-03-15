@@ -1,7 +1,6 @@
 package Simulator;
 
 import Data.Person;
-import Simulator.Maploading.TiledMap;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -10,13 +9,21 @@ import javafx.stage.Stage;
 import org.jfree.fx.FXGraphics2D;
 import org.jfree.fx.ResizableCanvas;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.geom.Point2D;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 // for testing purposes
 public class NPCTester extends Application
 {
+
+    private BufferedImage bufferedImage;
     private ResizableCanvas resizableCanvas;
     private NPCManager npcManager;
+    private NPCSprites npcSprites;
+
 
     public static void main(String[] args)
     {
@@ -26,6 +33,9 @@ public class NPCTester extends Application
     @Override
     public void start(Stage primaryStage) throws Exception
     {
+
+
+
         BorderPane mainPane = new BorderPane();
         resizableCanvas = new ResizableCanvas(fxGraphics2D -> draw(fxGraphics2D), mainPane);
 
@@ -49,6 +59,8 @@ public class NPCTester extends Application
             }
         }.start();
 
+        npcSprites = new NPCSprites(bufferedImage);
+
         primaryStage.setScene(new Scene(mainPane));
         primaryStage.show();
     }
@@ -65,6 +77,19 @@ public class NPCTester extends Application
         npcManager.addNPC(new Person("Test", 0), 400, 200, 0, -5, 10, 10, 0);
         npcManager.addNPC(new Person("Test", 0), 100, 300, 10, 5, 10, 10, 0);
         npcManager.addNPC(new Person("Test", 0), 200, 300, -10, 5, 10, 10, 0);
+        npcManager.addNPC(new Person("Test", 0), 100, 100, 10, -6, 10, 10, 0);
+        npcManager.addNPC(new Person("Test", 0), 200, 100, -10, 7, 10, 10, 0);
+
+        try
+        {
+            bufferedImage = ImageIO.read(getClass().getResource("/NPC/pop.png"));
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
+        npcManager.setLocation(new Point2D.Double(200, 200));
     }
 
     private void update(double deltaTime)
@@ -72,11 +97,15 @@ public class NPCTester extends Application
         npcManager.update(deltaTime);
     }
 
+
+
     private void draw(FXGraphics2D graphics2D)
     {
         graphics2D.setBackground(Color.WHITE);
         graphics2D.clearRect(0, 0, (int) this.resizableCanvas.getWidth(), (int) this.resizableCanvas.getHeight());
 
-        npcManager.draw(graphics2D);
+        npcSprites.draw(graphics2D);
+
+       npcManager.draw(graphics2D);
     }
 }

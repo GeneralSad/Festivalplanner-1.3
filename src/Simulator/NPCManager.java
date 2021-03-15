@@ -3,6 +3,7 @@ package Simulator;
 import Data.Person;
 import org.jfree.fx.FXGraphics2D;
 
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 public class NPCManager
@@ -30,6 +31,13 @@ public class NPCManager
         NPC npc = getNPCFromPerson(person);
         if (npc != null) {
             this.npcs.remove(npc);
+        }
+    }
+
+    public void setLocation(Point2D point2D){
+        for (NPC npc: npcs)
+        {
+            npc.goToDestination((int)point2D.getX(), (int)point2D.getY());
         }
     }
 
