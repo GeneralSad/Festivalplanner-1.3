@@ -13,7 +13,10 @@ De dag daarna op vrijdag was ik ook nauwelijks in staat om ook maar iets te doen
 Ik heb een paar bugs opgelost die de anderen hadden aangegeven, verder heb ik niet veel kunnen doen.
 
 ## Week 4
+
 In week vier ben ik gaan werken met het inladen en tekenen van de tiledmaps. Deze twee punten heb ik ook opgesplitst, door eerst te zorgen dat alles kan inladen en daarna pas te gaan kijken naar het tekenen.
+
+### Ontwerp
 
 Hiervoor heb ik de powerpoints van het opstart college erbij gepakt, hierin stonden een aantal punten over de structuur waarin dit kan en wat er moet gebeuren.
 
@@ -23,7 +26,11 @@ Verder heb ik Tiled erbij gepakt en een willekeurige tiledmap gemaakt met versch
 
 Voor het werken heb ik in de simulatie package een nieuwe package bijgemaakt met daarin alles over de tiledmaps met ook een uitvoerbare Main klasse om puur deze functionaliteiten te testen los van de andere code.
 
-Om te beginnen heb ik uit Tiled het bestand geëxporteerd als Json en daarin gekeken wat voor objecten en attribuuten er allemaal nodig zijn. Tijdens het kijken hiernaar heb ik ook opgemerkt dat dit heel erg in lijn is met wat er in de powerpoints staat over de structuur.
+Om te kijken wat er nodig was qua code heb ik uit Tiled het bestand geëxporteerd als Json en daarin gekeken wat voor objecten en attribuuten er allemaal nodig zijn. Tijdens het kijken hiernaar heb ik ook opgemerkt dat dit heel erg in lijn is met wat er in de powerpoints staat over de structuur.
+
+### Implementatie tiledmaps inladen
+
+Na kijken naar het ontwerp en hoe ik dit wil gaan aanpakken ben ik gaan implementeren van de code. Hierbij ben ik tegen een paar punten aangelopen.
 
 Met het programmeren van de data inlezen uit het Json bestand ben ik tegen twee problemen opgelopen:
 
@@ -38,9 +45,20 @@ Uiteindelijk heb ik de relative path copy gebruikt, deze werkte ook nog net niet
 Met debuggen doormiddel van een paar breakpoints heb ik gevonden dat omdat een van de tilesets alleen "firstgid" en "source" als waardes heeft een nullpointer geeft wanneer bijvoorbeeld de "columns" wordt gevraagd.
 Als oplossing heb ik de constructor een nullpointerexception laten throwen en bij het uitlezen van de array in een for loop een try catch gezet waarbij de tiledset alleen wordt toegevoegd als er geen nullpointer komt.
 
-Uiteindelijk is het wel gelukt om de TiledMap in te lezen en te tekenen!
+Uiteindelijk is het wel gelukt om de TiledMap in te lezen met correcte waardes.
+
+### Tiledmaps tekenen
+
+Met de ingeladen bestanden ben ik gaan kijken hoe ik het kon tekenen. Dit was echter heel simpel te doen met wat modulo en deel rekenen om de x en y positie te bepalen.
+Verder ben ik niet tegen grote problemen aangelopen hier.
 
 ![TiledMapWorkingWK4.PNG](TiledMapWorkingWK4.PNG)
+
+Bij de senior begeleiding heb ik wel wat feedback hierover gekregen. Namelijk dat in plaats van 1 afhalen van de data gid uit de tiledlayer, dat ik er de firstgid van de tiledset uit moet halen. Voor de eerste tiledset is het hetzelfde maar vanaf de tweede moet het op deze manier.
+
+Verder was er ook laten zien dat het mogelijk is om op een grote afbeelding veel kleine afbeeldingen te plakken in plaats van die allemaal individueel naar het scherm te tekenen. Dit zou efficiënter kunnen zijn, maar dat was niet helemaal zeker.
+
+### Tile rotatites herkenen
 
 Verder ben ik ook gaan kijken of het mogelijk is om geroteerde tiles te herkennen en tekenen naar vraag van degene die het ontwerp van de simulatie maakt.
 
@@ -72,12 +90,11 @@ for (int i = 0; i < jsonArraySize; i++) {
 ~~~
 Samen met het omzetten van de data ArrayList, van een Integer lijst naar een Long lijst.
 
-## Week 5
+### tile rotaties tekenen
 
-### Resterende punten week 4
-Het begin van week 5 was nog wat afronden van week 4, namelijk het laten zien van de tiledmap rotaties.
+Een paar dagen later ben ik verder gaan kijken naar het tekenen van de geroteerde tiles.
 
-Tijdens dit implementeren is opgevallen dat er twee rotaties mogelijk waren die nog niet hiervoor waren gezien.
+Tijdens dit implementeren is opgevallen dat er twee rotaties mogelijk waren die ik hiervoor nog niet had gezien.
 Namelijk een gespiegelde tile (horizontaal of verticaal gespiegeld) roteren links of rechtsom. Dit is nu wel toegevoegd.
 
 Verder is dit onderdeel goed gegaan. Ik heb in een ander project met een simpele afbeelding getest hoe het roteren en spiegelen kan werken met de affinetransform en daarbij gekeken naar hoe het tekenen daarbij moet compenseren in de translatie.
@@ -91,26 +108,53 @@ Het tweede waar ik tegen aan ben gelopen is dat na de export naar json en het pl
 Namelijk wanneer ik de bestandsnaam refactor werkt het laden wel en wanneer ik het nog een keer refactor naar het origineel werkt het nog steeds. Dus ik denk dat er iets mis gaat met het overzetten naar intelliJ. 
 Hier ga ik bij de senior begeleiding over vragen of de senior een antwoord weet.
 
-### Nieuwe punten week 5
+Bij de senior begeleiding wist de senior niet wat het probleem zou kunnen zijn.
+Daarbij had ik ook live tijdens de begeleiding een nieuw json bestand in het project gezet en die geprobeerd te laden, naar dat werkte wel in een keer.
+Dus ik weet niet zo goed meer wat het probleem was. Maar zolang het werkt voor het project is het zo goed.
+
+## Week 5
 
 In week 5 ben ik aan de slag gegaan met de NPC logica.
+
+### Aanpak en ontwerp
 
 Hiervoor heb ik een NPC klasse aangemaakt en een NPCManager klasse die de NPCs beheert en kan updaten en tekenen.
 
 Verder heb ik om de functionaliteiten te testen een uitvoerbare klasse gemaakt: NPCTester, die de NPCs als simpele rechthoeken kan tekenen om het bewegen te laten zien.
+
+### Implementatie basis logica
 
 Tijdens de implementatie ben ik niet tegen grote problemen of beslissingsmomenten gekomen.
 Het is allemaal redelijk recht aan direct dingen implementeren van wat ik al weet van ogp of 2dgraphics.
 
 De punten die ik heb geimplementeerd zijn:
 
-Een NPC heeft wat simpele data, hierbij is het vooral belangrijk dat een NPC altijd een persoon is en daarop geidentificeerd wordt.
+- Een NPC heeft wat simpele data, hierbij is het vooral belangrijk dat een NPC altijd een persoon is en daarop geïdentificeerd wordt.
 
-Een NPC kan bewegen doormiddel van een x en y snelheid attribuut en een x en y positie.
+- Een NPC kan bewegen doormiddel van een x en y snelheid attribuut en een x en y positie. Waarbij met de deltaTime van de update de speed waardes bij de desbetreffende positie waardes worden opgeteld met de deltaTime vermenigvuldigd.
 
-Een NPC kan collision zien met andere npcs, waarbij de npcs dan niet verder kunnen bewegen.
+- Een NPC kan collision zien met andere npcs, waarbij de npcs dan niet verder kunnen bewegen. Dit wordt gedaan door alle andere NPCs na te gaan. Dit is een prima oplossing voor kleine aantallen npcs, maar voor grotere aantallen moet er een efficiëntere methode komen (honderden of duizenden).
 
-Een NPC kan naar een bepaald punt worden gestuurd, waarbij die dan in een rechte lijn daarnaartoe loopt.
+- Een NPC kan naar een bepaald punt worden gestuurd, waarbij die dan in een rechte lijn daarnaartoe loopt. Dit wordt gedaan door te kijken wat de verhouding is van de x en y afstand van de totale afstand, zodat de snelheden afgesteld zijn op elkaar om in de goede richting te gaan.
+
+### Rotatie logica NPC
+
+Een paar dagen later ben ik verdergegaan met de NPC logica en heb daarvoor de rotatie geïmplementeerd.
+Hierbij waren de doelen het mogelijk maken om een NPC naar een bepaalde richting te laten draaien en voor de NPC om naar een bepaalde positie te wijzen waarbij die eerst draait en dan in de goede richting gaat lopen rechtvooruit.
+
+In eerste instantie had ik de rotatie in graden gezet (0 tot 360), maar al snel ben ik overgestapt naar radialen (0 naar 2 PI) omdat veel methodes radialen gebruiken en het dan makkelijker is om het zo direct te doen.
+
+Verder heb ik er ook voor gekozen om het oude systeem die met een xspeed en yspeed naar een punt toe gaat in de code te laten samen met het systeem voor het bewegen met de rotatie.
+Hiervoor heb ik gekozen omdat we volgende week met pathfinding gaan werken en het goed kan zijn dat het oude systeem daar veel makkelijker op werkt dan met de rotaties, of dat een combinatie van beide beter is. Dus voor nu erin laten en later kijken wat beter is.
+
+Omdat ik de verschillende systemen heb behouden heb ik ervoor gekozen om de verschillende onderdelen van de update methode te scheiden van elkaar in prive methodes.
+Dit zijn dan een update om te checken of de NPC op de bestemming is, of de NPC collision heeft met andere NPCs, en natuurlijk de verschillende methodes voor xyupdate en rotatieupdate.
+Dit geeft wat meer structuur, waarbij alleen een methode in comments hoeft worden gezet, in plaats van een heel blok code.
+
+Om te zorgen dat de NPC ook stopt bij de bestemming zijn alle bewegingsupdates nu binnen een if statement die kijkt of de NPC al op de bestemming zit. 
+Bij de destinationupdate veranderd de boolean naar true wanneer de NPC op de besttemming zit en bij het veranderen van de destination staat die op false.
+
+Verder ziet het eruit na het testen dat de rotatie goed werkt. De npc draait een stukje naar de goede richting en gaat dan rechtstreeks naar een gekozen punt.
 
 #Applicaties die Json gebruiken
 
@@ -124,5 +168,6 @@ Json wordt gebruikt voor de instellingen.
 
 - Tiled
 
-Hier hebben we gebruik van gemaakt met de proftaak.
+Hier hebben we gebruik van gemaakt met de proftaak. Het gemaakte in het programma kan worden opgeslagen als een json bestand en een json bestand kan ook worden geïmporteerd.
+
 
