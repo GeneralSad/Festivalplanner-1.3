@@ -11,7 +11,6 @@ import org.jfree.fx.ResizableCanvas;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -56,7 +55,6 @@ public class NPCTester extends Application
             }
         }.start();
 
-        npcSprites = new NPCSprites(bufferedImage);
 
         primaryStage.setScene(new Scene(mainPane));
         primaryStage.show();
@@ -66,20 +64,15 @@ public class NPCTester extends Application
     {
         npcManager = new NPCManager();
 
-        NPC npc = new NPC(new Person("Test", 0), 500, 500, 10, 0, 10, 10);
-        npcManager.addNPC(npc);
-//        npc.setTargetRotation(Math.PI * 1.5);
-        npc.goToDestinationRotational(346, 389);
-
-
-        try
+        for (int i = 0; i < 10; i++)
         {
-            bufferedImage = ImageIO.read(getClass().getResource("/NPC/pop.png"));
+            NPC npc = new NPC(new Person("Test", 0), 500 + i * 30, 1000 - i * 50, 10, 0, 10, 10, "/NPC/NPC1 male.png");
+            npcManager.addNPC(npc);
+            //        npc.setTargetRotation(Math.PI * 1.5);
+            npc.goToDestinationRotational(346, 389);
+
         }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
+
     }
 
     private void update(double deltaTime)
@@ -94,7 +87,6 @@ public class NPCTester extends Application
         graphics2D.setBackground(Color.WHITE);
         graphics2D.clearRect(0, 0, (int) this.resizableCanvas.getWidth(), (int) this.resizableCanvas.getHeight());
 
-        npcSprites.draw(graphics2D);
         npcManager.draw(graphics2D);
     }
 }

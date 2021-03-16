@@ -15,12 +15,12 @@ public class NPCManager
         this.npcs = new ArrayList<>();
     }
 
-    public void addNPC(Person person, double x, double y, double xSpeed, double ySpeed, int width, int height, int rotation, int speed, int rotationSpeed) {
-        this.npcs.add(new NPC(person, x, y, xSpeed, ySpeed, width, height, rotation, speed, rotationSpeed));
+    public void addNPC(Person person, double x, double y, double xSpeed, double ySpeed, int width, int height, int rotation, int speed, int rotationSpeed, String image) {
+        this.npcs.add(new NPC(person, x, y, xSpeed, ySpeed, width, height, rotation, speed, rotationSpeed, image));
     }
 
-    public void addNPC(Person person, double x, double y, double xSpeed, double ySpeed, int width, int height) {
-        this.npcs.add(new NPC(person, x, y, xSpeed, ySpeed, width, height));
+    public void addNPC(Person person, double x, double y, double xSpeed, double ySpeed, int width, int height, String image) {
+        this.npcs.add(new NPC(person, x, y, xSpeed, ySpeed, width, height, image));
     }
 
     public void addNPC(NPC npc) {

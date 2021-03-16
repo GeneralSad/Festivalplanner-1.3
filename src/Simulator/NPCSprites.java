@@ -1,9 +1,9 @@
 package Simulator;
 
-import GUI.TabLesson;
 import org.jfree.fx.FXGraphics2D;
 
 import javax.imageio.ImageIO;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -12,12 +12,22 @@ public class NPCSprites
 
     private BufferedImage sprite;
     private ArrayList<BufferedImage[]> movements;
+    private double previousX;
+    private double previousY;
+    private double updateFactor = 2;
+    private int frame = 0;
+    private int dir = 0;
 
-    public NPCSprites(BufferedImage sprite)
+    public NPCSprites(String image)
     {
         this.movements = new ArrayList<>();
-        this.sprite = sprite;
 
+        try
+        {
+            this.sprite = ImageIO.read(getClass().getResource(image));
+        }catch (Exception e){
+            System.out.println("Image not found");
+        }
 
         for (int i = 0; i < 7; i++)
         {
@@ -30,11 +40,69 @@ public class NPCSprites
 
     }
 
-    public void draw(FXGraphics2D fxGraphics2D) {
-        for (BufferedImage[] list : this.movements) {
-            for (BufferedImage image : list){
-                fxGraphics2D.drawImage(image, 100,100, null);
+    public BufferedImage[] getStanding(){
+
+        return movements.get(1);
+    }
+
+    public BufferedImage[] getRunning(){
+
+        return movements.get(2);
+    }
+
+    public BufferedImage[] getSitting(){
+
+        return movements.get(5);
+    }
+
+    public BufferedImage[] getPhonening(){
+        return movements.get(6);
+    }
+
+    public void draw(FXGraphics2D graphics2D, boolean atDestination, double x, double y, double rotation){
+        AffineTransform af = new AffineTransform();
+        af.translate(x  - 8, y - 16);
+
+        if (atDestination){
+            graphics2D.drawImage(getStanding()[0], af, null);
+
+        } else {
+
+
+
+            graphics2D.drawImage(getRunning()[frame + dir], af, null);
+        }
+    }
+
+
+    public void frameUpdater(double x, double y){
+        double xDif = x - this.previousX;
+        double yDif = y - this.previousY;
+
+        double distance = Math.sqrt(Math.pow(xDif, 2) + Math.pow(yDif, 2));
+
+        if (distance >= updateFactor){
+            if (frame < 5){
+                frame++;
+            } else {
+                frame = 0;
             }
+
+            previousX = x;
+            previousY = y;
+        }
+    }
+
+    public void directionUpdater(double rotation){
+        double angleDegrees = Math.toDegrees(rotation);
+        if ((angleDegrees<= 45 && angleDegrees>= 0) || (angleDegrees >= 315 && angleDegrees <= 180)){
+            dir = 0;
+        } else if (angleDegrees >45  && angleDegrees < 135){
+            dir = 6;
+        } else if (angleDegrees >= 135  && angleDegrees <= 225){
+            dir = 12;
+        } else if (angleDegrees > 225  && angleDegrees < 315){
+            dir = 18;
         }
     }
 }

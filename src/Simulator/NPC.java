@@ -27,8 +27,9 @@ public class NPC
     private int rotationSpeed;
 
     private boolean atDestination;
+    public NPCSprites appearance;
 
-    public NPC(Person person, double x, double y, double xSpeed, double ySpeed, int width, int height, int rotation, int speed, int rotationSpeed)
+    public NPC(Person person, double x, double y, double xSpeed, double ySpeed, int width, int height, int rotation, int speed, int rotationSpeed, String npcAppearance)
     {
         this.person = person;
         this.x = x;
@@ -42,11 +43,12 @@ public class NPC
         this.targetRotation = rotation;
         this.rotationSpeed = rotationSpeed;
         this.atDestination = true;
+        this.appearance = new NPCSprites(npcAppearance);
     }
 
-    public NPC(Person person, double x, double y, double xSpeed, double ySpeed, int width, int height)
+    public NPC(Person person, double x, double y, double xSpeed, double ySpeed, int width, int height, String imageLocation)
     {
-        this(person, x, y, xSpeed, ySpeed, width, height, 0, 10, 10);
+        this(person, x, y, xSpeed, ySpeed, width, height, 0, 10, 10, imageLocation);
     }
 
     /**
@@ -70,6 +72,10 @@ public class NPC
 
             // Destination check
             destinationUpdate();
+
+            // prints the texture of the npc correctly
+            this.appearance.frameUpdater(x, y);
+            this.appearance.directionUpdater(rotation);
         }
     }
 
@@ -228,6 +234,8 @@ public class NPC
         fxGraphics2D.setColor(Color.RED);
         fxGraphics2D.draw(new Ellipse2D.Double(destination.getX(), destination.getY(), 1, 1));
         fxGraphics2D.setColor(Color.BLACK);
+
+        this.appearance.draw(fxGraphics2D, this.atDestination, this.x, this.y, this.rotation);
     }
 
     public Person getPerson()
