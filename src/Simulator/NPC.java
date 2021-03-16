@@ -17,10 +17,14 @@ public class NPC
     private int width;
     private int height;
     private Point2D destination;
-    // rotation from 0 to 360 degrees
-    private int rotation;
+    // rotation from 0 to 2 * Math.PI
+    private double rotation;
 
-    public NPC(Person person, double x, double y, double xSpeed, double ySpeed, int width, int height, int rotation)
+    private int speed;
+    private double targetRotation;
+    private int rotationSpeed;
+
+    public NPC(Person person, double x, double y, double xSpeed, double ySpeed, int width, int height, int rotation, int speed, int rotationSpeed)
     {
         this.person = person;
         this.x = x;
@@ -30,16 +34,70 @@ public class NPC
         this.width = width;
         this.height = height;
         this.rotation = rotation;
+        this.speed = speed;
+        this.targetRotation = rotation;
+        this.rotationSpeed = rotationSpeed;
     }
 
+    public NPC(Person person, double x, double y, double xSpeed, double ySpeed, int width, int height)
+    {
+        this(person, x, y, xSpeed, ySpeed, width, height, 0, 10, 10);
+    }
+
+    /**
+     * Main update method
+     *
+     * @param deltaTime
+     * @param npcs
+     */
     public void update(double deltaTime, ArrayList<NPC> npcs)
+    {
+        // Either do the simple x/y update or a rotation update
+
+        //        xyUpdate(deltaTime);
+        rotationUpdate(deltaTime);
+
+        // NPC collision
+        collisionUpdate(deltaTime, npcs);
+
+        // Destination check
+        destinationUpdate();
+    }
+
+    /**
+     * Check if the npc is at the destination
+     */
+    private void destinationUpdate()
+    {
+        Rectangle2D currentHitBox = new Rectangle2D.Double(this.x, this.y, this.width, this.height);
+        if (destination != null && currentHitBox.contains(destination))
+        {
+            this.xSpeed = 0;
+            this.ySpeed = 0;
+            System.out.println("Reached destination");
+        }
+    }
+
+    /**
+     * Simple xy update for position
+     *
+     * @param deltaTime
+     */
+    private void xyUpdate(double deltaTime)
     {
         // Position update
         this.x += deltaTime * xSpeed;
         this.y += deltaTime * ySpeed;
+    }
 
-        // NPC collision
-
+    /**
+     * Check collision with other npcs
+     *
+     * @param deltaTime
+     * @param npcs
+     */
+    private void collisionUpdate(double deltaTime, ArrayList<NPC> npcs)
+    {
         // Find the four edges of the current npc square hitbox
         Point2D.Double point1 = new Point2D.Double(this.x, this.y);
         Point2D.Double point2 = new Point2D.Double(this.x + this.width, this.y);
@@ -62,20 +120,64 @@ public class NPC
                 }
             }
         }
+    }
 
-        // Destination check
-        if (destination != null)
+    /**
+     * Update the rotation
+     * If the rotation matches the target rotation then move the npc in the direction of it's rotation
+     *
+     * @param deltaTime
+     */
+    public void rotationUpdate(double deltaTime)
+    {
+        // only move if the rotation matches the target rotation
+        if (rotation == targetRotation)
         {
-            Rectangle2D currentHitBox = new Rectangle2D.Double(this.x, this.y, this.width, this.height);
-            if (currentHitBox.contains(destination))
+            System.out.println("Moving");
+            double distance = deltaTime * speed;
+
+            // Determine the x and y distance made with the rotation and adjust the position
+            double sin = Math.sin(rotation);
+            double cos = Math.cos(rotation);
+            double xDiff = (cos * distance);
+            double yDiff = (sin * distance);
+            System.out.println("rotation: " + rotation + " xDiff: " + xDiff + " yDiff: " + yDiff);
+
+            x += xDiff;
+            y -= yDiff;
+        }
+        else
+        {
+            double rotationModifier = 0.01;
+
+            // slowly rotate
+            rotation += rotationModifier * deltaTime * rotationSpeed;
+
+            System.out.println("New rotation: " + rotation);
+
+            double epsilon = 0.01;
+            if (rotation + epsilon >= targetRotation && rotation - epsilon <= targetRotation)
             {
-                this.xSpeed = 0;
-                this.ySpeed = 0;
-                System.out.println("Reached destination");
+                // if the rotation is within a small margin of the target rotation just set the rotation to equal the targetrotation
+                // Otherwise it won't ever exactly become the same with modifying it with deltaTime
+                System.out.println("Setting rotation");
+                rotation = targetRotation;
             }
         }
     }
 
+    public void setTargetRotation(double targetRotation)
+    {
+        // negative values aren't allowed, as those won't ever be reached
+        this.targetRotation = Math.abs(targetRotation);
+    }
+
+    /**
+     * Go to a target destination based on simple x and y position
+     *
+     * @param x
+     * @param y
+     */
     public void goToDestination(int x, int y)
     {
         destination = new Point2D.Double(x, y);
