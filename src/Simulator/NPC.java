@@ -3,6 +3,8 @@ package Simulator;
 import Data.Person;
 import org.jfree.fx.FXGraphics2D;
 
+import java.awt.*;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
@@ -24,6 +26,8 @@ public class NPC
     private double targetRotation;
     private int rotationSpeed;
 
+    private boolean atDestination;
+
     public NPC(Person person, double x, double y, double xSpeed, double ySpeed, int width, int height, int rotation, int speed, int rotationSpeed)
     {
         this.person = person;
@@ -37,6 +41,7 @@ public class NPC
         this.speed = speed;
         this.targetRotation = rotation;
         this.rotationSpeed = rotationSpeed;
+        this.atDestination = true;
     }
 
     public NPC(Person person, double x, double y, double xSpeed, double ySpeed, int width, int height)
@@ -52,16 +57,20 @@ public class NPC
      */
     public void update(double deltaTime, ArrayList<NPC> npcs)
     {
-        // Either do the simple x/y update or a rotation update
+        // Only move and update if not at the destination
+        // if at the destination the npc shouldn't do anything regarding movement
+        if (!atDestination)
+        {
+            // Either do the simple x/y update or a rotation update
+            //        xyUpdate(deltaTime);
+            rotationUpdate(deltaTime);
 
-        //        xyUpdate(deltaTime);
-        rotationUpdate(deltaTime);
+            // NPC collision
+            collisionUpdate(deltaTime, npcs);
 
-        // NPC collision
-        collisionUpdate(deltaTime, npcs);
-
-        // Destination check
-        destinationUpdate();
+            // Destination check
+            destinationUpdate();
+        }
     }
 
     /**
@@ -72,8 +81,7 @@ public class NPC
         Rectangle2D currentHitBox = new Rectangle2D.Double(this.x, this.y, this.width, this.height);
         if (destination != null && currentHitBox.contains(destination))
         {
-            this.xSpeed = 0;
-            this.ySpeed = 0;
+            atDestination = true;
             System.out.println("Reached destination");
         }
     }
@@ -133,7 +141,6 @@ public class NPC
         // only move if the rotation matches the target rotation
         if (rotation == targetRotation)
         {
-            System.out.println("Moving");
             double distance = deltaTime * speed;
 
             // Determine the x and y distance made with the rotation and adjust the position
@@ -141,26 +148,32 @@ public class NPC
             double cos = Math.cos(rotation);
             double xDiff = (cos * distance);
             double yDiff = (sin * distance);
-            System.out.println("rotation: " + rotation + " xDiff: " + xDiff + " yDiff: " + yDiff);
+
+            // ignore negligible differences
+            if (xDiff < 0.00001 && xDiff > -0.00001) {
+                xDiff = 0;
+            }
+            if (yDiff < 0.00001 && yDiff > -0.00001) {
+                yDiff = 0;
+            }
 
             x += xDiff;
             y -= yDiff;
         }
         else
         {
-            double rotationModifier = 0.01;
+            double rotationModifier = 0.1;
 
             // slowly rotate
             rotation += rotationModifier * deltaTime * rotationSpeed;
 
-            System.out.println("New rotation: " + rotation);
+//            System.out.println("New rotation: " + rotation);
 
-            double epsilon = 0.01;
+            double epsilon = 0.1;
             if (rotation + epsilon >= targetRotation && rotation - epsilon <= targetRotation)
             {
                 // if the rotation is within a small margin of the target rotation just set the rotation to equal the targetrotation
                 // Otherwise it won't ever exactly become the same with modifying it with deltaTime
-                System.out.println("Setting rotation");
                 rotation = targetRotation;
             }
         }
@@ -178,19 +191,43 @@ public class NPC
      * @param x
      * @param y
      */
-    public void goToDestination(int x, int y)
+    public void goToDestinationXY(int x, int y)
     {
-        destination = new Point2D.Double(x, y);
+        setNewDestination(x, y);
         // calculate the total distance from a point and set the x and y speed to be a part of 10 based on how much of the total distance is on the x or y
         double totalDistance = Math.sqrt(Math.pow(x - this.x, 2) + Math.pow(y - this.y, 2));
         this.xSpeed = ((x - this.x) / totalDistance * 10);
         this.ySpeed = ((y - this.y) / totalDistance * 10);
-        System.out.println("Going to destination " + destination);
+    }
+
+    private void setNewDestination(int x, int y) {
+        destination = new Point2D.Double(x, y);
+        atDestination = false;
+    }
+
+    public void goToDestinationRotational(int x, int y) {
+        setNewDestination(x, y);
+
+        // determine the rotation angle and set it as the target rotation
+        double xDiff = x - this.x;
+        double yDiff = this.y - y;
+        double angle = Math.atan2(yDiff, xDiff);
+
+        if (angle < 0) {
+            // if it goes over 180 degrees it starts to count in the negative, so adjust for that
+            angle += 2 * Math.PI;
+        }
+
+        targetRotation = angle;
     }
 
     public void draw(FXGraphics2D fxGraphics2D)
     {
         fxGraphics2D.draw(new Rectangle2D.Double(x, y, width, height));
+        // Draw the destination as a small dot
+        fxGraphics2D.setColor(Color.RED);
+        fxGraphics2D.draw(new Ellipse2D.Double(destination.getX(), destination.getY(), 1, 1));
+        fxGraphics2D.setColor(Color.BLACK);
     }
 
     public Person getPerson()

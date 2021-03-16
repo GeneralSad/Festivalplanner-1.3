@@ -41,7 +41,7 @@ public class NPCManager
     public void setLocation(Point2D point2D){
         for (NPC npc: npcs)
         {
-            npc.goToDestination((int)point2D.getX(), (int)point2D.getY());
+            npc.goToDestinationXY((int)point2D.getX(), (int)point2D.getY());
         }
     }
 

@@ -33,9 +33,6 @@ public class NPCTester extends Application
     @Override
     public void start(Stage primaryStage) throws Exception
     {
-
-
-
         BorderPane mainPane = new BorderPane();
         resizableCanvas = new ResizableCanvas(fxGraphics2D -> draw(fxGraphics2D), mainPane);
 
@@ -68,22 +65,12 @@ public class NPCTester extends Application
     public void init()
     {
         npcManager = new NPCManager();
-//        Person person = new Person("Test", 0);
-//        npcManager.addNPC(person, 500, 500, 0, 0, 10, 10);
-//        npcManager.getNPC(person).goToDestination(150, 180);
-//        npcManager.addNPC(new Person("Test", 0), 100, 100, 10, 0, 10, 10);
-//        npcManager.addNPC(new Person("Test", 0), 200, 100, -10, 0, 10, 10);
-//        npcManager.addNPC(new Person("Test", 0), 400, 100, 0, 5, 10, 10);
-//        npcManager.addNPC(new Person("Test", 0), 400, 200, 0, -5, 10, 10);
-//        npcManager.addNPC(new Person("Test", 0), 100, 300, 10, 5, 10, 10);
-//        npcManager.addNPC(new Person("Test", 0), 200, 300, -10, 5, 10, 10);
-//        npcManager.addNPC(new Person("Test", 0), 100, 100, 10, -6, 10, 10);
-//        npcManager.addNPC(new Person("Test", 0), 200, 100, -10, 7, 10, 10);
 
         NPC npc = new NPC(new Person("Test", 0), 500, 500, 10, 0, 10, 10);
         npcManager.addNPC(npc);
-        npc.setTargetRotation(Math.PI * 1.5);
-//        npc.goToDestination(200, 200);
+//        npc.setTargetRotation(Math.PI * 1.5);
+        npc.goToDestinationRotational(346, 389);
+
 
         try
         {
@@ -93,8 +80,6 @@ public class NPCTester extends Application
         {
             e.printStackTrace();
         }
-
-        npcManager.setLocation(new Point2D.Double(200, 200));
     }
 
     private void update(double deltaTime)
