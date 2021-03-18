@@ -1,6 +1,8 @@
 package GUI;
 
 import Data.*;
+import Simulator.Time.SpeedFactoredTime;
+import Simulator.Time.TimeManager;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -17,9 +19,8 @@ import java.util.ArrayList;
 
 /**
  * Auteurs:
- *
+ * <p>
  * Hier wordt ervoor gezorgd dat de applicatie goed wordt opgestart en hier worden ook wat test dingen in het programma gezet
- *
  */
 
 public class GUI extends Application
@@ -69,7 +70,16 @@ public class GUI extends Application
         tabPane.getTabs().add(new Tab("Rooster", canvasContainer));
 
         FlowPane test = new FlowPane();
-        test.getChildren().add(new TextField("testing"));
+
+        Button testButton = new Button("Get time");
+        TimeManager timeManager = new TimeManager(schedule, new SpeedFactoredTime(LocalTime.of(9, 0, 0), 100));
+        testButton.setOnAction(event ->
+        {
+            System.out.println(timeManager.getTime());
+            timeManager.getCurrentLessons();
+        });
+
+        test.getChildren().addAll(new TextField("testing"), testButton);
         tabPane.getTabs().add(new Tab("Testing", test));
 
         Scene scene = new Scene(tabPane);

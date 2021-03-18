@@ -84,7 +84,7 @@ public class Schedule implements Serializable
         // First check if there are no conflicts with other lessonArrayList
         LocalTime beginTime = lesson.getBeginTime();
         LocalTime endTime = lesson.getEndTime();
-        ArrayList<Lesson> overLappingLesson = getOverlappingTime(beginTime, endTime);
+        ArrayList<Lesson> overLappingLesson = getOverlappingLessons(beginTime, endTime);
 
         checkLesson(lesson, overLappingLesson);
         // if an exception was thrown then the method stops so the following statement isn't reached
@@ -172,7 +172,12 @@ public class Schedule implements Serializable
     }
 
 
-    public ArrayList<Lesson> getOverlappingTime(LocalTime beginTime, LocalTime endTime)
+    public ArrayList<Lesson> getOverlappingLessons(LocalTime time)
+    {
+        return getOverlappingLessons(time, time);
+    }
+
+    public ArrayList<Lesson> getOverlappingLessons(LocalTime beginTime, LocalTime endTime)
     {
 
         ArrayList<Lesson> overlappingTimeLesson = new ArrayList<>();
@@ -305,5 +310,6 @@ public class Schedule implements Serializable
     {
         return allEndingTimes;
     }
+
 
 }
