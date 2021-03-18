@@ -1,4 +1,4 @@
-package Simulator;
+package Simulator.NPC;
 
 import Data.Person;
 import org.jfree.fx.FXGraphics2D;
