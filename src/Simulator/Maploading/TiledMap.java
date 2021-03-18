@@ -3,6 +3,7 @@ package Simulator.Maploading;
 import org.jfree.fx.FXGraphics2D;
 
 import javax.json.*;
+import java.awt.*;
 import java.util.ArrayList;
 
 /**
@@ -74,6 +75,9 @@ public class TiledMap
      * @param fxGraphics2D
      */
     public void draw(FXGraphics2D fxGraphics2D) {
+        fxGraphics2D.clearRect(-4000, -4000, 4000, 4000);
+        fxGraphics2D.setBackground(Color.white);
+
         for (TiledLayer tiledLayer : this.tiledLayers) {
             tiledLayer.draw(fxGraphics2D);
         }
