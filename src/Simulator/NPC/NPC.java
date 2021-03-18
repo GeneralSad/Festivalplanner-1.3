@@ -53,7 +53,7 @@ public class NPC
     
     public NPC(Person person)
     {
-        this(person, 200, 100, 10, 0, 10, 10, "/NPC/NPC1 male.png");
+        this(person, Math.random() * 100, 100 + Math.random() * 500, 10, 0, 10, 10, "/NPC/NPC1 male.png");
     }
 
     /**
@@ -231,6 +231,7 @@ public class NPC
 
     public void draw(FXGraphics2D fxGraphics2D)
     {
+        fxGraphics2D.setColor(Color.white);
         fxGraphics2D.draw(new Rectangle2D.Double(x, y, width, height));
         // Draw the destination as a small dot
 

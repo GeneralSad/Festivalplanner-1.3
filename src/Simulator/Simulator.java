@@ -6,6 +6,7 @@ import Data.Schedule;
 import Data.Student;
 import Simulator.NPC.NPC;
 import Simulator.NPC.NPCManager;
+import Simulator.Time.NormalTime;
 import Simulator.Time.SpeedFactoredTime;
 import Simulator.Time.TimeManager;
 import org.jfree.fx.FXGraphics2D;
@@ -23,16 +24,17 @@ public class Simulator
 {
     private NPCManager npcManager = new NPCManager();
     private TimeManager timeManager;
+    private int speedfactor = 10;
 
 
     public Simulator(Schedule schedule)
     {
-        timeManager = new TimeManager(schedule, new SpeedFactoredTime(LocalTime.of(9, 0, 0), 100));
+        timeManager = new TimeManager(schedule, new SpeedFactoredTime(LocalTime.of(9, 0, 0), speedfactor));
     }
 
     public void update(long deltatime)
     {
-        npcManager.update(deltatime / 1000000000.0);
+        npcManager.update(deltatime / 1000000000.0*speedfactor);
         timeManager.update(deltatime);
 
         if (timeManager.isChanged())

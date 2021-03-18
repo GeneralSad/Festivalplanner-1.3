@@ -88,8 +88,7 @@ public class NPCSprites
      */
 
     public void draw(FXGraphics2D graphics2D, boolean atDestination, double x, double y, String name){
-        AffineTransform af = new AffineTransform();
-        af.translate(x  - 8, y - 16);
+
 
 
         //draws the standing still behavior this is not updated.
@@ -97,14 +96,14 @@ public class NPCSprites
 
             if (onPhone){
                 if (dir == 18)
-                graphics2D.drawImage(getPhonening()[frame], af , null);
+                graphics2D.drawImage(getPhonening()[frame], (int) x-8, (int)y -16, null);
             } else
             {
-                graphics2D.drawImage(getStanding()[frame + dir], af, null);
+                graphics2D.drawImage(getStanding()[frame + dir], (int) x-8, (int)y -16, null);
             }
 
         } else {
-            graphics2D.drawImage(getRunning()[frame + dir], af, null);
+            graphics2D.drawImage(getRunning()[frame + dir], (int) x-8, (int)y -16, null);
 
             if (dir == 18 && frame == 4)
             {
@@ -113,20 +112,20 @@ public class NPCSprites
         }
 
         if (onName)
-        {
-            float alpha = 0.45f;
-            Color colorField = new Color(0, 0, 0, alpha);
-            graphics2D.setColor(colorField);
+                {
+                    float alpha = 0.45f;
+                    Color colorField = new Color(0, 0, 0, alpha);
+                    graphics2D.setColor(colorField);
 
-            RoundRectangle2D nameSign = new RoundRectangle2D.Double(x - 20, y - 15, 40, 10, 5, 5);
-            graphics2D.fill(nameSign);
+                    RoundRectangle2D nameSign = new RoundRectangle2D.Double(x - 20, y - 15, 40, 10, 5, 5);
+                    graphics2D.fill(nameSign);
 
-            Font font = new Font(Font.MONOSPACED, Font.PLAIN, 10);
-            graphics2D.setFont(font);
-            graphics2D.setColor(Color.white);
-            graphics2D.drawString(name,(int)x-18,(int)y-7);
+                    Font font = new Font(Font.MONOSPACED, Font.PLAIN, 10);
+                    graphics2D.setFont(font);
+                    graphics2D.setColor(Color.white);
+                    graphics2D.drawString(name,(int)x-18,(int)y-7);
 
-        }
+                }
     }
 
 
