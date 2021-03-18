@@ -1,4 +1,4 @@
-package Simulator;
+package Simulator.NPC;
 
 import Data.Person;
 import javafx.animation.AnimationTimer;
@@ -9,10 +9,8 @@ import javafx.stage.Stage;
 import org.jfree.fx.FXGraphics2D;
 import org.jfree.fx.ResizableCanvas;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 
 // for testing purposes
 public class NPCTester extends Application
@@ -22,6 +20,7 @@ public class NPCTester extends Application
     private ResizableCanvas resizableCanvas;
     private NPCManager npcManager;
     private NPCSprites npcSprites;
+
 
 
     public static void main(String[] args)
@@ -66,13 +65,12 @@ public class NPCTester extends Application
 
         for (int i = 0; i < 10; i++)
         {
-            NPC npc = new NPC(new Person("Test", 0), 200, 100 - i * 100, 10, 0, 10, 10, "/NPC/NPC1 male.png");
+            NPC npc = new NPC(new Person("Ewout", 0), 200, 100 - i * 100, 10, 0, 10, 10, "/NPC/NPC1 male.png");
             npcManager.addNPC(npc);
             //        npc.setTargetRotation(Math.PI * 1.5);
             npc.goToDestinationRotational(200, 200);
 
         }
-
     }
 
     private void update(double deltaTime)
