@@ -19,6 +19,7 @@ public class Student extends Person implements Serializable
     {
         super(name, age);
         this.group = group;
+        group.addStudent(this);
     }
 
     public String toDetailString()

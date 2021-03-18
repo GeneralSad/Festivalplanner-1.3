@@ -23,9 +23,14 @@ public class Group implements Serializable
 
     }
 
-    public void addStudent(Student student)
+    public boolean addStudent(Student student)
     {
-        students.add(student);
+        if (!students.contains(student))
+        {
+            students.add(student);
+            return true;
+        }
+        return false;
     }
 
     public void removeStudent(Student student)

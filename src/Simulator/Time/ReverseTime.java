@@ -14,16 +14,16 @@ public class ReverseTime implements TimeType
         time = timeType.getTime();
     }
 
+
     @Override
     public LocalTime getTime()
     {
-        time = time.plusNanos(deltaTime());
         return time;
     }
 
     @Override
-    public long deltaTime()
+    public void update(Long deltatime)
     {
-        return timeType.deltaTime() * -1;
+        time = time.plusNanos(deltatime * -1);
     }
 }

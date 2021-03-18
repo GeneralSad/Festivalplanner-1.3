@@ -55,9 +55,16 @@ public class TiledLayer
      * Draw all the tiles in the layer
      * @param fxGraphics2D
      */
+
+    BufferedImage cache = null;
+
     public void draw(FXGraphics2D fxGraphics2D) {
-        BufferedImage cash = new BufferedImage(tiledMap.getWidth() * tiledMap.getTileWidth(), tiledMap.getHeight() * tiledMap.getTileHeight(), BufferedImage.TYPE_INT_ARGB);
-        Graphics2D cashGraphics = cash.createGraphics();
+
+        if (cache == null) {
+            cache = new BufferedImage(tiledMap.getWidth() * tiledMap.getTileWidth(), tiledMap.getHeight() * tiledMap.getTileHeight(), BufferedImage.TYPE_INT_ARGB);
+        }
+
+        Graphics2D cashGraphics = cache.createGraphics();
 
         if (visible) {
             for (int i = 0; i < data.size(); i++) {
@@ -136,6 +143,6 @@ public class TiledLayer
                 }
             }
         }
-        fxGraphics2D.drawImage(cash, 0, 0, null);
+        fxGraphics2D.drawImage(cache, 0, 0, null);
     }
 }
