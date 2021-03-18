@@ -7,5 +7,6 @@ public interface TimeType
 {
     LocalTime getTime();
 
-    long deltaTime();
+    void update(Long deltatime);
+
 }

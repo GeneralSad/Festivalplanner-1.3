@@ -6,29 +6,27 @@ public class SpeedFactoredTime implements TimeType
 {
     private Long lastTime;
     private LocalTime time;
-    private double speedFactor;
+    private int speedFactor;
 
 
-    public SpeedFactoredTime(LocalTime startingTime, double speedFactor)
+    public SpeedFactoredTime(LocalTime startingTime, int speedFactor)
     {
         this.time = startingTime;
         lastTime = LocalTime.now().toNanoOfDay();
         this.speedFactor = speedFactor;
     }
 
+
     @Override
     public LocalTime getTime()
     {
-
-        this.time = this.time.plusNanos(deltaTime());
-        return this.time;
+        return time;
     }
 
 
-    public long deltaTime()
+    @Override
+    public void update(Long deltatime)
     {
-        long deltaTime = LocalTime.now().toNanoOfDay() - lastTime;
-        lastTime = LocalTime.now().toNanoOfDay();
-        return (long) (deltaTime * speedFactor);
+        time = time.plusNanos(deltatime * speedFactor);
     }
 }

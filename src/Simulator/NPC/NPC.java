@@ -50,6 +50,11 @@ public class NPC
     {
         this(person, x, y, xSpeed, ySpeed, width, height, 0, 10, 20, imageLocation);
     }
+    
+    public NPC(Person person)
+    {
+        this(person, 200, 100, 10, 0, 10, 10, "/NPC/NPC1 male.png");
+    }
 
     /**
      * Main update method
