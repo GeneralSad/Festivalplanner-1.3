@@ -1,4 +1,4 @@
-package Simulator;
+package Simulator.NPC;
 
 import Data.Person;
 import javafx.animation.AnimationTimer;
@@ -9,10 +9,8 @@ import javafx.stage.Stage;
 import org.jfree.fx.FXGraphics2D;
 import org.jfree.fx.ResizableCanvas;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 
 // for testing purposes
 public class NPCTester extends Application
@@ -72,7 +70,6 @@ public class NPCTester extends Application
             npc.goToDestinationRotational(200, 200);
 
         }
-
     }
 
     private void update(double deltaTime)

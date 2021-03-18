@@ -1,5 +1,6 @@
-package Simulator;
+package Simulator.NPC;
 
+import Simulator.Simulator;
 import org.jfree.fx.FXGraphics2D;
 
 import javax.imageio.ImageIO;

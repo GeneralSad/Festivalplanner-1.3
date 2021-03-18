@@ -1,4 +1,4 @@
-package Simulator;
+package Simulator.NPC;
 
 import Data.Person;
 import org.jfree.fx.FXGraphics2D;
@@ -64,11 +64,14 @@ public class NPC
         if (!atDestination)
         {
             // Either do the simple x/y update or a rotation update
-            //        xyUpdate(deltaTime);
+//                    xyUpdate(deltaTime);
             rotationUpdate(deltaTime);
 
             // NPC collision
-            collisionUpdate(deltaTime, npcs);
+            if (collisionUpdate(npcs)) {
+                // if a collision would occur, reverse the previous made movement
+                rotationUpdate(-deltaTime);
+            }
 
             // Destination check
             destinationUpdate();
@@ -107,17 +110,13 @@ public class NPC
     /**
      * Check collision with other npcs
      *
-     * @param deltaTime
      * @param npcs
      */
-    private void collisionUpdate(double deltaTime, ArrayList<NPC> npcs)
+    private boolean collisionUpdate(ArrayList<NPC> npcs)
     {
-        // Find the four edges of the current npc square hitbox
-        Point2D.Double point1 = new Point2D.Double(this.x, this.y);
-        Point2D.Double point2 = new Point2D.Double(this.x + this.width, this.y);
-        Point2D.Double point3 = new Point2D.Double(this.x, this.y + this.height);
-        Point2D.Double point4 = new Point2D.Double(this.x + this.width, this.y + this.height);
+        Rectangle2D thisNpcHitBox = new Rectangle2D.Double(this.x, this.y, this.width, this.height);
 
+        // check for all other npcs if this npc would collide
         for (NPC npc : npcs)
         {
             if (npc != this)
@@ -125,15 +124,12 @@ public class NPC
                 // find the other npc hitbox
                 Rectangle2D npcHitBox = new Rectangle2D.Double(npc.x, npc.y, npc.width, npc.height);
 
-                // if any of the edges is contained within the other npcs hitbox then a collision happened
-                // so reverse the movement
-                if (npcHitBox.contains(point1) || npcHitBox.contains(point2) || npcHitBox.contains(point3) || npcHitBox.contains(point4))
-                {
-                    this.x -= deltaTime * xSpeed;
-                    this.y -= deltaTime * ySpeed;
+                if (thisNpcHitBox.intersects(npcHitBox)) {
+                    return true;
                 }
             }
         }
+        return false;
     }
 
     /**
@@ -231,9 +227,13 @@ public class NPC
     {
         fxGraphics2D.draw(new Rectangle2D.Double(x, y, width, height));
         // Draw the destination as a small dot
-        fxGraphics2D.setColor(Color.RED);
-        fxGraphics2D.draw(new Ellipse2D.Double(destination.getX(), destination.getY(), 1, 1));
-        fxGraphics2D.setColor(Color.BLACK);
+
+        if (destination != null)
+        {
+            fxGraphics2D.setColor(Color.RED);
+            fxGraphics2D.draw(new Ellipse2D.Double(destination.getX(), destination.getY(), 1, 1));
+            fxGraphics2D.setColor(Color.BLACK);
+        }
 
         this.appearance.draw(fxGraphics2D, this.atDestination, this.x, this.y, this.rotation);
     }
