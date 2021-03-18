@@ -1,9 +1,8 @@
 package GUI;
 
 import Data.*;
-import Simulator.Time.SpeedFactoredTime;
-import Simulator.Time.TimeManager;
 import Simulator.Maploading.TiledMap;
+import Simulator.Simulator;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Node;
@@ -15,7 +14,6 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import org.jfree.fx.FXGraphics2D;
@@ -35,6 +33,8 @@ public class GUI extends Application
     private Schedule schedule;
     private String filePath = "src/Data/storedSchedule";
     private DataStorage dataStorage = new DataStorage();
+    private Simulator simulator;
+
 
     public static void main(String[] args)
     {
@@ -51,7 +51,7 @@ public class GUI extends Application
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
         BorderPane canvasContainer = new BorderPane();
-        BorderPane simulator = new BorderPane();
+        BorderPane simulatorPane = new BorderPane();
         MainWindow mainWindow = new MainWindow(canvasContainer, this.schedule);
         canvasContainer.setCenter(mainWindow);
 
@@ -83,21 +83,17 @@ public class GUI extends Application
         borderPane.setCenter(canvas);
         simulatorTab.setContent(borderPane);
 
-        FlowPane test = new FlowPane();
-
-        Button testButton = new Button("Get time");
-        TimeManager timeManager = new TimeManager(schedule, new SpeedFactoredTime(LocalTime.of(9, 0, 0), 100));
-        testButton.setOnAction(event ->
-        {
-            System.out.println(timeManager.getTime());
-            timeManager.getCurrentLessons();
-        });
 
         tabPane.getTabs().add(new Tab("Rooster", canvasContainer));
         tabPane.getTabs().add(simulatorTab);
 
         Scene scene = new Scene(tabPane);
+
+
         TiledMap tiledmap = new TiledMap("/TiledMaps/MapFinal.json");
+        addMouseScrolling(canvas);
+
+        simulator = new Simulator(schedule);
 
         new AnimationTimer()
         {
@@ -110,21 +106,20 @@ public class GUI extends Application
                 {
                     last = now;
                 }
-                if (now - last > 1e9)
-                {
-                    graphicsContext.setImageSmoothing(false);
-                    FXGraphics2D fxGraphics2D =  new FXGraphics2D(graphicsContext);
-                    fxGraphics2D.setBackground(Color.WHITE);
-                    fxGraphics2D.clearRect(0, 0, (int) canvas.getWidth(), (int) canvas.getHeight());
-                    double heck = 0;
-                    //fxGraphics2D.translate(heck += 0.1, heck += 0.1);
-                    tiledmap.draw(fxGraphics2D);
-                    addMouseScrolling(canvas);
-                    last = now;
-                }
+
+                graphicsContext.setImageSmoothing(false);
+                FXGraphics2D fxGraphics2D = new FXGraphics2D(graphicsContext);
+                fxGraphics2D.setBackground(Color.WHITE);
+                fxGraphics2D.clearRect(0, 0, (int) canvas.getWidth(), (int) canvas.getHeight());
+                tiledmap.draw(fxGraphics2D);
+                simulator.draw(fxGraphics2D);
+                long deltatime = now - last;
+                simulator.update(deltatime);
+                last = now;
+
+
             }
         }.start();
-
         stage.setScene(scene);
         stage.setTitle("School simulatie");
         stage.setMaximized(true);
@@ -142,10 +137,13 @@ public class GUI extends Application
             teachers.add(new Teacher("Johan", 36, "Graphics"));
             teachers.add(new Teacher("Maurice", -1, "Programmeren"));
             ArrayList<Group> groups = new ArrayList<>();
-            groups.add(new Group("C1"));
+            Group c1 = new Group("C1");
+            groups.add(c1);
             groups.add(new Group("C2"));
             groups.add(new Group("C3"));
             groups.add(new Group("C4"));
+            Student test = new Student("test", 12, c1);
+
             ArrayList<Classroom> classrooms = new ArrayList<>();
             classrooms.add(new Classroom(1));
             classrooms.add(new Classroom(2));
@@ -164,7 +162,15 @@ public class GUI extends Application
             lessons.add(new Lesson(LocalTime.of(13, 30), LocalTime.of(14, 30), teachers.get(2), classrooms.get(3), groups.get(0)));
             lessons.add(new Lesson(LocalTime.of(16, 30), LocalTime.of(17, 30), teachers.get(0), classrooms.get(2), groups));
             lessons.add(new Lesson(LocalTime.of(11, 0), LocalTime.of(12, 0), teachers.get(0), classrooms.get(7), groups));
+
+            for (Group group : groups)
+            {
+                group.addStudent(new Student(group.getGroupName() + "test", 12, group));
+            }
+
             this.schedule = new Schedule(lessons, teachers, groups, classrooms);
+
+
         }
         else
         {
@@ -172,15 +178,19 @@ public class GUI extends Application
         }
     }
 
-    public void addMouseScrolling(Node node) {
-        node.setOnScroll((ScrollEvent event) -> {
+    public void addMouseScrolling(Node node)
+    {
+        node.setOnScroll((ScrollEvent event) ->
+        {
             double zoomFactor = 1.05;
             double deltaY = event.getDeltaY();
-            if (deltaY < 0){
+            if (deltaY < 0)
+            {
                 zoomFactor = 2.0 - zoomFactor;
             }
 
-            if (!(node.getScaleY() * zoomFactor > 5) && !(node.getScaleY() * zoomFactor < 0.9)) {
+            if (!(node.getScaleY() * zoomFactor > 5) && !(node.getScaleY() * zoomFactor < 0.9))
+            {
                 //System.out.println("X: " + node.getScaleX());
                 //System.out.println("Y: " + node.getScaleY());
 
@@ -191,5 +201,6 @@ public class GUI extends Application
 
         });
     }
+
 
 }

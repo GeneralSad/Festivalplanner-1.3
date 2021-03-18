@@ -16,14 +16,12 @@ public class NormalTime implements TimeType
     @Override
     public LocalTime getTime()
     {
-        time = time.plusNanos(deltaTime());
         return time;
     }
 
-    public long deltaTime()
+    @Override
+    public void update(Long deltatime)
     {
-        long deltaTime = LocalTime.now().toNanoOfDay() - lastTime;
-        lastTime = LocalTime.now().toNanoOfDay();
-        return deltaTime;
+        time = time.plusNanos(deltatime);
     }
 }

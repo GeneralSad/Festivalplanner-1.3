@@ -1,4 +1,4 @@
-package Simulator;
+package Simulator.NPC;
 
 import org.jfree.fx.FXGraphics2D;
 

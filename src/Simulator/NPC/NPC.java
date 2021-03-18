@@ -1,4 +1,4 @@
-package Simulator;
+package Simulator.NPC;
 
 import Data.Person;
 import org.jfree.fx.FXGraphics2D;
@@ -49,6 +49,11 @@ public class NPC
     public NPC(Person person, double x, double y, double xSpeed, double ySpeed, int width, int height, String imageLocation)
     {
         this(person, x, y, xSpeed, ySpeed, width, height, 0, 10, 10, imageLocation);
+    }
+
+    public NPC(Person person)
+    {
+        this(person, 200, 100, 10, 0, 10, 10, "/NPC/NPC1 male.png");
     }
 
     /**
