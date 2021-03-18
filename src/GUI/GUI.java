@@ -13,6 +13,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.input.DragEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
@@ -21,6 +22,7 @@ import javafx.stage.Stage;
 import org.jfree.fx.FXGraphics2D;
 
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
@@ -110,18 +112,14 @@ public class GUI extends Application
                 {
                     last = now;
                 }
-                if (now - last > 1e9)
-                {
-                    graphicsContext.setImageSmoothing(false);
+
                     FXGraphics2D fxGraphics2D =  new FXGraphics2D(graphicsContext);
                     fxGraphics2D.setBackground(Color.WHITE);
                     fxGraphics2D.clearRect(0, 0, (int) canvas.getWidth(), (int) canvas.getHeight());
-                    double heck = 0;
-                    //fxGraphics2D.translate(heck += 0.1, heck += 0.1);
-                    tiledmap.draw(fxGraphics2D);
                     addMouseScrolling(canvas);
+                    addMouseClickDrag(canvas, fxGraphics2D);
+                    tiledmap.draw(fxGraphics2D);
                     last = now;
-                }
             }
         }.start();
 
@@ -181,15 +179,38 @@ public class GUI extends Application
             }
 
             if (!(node.getScaleY() * zoomFactor > 5) && !(node.getScaleY() * zoomFactor < 0.9)) {
-                //System.out.println("X: " + node.getScaleX());
-                //System.out.println("Y: " + node.getScaleY());
-
-
                 node.setScaleX(node.getScaleX() * zoomFactor);
                 node.setScaleY(node.getScaleY() * zoomFactor);
             }
 
         });
+    }
+
+    private double lastX = -10000;
+    private double lastY = -10000;
+
+    public void addMouseClickDrag(Node node, FXGraphics2D fxGraphics2D) {
+        node.setOnMouseDragged((event) -> {
+
+            if (lastX == -10000 && lastY == -10000) {
+                lastX = event.getX();
+                lastY = event.getY();
+            }
+
+            fxGraphics2D.translate(event.getX() - lastX, event.getY() - lastY);
+
+            lastX = event.getX();
+            lastY = event.getY();
+
+        });
+
+        node.setOnMouseReleased(event -> {
+
+            lastX = -10000;
+            lastY = -10000;
+
+        });
+
     }
 
 }
