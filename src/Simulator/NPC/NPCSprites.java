@@ -92,10 +92,11 @@ public class NPCSprites
         af.translate(x  - 8, y - 16);
 
 
-
+        //draws the standing still behavior this is not updated.
         if (atDestination){
 
             if (onPhone){
+                if (dir == 18)
                 graphics2D.drawImage(getPhonening()[frame], af , null);
             } else
             {
