@@ -156,6 +156,83 @@ Bij de destinationupdate veranderd de boolean naar true wanneer de NPC op de bes
 
 Verder ziet het eruit na het testen dat de rotatie goed werkt. De npc draait een stukje naar de goede richting en gaat dan rechtstreeks naar een gekozen punt.
 
+## Week 6
+
+In week 6 ben ik gaan werken aan een bugfix voor de npc collision (dit gaat nog niet helemaal goed) en de pathfinding voor npcs
+
+### Npc collision bugfix
+
+In sommige situaties clippen de npcs in elkaar en gaan met een hogere snelheid samen naar een andere richting toe.
+Dus er gaat iets mis met de collision bounds en ook iets mis met het terugzetten van de npc.
+
+Voor de collision bounds werden eerst de 4 hoeken van de hitbox van de huidige npc gepakt en het vierkant van de hitbox van een andere npc en gekeken of een van de vier hoeken in de andere npc zat. Het blijkt dat dit niet zo goed werkt.
+Als mogelijke oplossing dacht ik om in plaats van vier verschillende hoeken te pakken simpelweg het vierkant van de hitbox te kijken en of er overlap is met het vierkant van de hitbox van andere npcs.
+
+Voor het terugzetten van de npc wanneer een verdere beweging een collision zou hebben werd er eerst handmatig de x en y veranderd. Maar dit was dus niet op een goede manier.
+In plaats van gecompliceerd verder te gaan doen heb ik de methode die de verplaatsing regelt aangeroepen met de negatieve van deltaTime, om dan dezelfde verplaatsing in de andere richting te krijgen.
+
+Met deze twee veranderingen was het probleem opgelost en stoppen de npcs nu wanneer ze botsen met andere npcs.
+
+### Pathfinding
+
+Naast de bugfix ben ik ook begonnen aan de pathfinding. 
+Tijdens het opstartcollege hadden we een demonstratie gekregen van hoe we pathfinding konden implementeren. 
+Echter heb ik pathfinding al geïmplementeerd voor mijn 2Dgraphics eindopdracht waardoor het niet nieuwe principes zijn.
+Daarom ben ik dus begonnen met in principe pathfinding op dezelfde manier te implementeren als bij mijn particle flow simulatie eindopdracht voor 2Dgraphics.
+
+Er zit wel een redelijk groot verschil tussen de pathfinding voor de proftaak en die ik al ken.
+Namelijk dat je per tile die je checkt niet alleen de afstand wil weten die die moet verlopen, maar je wilt juist weten in welke richting je moet gaan om naar de bestemming te gaan.
+Hierdoor moest ik het algoritme net iets aanpassen. 
+Waarbij de tiles ook een bestemming attribuut hebben die een waarde van een enumerator hebben, UP, LEFT, RIGHT, DOWN of NONE. 
+Dit geeft heel simpel aan welke richting een tile naar moet wijzen.
+
+Het algoritme werkt als volgt:
+- Een tile is de bestemming.
+- De bestemming wordt gezet als originele tile.
+- Vanuit de originele tile wordt gekeken naar welke tiles direct aanliggend zijn (boven, links, rechts, onder).
+- Voor elke tile wordt gekeken of ze binnen de map vallen en of ze loopbaar zijn.
+- Wanneer bovenstaande klopt dan wordt op de tile een richting aangegeven naar de originele tile.
+- De geldige tiles van stap 3 worden toegevoegd aan een lijst met tiles die in de volgende loop iteratie moeten worden gecheckt.
+- De originele tile van stap 2 wordt toegevoegd aan een lijst met tiles die al zijn gecheckt. Deze mogen ook niet meetellen vanaf stap 4 samen met de tiles buiten de map en niet loopbare.
+- De vorige stappen worden herhaalt met het lijstje van tiles die opnieuw worden gechekt, waarbij wanneer dat lijstje af is het nieuwe lijstje met tiles die daar weer van aanliggend zijn worden gechekt, enzovoorts.
+
+Behalve het stukje met de richting werkt het algoritme in principe precies hetzelfde als wat ik voor 2Dgraphics heb gemaakt, waardoor het geen grote uitdaging was.
+
+Om te testen of het algoritme goed werkt heb ik een debug draw methode toegevoegd die ook lijntjes tekent in de richting van waar npcs naartoe zouden moeten lopen.
+Dit is te zien in de afbeelding hieronder:
+
+![TiledMapWorkingWK4.PNG](Week6PathfindingField.PNG)
+
+In de afbeelding is helemaal links boven een leeg vakje te zien, dit is de bestemming. 
+Alle andere vakjes wijzen naar een route richting dat vakje. 
+De enige vakjes die er niet naar wijzen zijn een reeks vakjes richting het midden van de afbeelding. 
+Dit zijn niet loopbare tiles, waarbij het ook te zien is dat het pad eromheen loopt.
+De bestemming en de niet loopbare tiles hebben allebei geen bestemming waardoor ze allebei leeg zijn. 
+
+Wanneer een tile twee even lange mogelijke paden heeft naar de bestemming wordt arbitrair tussen die twee gekozen.
+Degene die het eerste wordt gecheckt in de loop die wint en aangezien een hashset wordt gebruikt kan dit redelijk wisselen.
+Maar dit is nog steeds het kortste pad naar de bestemming en dat het niet consequent is in de beslissing maakt voor deze implementatie niet uit.
+Het is juist net wat leuker dat er wat willekeurigheid in de paden zit voor de npcs, mensen zijn ook niet voorspelbaar.
+
+Npcs kijken naar op welke tile ze staan en naar welke richting ze dan moeten lopen.
+Wanneer ze in de bestemming tile zijn stoppen ze met de tile richting volgen, maar gaan ze naar de specifieke x,y postiie van de bestemming binnen die tile.
+Verder gebeurt het wel dat npcs precies op de randjes van tiles gaan lopen. Dit moet nog worden aangepast voor wanneer ze op de volledige tiledmap gaan lopen en niet in de muren mogen lopen.
+
+### Overige punten
+
+Ik ben verder nog tegen een probleem gelopen tijdens het werken.
+Namelijk dat npcs soms wanneer ze naar een punt toe moeten lopen het punt maar net missen.
+
+Na een beetje testen en kijken naar de code blijk dit probleem te komen doordat wanneer npcs naar een punt toe moeten lopen ze vanuit het linksbovenste hoekje van de hitbox direct naar het punt worden gestuurd.
+Maar de check of ze op het punt zijn gebeurt binnen de gehele hitbox.
+Waardoor wanneer er net wat kleine afronding foutjes zijn bij het berekenen de bestemming niet exact wordt bereikt.
+
+Als oplossing voor dit probleem heb ik de hitbox behouden zoals het is, maar de berekening van het lopen aangepast.
+In plaats van vanuit het links bovenste hoekje te kijken is het veel beter om te kijken vanuit het middelpunt van de hitbox.
+Hierdoor kunnen kleine afrondingsfoutjes worden opgevangen doordat er meer marge voor fout is.
+
+Deze verandering heeft het probleem opgelost waardoor npcs nu altijd hun bestemming herkennen.
+
 #Applicaties die Json gebruiken
 
 - Proglet
