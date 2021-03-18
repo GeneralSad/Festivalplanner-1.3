@@ -17,6 +17,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import org.jfree.fx.FXGraphics2D;
 
+import java.awt.*;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
@@ -74,7 +75,7 @@ public class GUI extends Application
         BorderPane borderPane = new BorderPane();
 
         Tab simulatorTab = new Tab("Simulator");
-        Canvas canvas = new Canvas(2000, 2000);
+        Canvas canvas = new Canvas(2048, 2048);
         GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
 
         borderPane.setCenter(canvas);
@@ -99,9 +100,12 @@ public class GUI extends Application
                 }
                 if (now - last > 1e9)
                 {
+                    graphicsContext.setImageSmoothing(false);
                     FXGraphics2D fxGraphics2D =  new FXGraphics2D(graphicsContext);
-                    fxGraphics2D.setBackground(java.awt.Color.WHITE);
+                    fxGraphics2D.setBackground(Color.WHITE);
                     fxGraphics2D.clearRect(0, 0, (int) canvas.getWidth(), (int) canvas.getHeight());
+                    double heck = 0;
+                    //fxGraphics2D.translate(heck += 0.1, heck += 0.1);
                     tiledmap.draw(fxGraphics2D);
                     addMouseScrolling(canvas);
                     last = now;
@@ -165,8 +169,8 @@ public class GUI extends Application
             }
 
             if (!(node.getScaleY() * zoomFactor > 5) && !(node.getScaleY() * zoomFactor < 0.9)) {
-                System.out.println("X: " + node.getScaleX());
-                System.out.println("Y: " + node.getScaleY());
+                //System.out.println("X: " + node.getScaleX());
+                //System.out.println("Y: " + node.getScaleY());
 
 
                 node.setScaleX(node.getScaleX() * zoomFactor);
