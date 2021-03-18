@@ -69,22 +69,19 @@ public class NPCTester extends Application
     {
         npcManager = new NPCManager();
 
-        pathfinding = new Pathfinding(32, 32, 128, 128);
+        pathfinding = new Pathfinding(16, 16, 128, 128);
 
         for (int i = 0; i < 20; i++)
         {
             pathfinding.getTile(i, 10).setWalkable(false);
         }
 
-
-        pathfinding.setDestination(680, 780);
-
         for (int i = 0; i < 1; i++)
         {
             NPC npc = new NPC(new Person("Test", 0), 200, 100 - i * 100, 10, 0, 10, 10, "/NPC/NPC1 male.png");
             npcManager.addNPC(npc);
             //        npc.setTargetRotation(Math.PI * 1.5);
-//            npc.goToDestinationRotational(200, 200);
+//            npc.goToDestination(200, 200);
             npc.setPathfinding(pathfinding);
         }
     }
@@ -101,7 +98,7 @@ public class NPCTester extends Application
         graphics2D.setBackground(Color.WHITE);
         graphics2D.clearRect(0, 0, (int) this.resizableCanvas.getWidth(), (int) this.resizableCanvas.getHeight());
 
-        npcManager.draw(graphics2D);
+        npcManager.draw(graphics2D, debug);
 
         pathfinding.draw(graphics2D, debug);
     }

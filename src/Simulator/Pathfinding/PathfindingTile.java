@@ -1,7 +1,5 @@
 package Simulator.Pathfinding;
 
-import Simulator.Maploading.Tile;
-import org.dyn4j.geometry.Vector2;
 import org.jfree.fx.FXGraphics2D;
 
 import java.awt.geom.Point2D;
@@ -15,7 +13,6 @@ public class PathfindingTile
     private int height;
     private boolean walkable;
     private Direction direction;
-    private Point2D exactDestination;
 
     public PathfindingTile(int row, int column, int width, int height, boolean walkable)
     {
@@ -86,16 +83,6 @@ public class PathfindingTile
                 fxGraphics2D.drawLine(x, y, x, y + height / 2);
             }
         }
-    }
-
-    public Point2D getExactDestination()
-    {
-        return exactDestination;
-    }
-
-    public void setExactDestination(Point2D exactDestination)
-    {
-        this.exactDestination = exactDestination;
     }
 
     public void setWalkable(boolean walkable)

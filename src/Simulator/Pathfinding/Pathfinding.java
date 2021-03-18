@@ -16,6 +16,10 @@ public class Pathfinding
     private int totalWidth;
     private int totalHeight;
     private PathfindingTile destinationTile;
+    private Point2D exactDestination;
+
+    // keeps track of a list of npcs for manual changes to the pathfinding on the current object
+    // Normally npcs should be given a new pathfinding object when they need to go somewhere else
     private ArrayList<NPC> npcs;
 
     public Pathfinding(TiledMap tiledMapBase)
@@ -59,6 +63,12 @@ public class Pathfinding
         }
     }
 
+    /**
+     * Set the target destination
+     * Calculates the path necessary to go there from each tile on the map
+     * @param x
+     * @param y
+     */
     public void setDestination(int x, int y) {
         int row = y / tileHeight;
         int column = x / tileWidth;
@@ -66,10 +76,12 @@ public class Pathfinding
         if (tile != null) {
             destinationTile = tile;
             // set the exact destination, so the npc doesn't just stop at the edge of the tile
-            destinationTile.setExactDestination(new Point2D.Double(x, y));
+            exactDestination = new Point2D.Double(x, y);
             calculatePaths(destinationTile);
         }
 
+        // For manual changes to the pathfinding
+        // The npc needs to know that a new destination was put in, so reset the old values
         for (NPC npc : npcs) {
             npc.resetDestination();
         }
@@ -77,6 +89,7 @@ public class Pathfinding
 
     /**
      * Calculate the pathfinding to go to a destination tile from each other tile on the map
+     * Gives each tile a direction to which an npc needs to move to reach the destination tile
      * @param destination
      */
     private void calculatePaths(PathfindingTile destination) {
@@ -127,6 +140,13 @@ public class Pathfinding
         }
     }
 
+    /**
+     * Get a tile on a certain row and column
+     * If the tile isn't contained in the map bounds it returns null
+     * @param row
+     * @param column
+     * @return
+     */
     public PathfindingTile getTile(int row, int column) {
         if (row >= 0 && row < totalHeight && column >= 0 && column < totalWidth) {
             return this.pathfindingtiles.get(row).get(column);
@@ -155,5 +175,10 @@ public class Pathfinding
                 tile.draw(fxGraphics2D, debug);
             }
         }
+    }
+
+    public Point2D getExactDestination()
+    {
+        return exactDestination;
     }
 }
