@@ -98,7 +98,7 @@ public class TabLesson extends PopUpTab
 
                 Lesson lesson = this.selectedLesson.clone();
 
-                ArrayList<Lesson> overlappingLessons = this.schedule.getOverlappingTime(beginTime, endTime);
+                ArrayList<Lesson> overlappingLessons = this.schedule.getOverlappingLessons(beginTime, endTime);
                 overlappingLessons.remove(this.selectedLesson);
 
                 lesson.setBeginTime(beginTime);
