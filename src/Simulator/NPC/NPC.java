@@ -48,7 +48,7 @@ public class NPC
 
     public NPC(Person person, double x, double y, double xSpeed, double ySpeed, int width, int height, String imageLocation)
     {
-        this(person, x, y, xSpeed, ySpeed, width, height, 0, 10, 10, imageLocation);
+        this(person, x, y, xSpeed, ySpeed, width, height, 0, 10, 20, imageLocation);
     }
 
     /**
@@ -77,8 +77,9 @@ public class NPC
             destinationUpdate();
 
             // prints the texture of the npc correctly
-            this.appearance.frameUpdater(x, y);
+            this.appearance.locationUpdater(x, y);
             this.appearance.directionUpdater(rotation);
+            this.appearance.calculateUpdater(rotation);
         }
     }
 
@@ -235,7 +236,8 @@ public class NPC
             fxGraphics2D.setColor(Color.BLACK);
         }
 
-        this.appearance.draw(fxGraphics2D, this.atDestination, this.x, this.y, this.rotation);
+        //draws the sprite
+        this.appearance.draw(fxGraphics2D, this.atDestination, this.x, this.y, this.person.getName());
     }
 
     public Person getPerson()

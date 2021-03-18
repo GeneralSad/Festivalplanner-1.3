@@ -22,6 +22,7 @@ public class NPCTester extends Application
     private NPCSprites npcSprites;
 
 
+
     public static void main(String[] args)
     {
         launch(NPCTester.class);
@@ -64,7 +65,7 @@ public class NPCTester extends Application
 
         for (int i = 0; i < 10; i++)
         {
-            NPC npc = new NPC(new Person("Test", 0), 200, 100 - i * 100, 10, 0, 10, 10, "/NPC/NPC1 male.png");
+            NPC npc = new NPC(new Person("Ewout", 0), 200, 100 - i * 100, 10, 0, 10, 10, "/NPC/NPC1 male.png");
             npcManager.addNPC(npc);
             //        npc.setTargetRotation(Math.PI * 1.5);
             npc.goToDestinationRotational(200, 200);
