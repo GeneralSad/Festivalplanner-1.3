@@ -9,14 +9,23 @@ import java.util.ArrayList;
 
 public class NPCSprites
 {
-
+    //sprites loading
     private BufferedImage sprite;
     private ArrayList<BufferedImage[]> movements;
+
+    //cache
     private double previousX;
     private double previousY;
-    private double updateFactor = 2;
-    private int frame = 0;
+    private double previousROT;
+
+    //refreshable
     private int dir = 0;
+    private double refresh = 2;
+
+    //state
+    private int frame = (int)(Math.random()*5);
+    private boolean onPhone = false;
+
 
     public NPCSprites(String image)
     {
@@ -46,12 +55,10 @@ public class NPCSprites
     }
 
     public BufferedImage[] getRunning(){
-
         return movements.get(2);
     }
 
     public BufferedImage[] getSitting(){
-
         return movements.get(5);
     }
 
@@ -64,12 +71,18 @@ public class NPCSprites
         af.translate(x  - 8, y - 16);
 
         if (atDestination){
-            graphics2D.drawImage(getStanding()[0], af, null);
+//            if (dir == 18){
+//                onPhone = !onPhone;
+//            }
+
+            if (onPhone){
+                graphics2D.drawImage(getPhonening()[frame + dir], af , null);
+            } else
+            {
+                graphics2D.drawImage(getStanding()[frame + dir], af, null);
+            }
 
         } else {
-
-
-
             graphics2D.drawImage(getRunning()[frame + dir], af, null);
         }
     }
@@ -81,7 +94,9 @@ public class NPCSprites
 
         double distance = Math.sqrt(Math.pow(xDif, 2) + Math.pow(yDif, 2));
 
-        if (distance >= updateFactor){
+
+        if (distance >= refresh){
+
             if (frame < 5){
                 frame++;
             } else {
@@ -90,6 +105,7 @@ public class NPCSprites
 
             previousX = x;
             previousY = y;
+
         }
     }
 
@@ -104,5 +120,22 @@ public class NPCSprites
         } else if (angleDegrees > 225  && angleDegrees < 315){
             dir = 18;
         }
+
+        if (Math.abs(previousROT - rotation) >= 10)
+        {
+
+            if (frame < 5)
+            {
+                frame++;
+            }
+            else
+            {
+                frame = 0;
+            }
+
+            previousROT = rotation;
+        }
+
+
     }
 }

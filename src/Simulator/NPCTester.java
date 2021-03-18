@@ -66,10 +66,10 @@ public class NPCTester extends Application
 
         for (int i = 0; i < 10; i++)
         {
-            NPC npc = new NPC(new Person("Test", 0), 500 + i * 30, 1000 - i * 50, 10, 0, 10, 10, "/NPC/NPC1 male.png");
+            NPC npc = new NPC(new Person("Test", 0), 200, 100 - i * 100, 10, 0, 10, 10, "/NPC/NPC1 male.png");
             npcManager.addNPC(npc);
             //        npc.setTargetRotation(Math.PI * 1.5);
-            npc.goToDestinationRotational(346, 389);
+            npc.goToDestinationRotational(200, 200);
 
         }
 
