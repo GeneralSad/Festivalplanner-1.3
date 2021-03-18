@@ -30,14 +30,19 @@ public class TimeManager
     {
 
         lessons = schedule.getOverlappingLessons(getTime());
-        nextChange = LocalTime.MAX;
+        nextChange = null;
         for (Lesson lesson : lessons)
         {
             LocalTime endTime = lesson.getEndTime();
-            if (nextChange == LocalTime.MAX || endTime.isBefore(nextChange))
+            if (nextChange == null || endTime.isBefore(nextChange))
             {
                 nextChange = endTime;
             }
+        }
+
+        if (nextChange == null)
+        {
+            nextChange = schedule.nextLesson(timeType.getTime());
         }
 
 
