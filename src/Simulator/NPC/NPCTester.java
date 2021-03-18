@@ -1,6 +1,7 @@
 package Simulator.NPC;
 
 import Data.Person;
+import Simulator.Pathfinding.Pathfinding;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -11,6 +12,7 @@ import org.jfree.fx.ResizableCanvas;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 // for testing purposes
 public class NPCTester extends Application
@@ -20,7 +22,9 @@ public class NPCTester extends Application
     private ResizableCanvas resizableCanvas;
     private NPCManager npcManager;
     private NPCSprites npcSprites;
+    private Pathfinding pathfinding;
 
+    private boolean debug = true;
 
     public static void main(String[] args)
     {
@@ -53,6 +57,9 @@ public class NPCTester extends Application
             }
         }.start();
 
+        resizableCanvas.setOnMouseClicked(event -> {
+            pathfinding.setDestination((int)event.getX(), (int)event.getY());
+        });
 
         primaryStage.setScene(new Scene(mainPane));
         primaryStage.show();
@@ -62,13 +69,23 @@ public class NPCTester extends Application
     {
         npcManager = new NPCManager();
 
-        for (int i = 0; i < 10; i++)
+        pathfinding = new Pathfinding(32, 32, 128, 128);
+
+        for (int i = 0; i < 20; i++)
+        {
+            pathfinding.getTile(i, 10).setWalkable(false);
+        }
+
+
+        pathfinding.setDestination(680, 780);
+
+        for (int i = 0; i < 1; i++)
         {
             NPC npc = new NPC(new Person("Test", 0), 200, 100 - i * 100, 10, 0, 10, 10, "/NPC/NPC1 male.png");
             npcManager.addNPC(npc);
             //        npc.setTargetRotation(Math.PI * 1.5);
-            npc.goToDestinationRotational(200, 200);
-
+//            npc.goToDestinationRotational(200, 200);
+            npc.setPathfinding(pathfinding);
         }
     }
 
@@ -85,5 +102,7 @@ public class NPCTester extends Application
         graphics2D.clearRect(0, 0, (int) this.resizableCanvas.getWidth(), (int) this.resizableCanvas.getHeight());
 
         npcManager.draw(graphics2D);
+
+        pathfinding.draw(graphics2D, debug);
     }
 }
