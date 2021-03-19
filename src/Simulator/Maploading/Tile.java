@@ -9,6 +9,8 @@ import java.awt.image.BufferedImage;
 public class Tile
 {
     private BufferedImage tileImage;
+    private boolean sitable;
+    private boolean walkable;
 
     public Tile(BufferedImage tileImage)
     {
