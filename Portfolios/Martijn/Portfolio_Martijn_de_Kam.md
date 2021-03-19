@@ -201,6 +201,8 @@ Behalve het stukje met de richting werkt het algoritme in principe precies hetze
 Om te testen of het algoritme goed werkt heb ik een debug draw methode toegevoegd die ook lijntjes tekent in de richting van waar npcs naartoe zouden moeten lopen.
 Dit is te zien in de afbeelding hieronder:
 
+(Wanneer de afbeelding op een te klein stuk scherm wordt gezet wordt de afbeelding niet goed laten zien, lijnen vallen weg, kleuren vervagen, etc.)
+
 ![TiledMapWorkingWK4.PNG](Week6PathfindingField.PNG)
 
 In de afbeelding is helemaal links boven een leeg vakje te zien, dit is de bestemming. 
