@@ -243,10 +243,15 @@ Json wordt gebruikt voor onder andere de configuratie, voor het parsen van de op
 
 - Visual studio code
 
-Json wordt gebruikt voor de instellingen.
+Json wordt gebruikt voor de instellingen. Om deze op te slaan en aan te passen.
 
 - Tiled
 
 Hier hebben we gebruik van gemaakt met de proftaak. Het gemaakte in het programma kan worden opgeslagen als een json bestand en een json bestand kan ook worden geïmporteerd.
 
+- Website RIVM
+
+Bij het bekijken van de data van het RIVM is het mogelijk om de website te inspecteren en te kijken welke bestanden worden ingeladen. Hierbij kan je dan zien dat er data vanuit Json bestanden wordt uitgelezen en ook weer op de website te zien is.
+
+Dit heb ik nu toevallig bij deze website gezien, maar dit zal ook wel bij meer andere websites gebruikt worden.
 
