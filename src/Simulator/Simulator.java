@@ -4,12 +4,16 @@ import Data.Group;
 import Data.Lesson;
 import Data.Schedule;
 import Data.Student;
+import GUI.GUI;
 import Simulator.NPC.NPC;
 import Simulator.NPC.NPCManager;
+import Simulator.Pathfinding.Pathfinding;
+import Simulator.Time.NormalTime;
 import Simulator.Time.SpeedFactoredTime;
 import Simulator.Time.TimeManager;
 import org.jfree.fx.FXGraphics2D;
 
+import java.awt.*;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
@@ -24,12 +28,12 @@ public class Simulator
     private NPCManager npcManager = new NPCManager();
     private TimeManager timeManager;
     private Schedule schedule;
-    private int speedfactor = 1000;
+    private int speedfactor = 100;
     private ArrayList<Student> studentsOnScreen = new ArrayList<>();
 
     public Simulator(Schedule schedule)
     {
-        timeManager = new TimeManager(schedule, new SpeedFactoredTime(LocalTime.of(9, 0, 0), speedfactor));
+        timeManager = new TimeManager(schedule, new SpeedFactoredTime(LocalTime.of(9,0,0), speedfactor));
         this.schedule = schedule;
     }
 
@@ -63,7 +67,11 @@ public class Simulator
                 {
                     System.out.println(student.getName() + ": de student komt de school binnen en gaat naar zijn les");
                     NPC npc = new NPC(student);
-                    npc.goToDestination(100, 100);
+                    Pathfinding pathfinding = new Pathfinding(GUI.getTiledmap());
+                    npc.setPathfinding(pathfinding);
+                    pathfinding.addNpc(npc);
+                    pathfinding.setDestination(550, 550);
+
 
                     npcManager.addNPC(npc);
                     studentsOnScreen.add(student);
@@ -96,5 +104,7 @@ public class Simulator
     public void draw(FXGraphics2D fxGraphics2D)
     {
         npcManager.draw(fxGraphics2D, false);
+        fxGraphics2D.setColor(Color.blue);
+        fxGraphics2D.fill(new Rectangle(550 -5, 550-5 , 10, 10 ));
     }
 }

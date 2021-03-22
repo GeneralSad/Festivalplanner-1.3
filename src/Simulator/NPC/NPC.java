@@ -60,7 +60,7 @@ public class NPC
     
     public NPC(Person person)
     {
-        this(person, Math.random() * 100, 100 + Math.random() * 500, 10, 0, 10, 10, "/NPC/NPC1 male.png");
+        this(person, 1000, 550 + Math.random()* 200, 10, 0, 10, 10, "/NPC/NPC1 male.png");
     }
 
     /**

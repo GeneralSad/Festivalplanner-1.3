@@ -1,6 +1,5 @@
-package Simulator.Room;
+package Simulator.LocationSystem;
 
-import Simulator.Maploading.Tile;
 import Simulator.NPC.NPC;
 
 import java.awt.geom.Point2D;

@@ -30,12 +30,14 @@ import java.util.ArrayList;
  * Hier wordt ervoor gezorgd dat de applicatie goed wordt opgestart en hier worden ook wat test dingen in het programma gezet
  */
 
+
 public class GUI extends Application
 {
     private Schedule schedule;
     private String filePath = "src/Data/storedSchedule";
     private DataStorage dataStorage = new DataStorage();
     private Simulator simulator;
+    private static TiledMap tiledmap = new TiledMap("/TiledMaps/MapFinal.json");
 
 
     public static void main(String[] args)
@@ -92,7 +94,7 @@ public class GUI extends Application
         Scene scene = new Scene(tabPane);
 
 
-        TiledMap tiledmap = new TiledMap("/TiledMaps/MapFinal.json");
+
         addMouseScrolling(canvas);
 
         simulator = new Simulator(schedule);
@@ -227,4 +229,8 @@ public class GUI extends Application
 
     }
 
+    public static TiledMap getTiledmap()
+    {
+        return tiledmap;
+    }
 }
