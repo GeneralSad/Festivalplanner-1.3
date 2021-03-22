@@ -5,8 +5,10 @@ import org.jfree.fx.FXGraphics2D;
 import javax.json.JsonArray;
 import javax.json.JsonNumber;
 import javax.json.JsonObject;
+import javax.json.JsonValue;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Area;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -32,6 +34,9 @@ public class TiledLayer
     private ArrayList<Long> data;
     private boolean visible;
     private TiledMap tiledMap;
+    private boolean walkable;
+    private boolean seatable;
+    private boolean area;
 
     public TiledLayer(JsonObject jsonObject, TiledMap tiledMap)
     {
@@ -49,6 +54,17 @@ public class TiledLayer
         for (int i = 0; i < jsonArraySize; i++) {
             this.data.add(jsonArray.getJsonNumber(i).longValue());
         }
+
+        JsonArray properties = jsonObject.getJsonArray("properties");
+
+        JsonObject areaObject = properties.getJsonObject(0);
+        this.area = areaObject.getBoolean("value");
+
+        JsonObject seatableObject = properties.getJsonObject(1);
+        this.seatable = seatableObject.getBoolean("value");
+
+        JsonObject walkableObject = properties.getJsonObject(2);
+        this.walkable = walkableObject.getBoolean("value");
     }
 
     /**
