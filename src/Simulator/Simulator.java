@@ -14,8 +14,10 @@ import Simulator.Time.TimeManager;
 import org.jfree.fx.FXGraphics2D;
 
 import java.awt.*;
+import java.awt.geom.Point2D;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Auteurs: Leon
@@ -104,7 +106,12 @@ public class Simulator
     public void draw(FXGraphics2D fxGraphics2D)
     {
         npcManager.draw(fxGraphics2D, false);
+
         fxGraphics2D.setColor(Color.blue);
-        fxGraphics2D.fill(new Rectangle(550 -5, 550-5 , 10, 10 ));
+
+        for (Map.Entry<Point2D, Double> entry: GUI.getTiledmap().getAllSitableTiles().entrySet())
+        {
+            fxGraphics2D.fill(new Rectangle.Double(entry.getKey().getX() - 5, entry.getKey().getY() - 5 , 10 ,10));
+        }
     }
 }

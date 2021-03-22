@@ -11,14 +11,20 @@ public class Tile
     private BufferedImage tileImage;
     private boolean sitable;
     private boolean walkable;
+    private boolean area;
 
     public Tile(BufferedImage tileImage)
     {
         this.tileImage = tileImage;
+        this.sitable = sitable;
+        this.area = area;
+
     }
 
     public BufferedImage getTileImage()
     {
         return tileImage;
     }
+
+
 }

@@ -1,6 +1,7 @@
 package Simulator.LocationSystem;
 
 import Data.Schedule;
+import GUI.GUI;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
