@@ -1,6 +1,7 @@
 package Simulator.NPC;
 
 import Data.Person;
+import Simulator.Maploading.TiledMap;
 import Simulator.Pathfinding.Direction;
 import Simulator.Pathfinding.Pathfinding;
 import Simulator.Pathfinding.PathfindingTile;
@@ -327,4 +328,11 @@ public class NPC
             }
         }
     }
+
+    public boolean isAtDestination()
+    {
+        return atDestination;
+    }
+
+
 }

@@ -63,7 +63,7 @@ public class Simulator
                 {
                     System.out.println(student.getName() + ": de student komt de school binnen en gaat naar zijn les");
                     NPC npc = new NPC(student);
-                    npc.goToDestinationXY(100, 100);
+                    npc.goToDestination(100, 100);
 
                     npcManager.addNPC(npc);
                     studentsOnScreen.add(student);
@@ -95,6 +95,6 @@ public class Simulator
 
     public void draw(FXGraphics2D fxGraphics2D)
     {
-        npcManager.draw(fxGraphics2D);
+        npcManager.draw(fxGraphics2D, false);
     }
 }
