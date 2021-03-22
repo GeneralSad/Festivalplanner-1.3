@@ -1,12 +1,10 @@
 package Simulator.NPC;
 
-import Simulator.Simulator;
+
 import org.jfree.fx.FXGraphics2D;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -30,6 +28,7 @@ public class NPCSprites
     private int frame = (int)(Math.random()*5);
     private boolean onPhone = false;
     private boolean onName = true;
+    private boolean sitting = false;
 
 
     public NPCSprites(String image)
@@ -94,7 +93,14 @@ public class NPCSprites
         //draws the standing still behavior this is not updated.
         if (atDestination){
 
-            if (onPhone){
+            if (sitting){
+                if (dir == 0 || dir == 12){
+                    graphics2D.drawImage(getSitting()[frame + dir], (int) x-8, (int)y-16, null);
+                } else {
+                    graphics2D.drawImage(getStanding()[frame +dir], (int) x-8, (int)y-16, null);
+                }
+
+            } else if (onPhone){
                 if (dir == 18)
                 graphics2D.drawImage(getPhonening()[frame], (int) x-8, (int)y -16, null);
             } else
@@ -194,5 +200,10 @@ public class NPCSprites
         } else if (angleDegrees > 225  && angleDegrees < 315){
             dir = 18;
         }
+    }
+
+    public void setSitting(boolean sitting)
+    {
+        this.sitting = sitting;
     }
 }

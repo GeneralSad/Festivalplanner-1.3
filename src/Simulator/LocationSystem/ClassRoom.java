@@ -19,6 +19,7 @@ public class ClassRoom
     }
 
     public void ScriptedStudentStart(NPC student){
+        student.appearance.setSitting(true);
         Point2D selectedSeat = claimEmptySeat(student);
         Pathfinding pathfinding = new Pathfinding(GUI.getTiledmap());
         student.setPathfinding(pathfinding);
@@ -32,6 +33,7 @@ public class ClassRoom
     }
 
     public void ScriptedStudentEnd(NPC student){
+        student.appearance.setSitting(false);
         leaveFilledSeat(student);
         Pathfinding pathfinding = new Pathfinding(GUI.getTiledmap());
         student.setPathfinding(pathfinding);

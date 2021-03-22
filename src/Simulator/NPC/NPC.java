@@ -329,10 +329,8 @@ public class NPC
         }
     }
 
-    public boolean isAtDestination()
-    {
-        return atDestination;
-    }
+
+
 
 
 }
