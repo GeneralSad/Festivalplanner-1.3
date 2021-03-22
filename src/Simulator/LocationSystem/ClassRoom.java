@@ -19,12 +19,13 @@ public class ClassRoom
     }
 
     public void ScriptedStudentStart(NPC student){
-        student.appearance.setSitting(true);
-        Point2D selectedSeat = claimEmptySeat(student);
+        Seat selectedSeat = claimEmptySeat(student);
+        student.appearance.setSitting(true, selectedSeat.getOrientation());
+
         Pathfinding pathfinding = new Pathfinding(GUI.getTiledmap());
         student.setPathfinding(pathfinding);
         pathfinding.addNpc(student);
-        pathfinding.setDestination((int)selectedSeat.getX(), (int)selectedSeat.getY());
+        pathfinding.setDestination((int)selectedSeat.getSeat().getX(), (int)selectedSeat.getSeat().getY());
 
     }
 
@@ -33,8 +34,8 @@ public class ClassRoom
     }
 
     public void ScriptedStudentEnd(NPC student){
-        student.appearance.setSitting(false);
-        leaveFilledSeat(student);
+        student.appearance.setSitting(false, leaveFilledSeat(student).getOrientation());
+
         Pathfinding pathfinding = new Pathfinding(GUI.getTiledmap());
         student.setPathfinding(pathfinding);
         pathfinding.addNpc(student);
@@ -45,29 +46,30 @@ public class ClassRoom
 
     }
 
-    public Point2D claimEmptySeat(NPC student) throws IllegalArgumentException{
+    public Seat claimEmptySeat(NPC student) throws IllegalArgumentException{
         for (Seat s : seats)
         {
             if (s.isEmpte()){
                 s.setStudent(student);
-                return s.getSeat();
+                return s;
             }
         }
         throw new IllegalArgumentException("Not enough seats!");
     }
 
-    public void leaveFilledSeat(NPC student){
+    public Seat leaveFilledSeat(NPC student){
         for (Seat s : seats)
         {
             if (s.getStudent() == student){
                 s.setStudent(null);
-                return;
+                return s;
             }
         }
         throw new IllegalArgumentException("Student not seated!");
     }
 
-
-
-
+    public Point2D getEntry()
+    {
+        return entry;
+    }
 }

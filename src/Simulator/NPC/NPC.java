@@ -36,8 +36,14 @@ public class NPC
     private Pathfinding currentPathfinding;
     private boolean onTargetTile;
 
+    //TODO Temporary for testing class behavior.
+    private static double yCompontent = 600;
+
+
     public NPC(Person person, double x, double y, double xSpeed, double ySpeed, int width, int height, int rotation, int speed, int rotationSpeed, String npcAppearance)
     {
+
+
         this.person = person;
         this.x = x;
         this.y = y;
@@ -60,7 +66,7 @@ public class NPC
     
     public NPC(Person person)
     {
-        this(person, 1000, 550 + Math.random()* 200, 10, 0, 10, 10, "/NPC/NPC1 male.png");
+        this(person, 550, yComponent(), 10, 0, 10, 10, randomSprite());
     }
 
     /**
@@ -329,8 +335,29 @@ public class NPC
         }
     }
 
+    public boolean isAtDestination()
+    {
+        return atDestination;
+    }
+
+    public Point2D getCurrentLocation(){
+        return new Point2D.Double(this.x, this.y);
+    }
+
+    public static String randomSprite(){
+        ArrayList<String> imagePaths = new ArrayList<>();
+        imagePaths.add("/NPC/NPC1 male.png");
+        imagePaths.add("/NPC/NPC2 male.png");
+        imagePaths.add("/NPC/NPC3 female.png");
+        imagePaths.add("/NPC/NPC4 female.png");
+
+        return imagePaths.get((int)(Math.random()*4));
+    }
 
 
-
-
+    //TODO temprotray for testing
+    public static int yComponent(){
+        yCompontent +=50;
+        return (int)yCompontent;
+    }
 }

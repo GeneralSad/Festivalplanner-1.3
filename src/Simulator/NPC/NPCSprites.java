@@ -29,6 +29,7 @@ public class NPCSprites
     private boolean onPhone = false;
     private boolean onName = true;
     private boolean sitting = false;
+    private int sittingRotation = 0;
 
 
     public NPCSprites(String image)
@@ -94,10 +95,15 @@ public class NPCSprites
         if (atDestination){
 
             if (sitting){
-                if (dir == 0 || dir == 12){
-                    graphics2D.drawImage(getSitting()[frame + dir], (int) x-8, (int)y-16, null);
+                if (sittingRotation == 0 || sittingRotation== 12){
+                    if (sittingRotation == 0){
+                        graphics2D.drawImage(getSitting()[frame], (int) x+6, (int)y-14, null);
+                    } else {
+                        graphics2D.drawImage(getSitting()[frame + 5], (int) x+6, (int)y-14, null);
+                    }
+
                 } else {
-                    graphics2D.drawImage(getStanding()[frame +dir], (int) x-8, (int)y-16, null);
+                    graphics2D.drawImage(getStanding()[sittingRotation +dir], (int) x-8, (int)y-16, null);
                 }
 
             } else if (onPhone){
@@ -190,6 +196,7 @@ public class NPCSprites
      */
     public void calculateUpdater(double rotation){
         //loads the correct orientation
+
         double angleDegrees = Math.toDegrees(rotation);
         if ((angleDegrees<= 45 && angleDegrees>= 0) || (angleDegrees >= 315 && angleDegrees <= 180)){
             dir = 0;
@@ -202,8 +209,18 @@ public class NPCSprites
         }
     }
 
-    public void setSitting(boolean sitting)
+    public void setSitting(boolean sitting, double rotation)
     {
         this.sitting = sitting;
+        double angleDegrees = rotation;
+        if ((angleDegrees<= 45 && angleDegrees>= 0) || (angleDegrees >= 315 && angleDegrees <= 180)){
+            sittingRotation = 0;
+        } else if (angleDegrees >45  && angleDegrees < 135){
+            sittingRotation = 6;
+        } else if (angleDegrees >= 135  && angleDegrees <= 225){
+            sittingRotation = 12;
+        } else if (angleDegrees > 225  && angleDegrees < 315){
+            sittingRotation = 18;
+        }
     }
 }

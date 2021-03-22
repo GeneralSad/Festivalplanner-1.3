@@ -7,6 +7,8 @@ import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Represents a full tiledmap with all the different tiledsets and tiledlayers
@@ -113,15 +115,15 @@ public class TiledMap
      * these 3 methodes are parse all the tiles that hava specifick boolean and return those in a hasmap with theri point and orientation
      * @return
      */
-    public HashMap<Point2D, Double> getAllSitableTiles(){
+    public LinkedHashMap<Point2D, Double> getAllSitableTiles(){
         return tiledLayers.get(tiledLayers.size()-1).allMethodeBoolean();
     }
 
-    public HashMap<Point2D, Double> getAllWalkableTiles(){
+    public LinkedHashMap<Point2D, Double> getAllWalkableTiles(){
         return tiledLayers.get(tiledLayers.size()-3).allMethodeBoolean();
     }
 
-    public HashMap<Point2D, Double> getAllAreaTiles(){
+    public LinkedHashMap<Point2D, Double> getAllAreaTiles(){
         return tiledLayers.get(tiledLayers.size()-2).allMethodeBoolean();
     }
 

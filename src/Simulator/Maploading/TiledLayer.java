@@ -13,6 +13,7 @@ import java.awt.image.BufferedImage;
 import java.lang.annotation.AnnotationFormatError;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -38,7 +39,7 @@ public class TiledLayer
     private boolean visible;
     private TiledMap tiledMap;
 
-    private HashMap<AffineTransform, Double> transform = new HashMap<>();
+    private LinkedHashMap<AffineTransform, Double> transform = new LinkedHashMap<>();
 
     public TiledLayer(JsonObject jsonObject, TiledMap tiledMap)
     {
@@ -206,8 +207,8 @@ public class TiledLayer
         return false;
     }
 
-    public HashMap<Point2D, Double> allMethodeBoolean(){
-        HashMap<Point2D, Double> temporary = new HashMap<>();
+    public LinkedHashMap<Point2D, Double> allMethodeBoolean(){
+        LinkedHashMap<Point2D, Double> temporary = new LinkedHashMap<>();
 
         for (Map.Entry<AffineTransform, Double> entry:transform.entrySet())
         {

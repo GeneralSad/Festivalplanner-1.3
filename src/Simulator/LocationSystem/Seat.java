@@ -8,10 +8,12 @@ public class Seat
 {
     private Point2D seat;
     private NPC student;
+    private double orientation;
 
-    public Seat(Point2D seat, NPC student)
+    public Seat(Point2D seat, NPC student, double orientation)
     {
         this.seat = seat;
+        this.orientation = orientation;
         this.student = student;
     }
 
@@ -40,5 +42,15 @@ public class Seat
     public void setStudent(NPC student)
     {
         this.student = student;
+    }
+
+    public void setOrientation(double orientation)
+    {
+        this.orientation = orientation;
+    }
+
+    public double getOrientation()
+    {
+        return orientation;
     }
 }
