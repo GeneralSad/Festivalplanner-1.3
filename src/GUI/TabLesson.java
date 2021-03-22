@@ -13,6 +13,7 @@ import java.util.ArrayList;
 public class TabLesson extends PopUpTab
 {
     private ObservableList timeList;
+    private ObservableList classList;
     private int spacingDistance = 10;
     private ArrayList<String> classes = new ArrayList<>();
 
@@ -20,9 +21,8 @@ public class TabLesson extends PopUpTab
     protected TabLesson()
     {
         super.setPopUpName("Lessen");
-        classes.add("Tivt1A");
-        classes.add("Tivt1B");
-        classes.add("Tivt1C");
+
+
     }
 
     @Override
