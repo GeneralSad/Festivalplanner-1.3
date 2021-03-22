@@ -70,7 +70,7 @@ public class NPCTester extends Application
     {
         npcManager = new NPCManager();
 
-        pathfinding = new Pathfinding(16, 16, 128, 128);
+        pathfinding = new Pathfinding(32, 32, 128, 128);
 
         for (int i = 0; i < 20; i++)
         {

@@ -136,7 +136,7 @@ public class NPCSprites
                     graphics2D.setFont(font);
                     graphics2D.setColor(Color.white);
                     graphics2D.drawString(name,(int)x-18,(int)y-7);
-
+                    graphics2D.setColor(Color.BLACK);
                 }
     }
 
