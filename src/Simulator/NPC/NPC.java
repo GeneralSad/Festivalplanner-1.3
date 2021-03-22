@@ -18,8 +18,6 @@ public class NPC
     private Person person;
     private double x;
     private double y;
-    private double xSpeed;
-    private double ySpeed;
     private int width;
     private int height;
     private Point2D destination;
@@ -43,15 +41,11 @@ public class NPC
     private static double yCompontent = 600;
 
 
-    public NPC(Person person, double x, double y, double xSpeed, double ySpeed, int width, int height, int rotation, int speed, int rotationSpeed, String npcAppearance)
+    public NPC(Person person, double x, double y, int width, int height, int rotation, int speed, int rotationSpeed, String npcAppearance)
     {
-
-
         this.person = person;
         this.x = x;
         this.y = y;
-        this.xSpeed = xSpeed;
-        this.ySpeed = ySpeed;
         this.width = width;
         this.height = height;
         this.rotation = rotation;
@@ -64,14 +58,14 @@ public class NPC
         this.appearance = new NPCSprites(npcAppearance);
     }
 
-    public NPC(Person person, double x, double y, double xSpeed, double ySpeed, int width, int height, String imageLocation)
+    public NPC(Person person, double x, double y, int width, int height, String imageLocation)
     {
-        this(person, x, y, xSpeed, ySpeed, width, height, 0, 10, 20, imageLocation);
+        this(person, x, y, width, height, 0, 10, 20, imageLocation);
     }
     
     public NPC(Person person)
     {
-        this(person, 550, yComponent(), 10, 0, 10, 10, randomSprite());
+        this(person, 550, yComponent(), 10, 10, randomSprite());
     }
 
     /**
