@@ -1,7 +1,6 @@
 package Simulator.NPC;
 
 import Data.Person;
-import Simulator.Maploading.TiledMap;
 import Simulator.Pathfinding.Direction;
 import Simulator.Pathfinding.Pathfinding;
 import Simulator.Pathfinding.PathfindingTile;
@@ -182,7 +181,7 @@ public class NPC
             // slowly rotate
             double oldRotation = rotation;
             rotation += rotationModifier * deltaTime * rotationSpeed * rotationDirection;
-            System.out.println("Oldrotation: " + oldRotation + " new rotation: " + rotation + " target rotation: " + targetRotation);
+            //System.out.println("Oldrotation: " + oldRotation + " new rotation: " + rotation + " target rotation: " + targetRotation);
 
             if (rotation > Math.PI * 2)
             {
@@ -195,7 +194,7 @@ public class NPC
             {
                 // if the rotation is within a small margin of the target rotation just set the rotation to equal the targetrotation
                 // Otherwise it won't ever exactly become the same with modifying it with deltaTime
-                System.out.println("Setting rotation to equal target rotation with rotation: " + rotation + " and targetrotation: " + targetRotation);
+                //System.out.println("Setting rotation to equal target rotation with rotation: " + rotation + " and targetrotation: " + targetRotation);
                 rotation = targetRotation;
             }
         }
@@ -395,20 +394,20 @@ public class NPC
         // so as to not have to calculate with negative numbers, add a full circle to both the current and target rotation
         double currentRotation = rotation + Math.PI * 2;
         double easierAngle = angle + Math.PI * 2;
-        System.out.println("setting rotation to: " + angle + " with current rotation at: " + rotation);
+        //System.out.println("setting rotation to: " + angle + " with current rotation at: " + rotation);
 
         // if the angle falls into the 180 degrees lower than the currentrotation, or if the angle falls outside of the 180 degrees higher than the currentrotation then rotate to the left
         // otherwise rotate to the right
         if ((easierAngle <= currentRotation && easierAngle > currentRotation - Math.PI) || (easierAngle >= currentRotation + Math.PI))
         {
-            System.out.println("Setting rotation direction to 1 with current: " + rotation + " and target: " + angle);
-            System.out.println("ROTATING TO THE LEFT");
+            //System.out.println("Setting rotation direction to 1 with current: " + rotation + " and target: " + angle);
+            //System.out.println("ROTATING TO THE LEFT");
             rotationDirection = -1;
         }
         else
         {
-            System.out.println("Setting rotation direction to -1 with current: " + rotation + " and target: " + angle);
-            System.out.println("ROTATING TO THE RIGHT");
+            // System.out.println("Setting rotation direction to -1 with current: " + rotation + " and target: " + angle);
+            //  System.out.println("ROTATING TO THE RIGHT");
             rotationDirection = 1;
         }
 
