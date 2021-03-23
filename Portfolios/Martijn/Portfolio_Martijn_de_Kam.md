@@ -235,23 +235,104 @@ Hierdoor kunnen kleine afrondingsfoutjes worden opgevangen doordat er meer marge
 
 Deze verandering heeft het probleem opgelost waardoor npcs nu altijd hun bestemming herkennen.
 
-#Applicaties die Json gebruiken
+## Week 7
+
+In deze week zijn er geen nieuwe dingen die bijkomen aan het project.
+Het is alleen verbeteringen maken op wat al is gemaakt en losse onderdelen samenvoegen.
+
+Omdat we op het laatste stuk van het project zitten hebben we gezegd dat het erg belangrijk is om doelgericht te gaan testen op alle gëeisde functionaliteiten.
+Daarom hebben we besloten dat een persoon (ik) een dag na het werk van de rest van de groep alles ga testen op de requirements en nodige aanpassingen ga maken op dingen die niet goed werken.
+
+Voor dit testen gebruik ik de lijst met requirements die in de periodewijzer staat.
+Ik ga elke individuele requirement na, kijk of het voldoet aan de eisen en mocht dat niet zijn of niet volledig dan noteer ik waarom niet.
+Dan na de hele lijst na te gaan ga ik de tekortkomingspunten na een voor een en ga die proberen op te lossen.
+
+
+# Reflectie op stelling over bedrijfsleven
+
+## Stellingen
+
+Voor dit onderdeel geef ik mijn eigen reflectie op een van de volgende twee stellingen
+
+“In het bedrijfsleven wordt gebruik gemaakt van JavaFX”
+
+“In het bedrijfsleven wordt steeds meer in software gesimuleerd”
+
+Uit deze twee stellingen ga ik in op de tweede stelling, over software simulatie in het bedrijfsleven.
+
+Ik kies voor deze stelling over de andere omdat software simulatie een heel breed onderwerp is met vele interessante applicaties, waarbij mij het leuk lijkt om een kort onderzoek naar te doen voor deze reflectie. 
+Terwijl het gebrik van JavaFX me juist veel gelimiteerder in gebruik lijkt en minder interessant om naar te kijken.
+
+## Software simulatie gebruik en voortgang afgelopen jaren
+
+In de afgelopen jaren is simulatie software met sprongen verder gekomen.
+Basis simulaties zijn al langer mogelijk geweest, waarbij je op een computer scherm de simulatie kan zien afspelen.
+Maar wat in de laatste jaren steeds beter wordt en meer wordt gebruikt is virtual reality.
+
+Simulaties die gebruik maken van virtual reality geven een groot voordeel boven de traditionele simulaties die alleen op een scherm werden laten zien.
+Het is mogelijk om in de simulatie te stappen, dingen van alle ooghoeken te bekijken, diepte en afstanden goed te zien en vaak is het ook mogelijk om interactie te hebben met de omgeving binnen de simulatie.
+Een aantal jaar geleden was dit nog het allernieuwste van het allernieuwste, maar tegenwoordig krijg je advertenties waarbij bijvoorbeeld wordt laten zien dat het mogelijk is om doormiddel van virtual reality een nieuwbouw project te zien zoals het zou zijn wanneer het af is en er ook echt in te kunnen bewegen.
+
+Wat ook bijvoorbeeld te zien is, is dat virtuel reality simulaties worden gebruikt voor trainingen. 
+Bedrijven en overheidinstaties gebruiken vritual reality simulaties om gevaarlijke en niet vaak voorkomende scenarios te simuleren voor het trainen van personeel.
+Dit gebeurt bijvoorbeeld met artsen die operaties van te voren oefenen in virtual reality, militairen die aanvaardingen met vijandige kunnen uitspelen of personeel die een noodsituatie, zoals brand op een boorplatform, kunnen simuleren en oefenen.
+Dit zijn allemaal gebruiken die pas in de afgelopen jaren mogelijk zijn.
+Met de jaren worden de technieken achter deze simulaties alleen meer geavanceerder.
+Er kan steeds preciezer en meer worden gesimuleerd en bedrijven gebruiken het ook steeds meer omdat het steeds meer een echte situatie kan simuleren.
+
+Naast virtual reality zijn er ook andere doeleinden voor simulatie software.
+Een veel voorkomend gebruik van simulaties is bijvoorbeeld de efficiëntie van bedrijfsprocessen proberen te verhogen, door knelpunten in het proces te identificeren en oplossingen te simuleren.
+Naast Efficiëntie is het ook mogelijk om simulaties te gebruiken om veiligheid te waarborgen. 
+Denk daarbij bijvoorbeeld aan brandoefeningen, deze worden nu fysiek gedaan, maar als toevoeging daarop is het mogelijk om de ontruiming van een gebouw te simuleren in verschillende situaties om te kijken of er toch nog verbeterpunten zijn in een vlotte ontruiming.
+
+## In het bedrijfsleven wordt steeds meer in software gesimuleerd
+
+Ik denk dat er in bedrijfsleven inderdaad steeds meer wordt gesimuleerd.
+
+Zoals ik hiervoor had beschreven wordt simulatie software steeds meer gebruikt en ook op nieuwe manieren in voornamelijk virtual reality.
+Ik denk dat deze relatief nieuwe technologie nog veel ruimte heeft om te groeien in capaciteiten en ook vraag.
+In de laatste jaren wordt er al steeds meer gebruik van gemaakt voor hele kritische doeleinden in de zorg en veiligheid, dit zal alleen maar toenemen naarmate de technologie geavanceerder wordt.
+Verder wordt algemene software simulatie ook nog steeds veel gebruikt voor bijvoorbeeld het verhogen van de efficiëntie van bedrijfsprocessen.
+Dit gebeurt ook steeds meer door de jaren heen en zal ook toenemen of minimaal hetzelfde blijven qua gebruik in de toekomst met hoe actief relevant de simulaties zijn.
+
+Dus er wordt in het bedrijfsleven steeds meer gesimuleerd en dit zal in de toekomst nog meer toenemen naarmate de technologiën geavanceerder worden.
+
+# Applicaties die Json gebruiken
+Hier formuleer ik een lijst van applicaties die gebruik maken van Json bestanden.
+Dit zijn allemaal applicaties waarbij ik eerst een vermoeden had dat het Json gebruikt en waarbij ik daarna dat vermoeden ben gaan bevestigen of het ook daadwerkelijk zo is.
+Bij elke applicatie staat daarom ook bewijs van waarom het Json gebruikt.
 
 - Proglet
 
 Json wordt gebruikt voor onder andere de configuratie, voor het parsen van de opgaven en voor het parsen van de resultaten.
 
+Dit is te zien op de github pagina van Proglet.
+
 - Visual studio code
 
-Json wordt gebruikt voor de instellingen. Om deze op te slaan en aan te passen.
+Json wordt gebruikt voor de user en workspace instellingen van visual studio code.
+
+Het is mogelijk om de settings als Json formaat te kopiëren, verder is het ook mogelijk om naar de bestandslocatie te gaan waar de settings zijn opgeslagen om daar het Json bestand direct te openen.
 
 - Tiled
 
-Hier hebben we gebruik van gemaakt met de proftaak. Het gemaakte in het programma kan worden opgeslagen als een json bestand en een json bestand kan ook worden geïmporteerd.
+Hier hebben we gebruik van gemaakt met de proftaak. 
+De gemaakte onderdelen in het programma kunnen worden opgeslagen als een json bestand en een json bestand kan ook worden geïmporteerd zodat je weer aanpassingen kan maken via Tiled.
 
 - Website RIVM
 
-Bij het bekijken van de data van het RIVM is het mogelijk om de website te inspecteren en te kijken welke bestanden worden ingeladen. Hierbij kan je dan zien dat er data vanuit Json bestanden wordt uitgelezen en ook weer op de website te zien is.
+Bij het bekijken van de data van het RIVM is het mogelijk om de website te inspecteren en te kijken welke bestanden worden ingeladen. 
+Hierbij kan je dan zien dat er data vanuit Json bestanden wordt uitgelezen en ook weer op de website te zien is.
 
 Dit heb ik nu toevallig bij deze website gezien, maar dit zal ook wel bij meer andere websites gebruikt worden.
 
+- Minecraft
+
+Bij minecraft wordt Json voor meerdere dingen gebruikt. 
+Dit is te zien door dit online op te zoeken, maar ook door zelf te kijken naar de bestanden als je het hebt geïnstalleerd.
+
+De gebruiken van Json bij minecraft zijn onder andere: 
+- Text in geschreven boeken en op signs opslaan en terug inladen.
+- Profiel data van de launcher opslaan en terug inladen.
+- Achievements, loot tables, crafting recipes en nog andere dingen in te laden van bepaalde resource packs (kan verschillende resource packs gebruiken).
+ 
