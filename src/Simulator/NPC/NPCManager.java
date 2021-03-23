@@ -15,25 +15,31 @@ public class NPCManager
         this.npcs = new ArrayList<>();
     }
 
-    public void addNPC(Person person, double x, double y, double xSpeed, double ySpeed, int width, int height, int rotation, int speed, int rotationSpeed, String image) {
-        this.npcs.add(new NPC(person, x, y, xSpeed, ySpeed, width, height, rotation, speed, rotationSpeed, image));
+    public void addNPC(Person person, double x, double y, int width, int height, int rotation, int speed, int rotationSpeed, String image)
+    {
+        this.npcs.add(new NPC(person, x, y, width, height, rotation, speed, rotationSpeed, image));
     }
 
-    public void addNPC(Person person, double x, double y, double xSpeed, double ySpeed, int width, int height, String image) {
-        this.npcs.add(new NPC(person, x, y, xSpeed, ySpeed, width, height, image));
+    public void addNPC(Person person, double x, double y, int width, int height, String image)
+    {
+        this.npcs.add(new NPC(person, x, y, width, height, image));
     }
 
-    public void addNPC(NPC npc) {
+    public void addNPC(NPC npc)
+    {
         this.npcs.add(npc);
     }
 
-    public void removeNPC(NPC npc) {
+    public void removeNPC(NPC npc)
+    {
         this.npcs.remove(npc);
     }
 
-    public void removeNPC(Person person) {
+    public void removeNPC(Person person)
+    {
         NPC npc = getNPCFromPerson(person);
-        if (npc != null) {
+        if (npc != null)
+        {
             this.npcs.remove(npc);
         }
     }
@@ -45,16 +51,20 @@ public class NPCManager
         }
     }
 
-    public NPC getNPC(int index) {
+    public NPC getNPC(int index)
+    {
         try
         {
             return this.npcs.get(index);
-        } catch (IndexOutOfBoundsException e) {
+        }
+        catch (IndexOutOfBoundsException e)
+        {
             return null;
         }
     }
 
-    public NPC getNPC(Person person) {
+    public NPC getNPC(Person person)
+    {
         return getNPCFromPerson(person);
     }
 
@@ -73,8 +83,10 @@ public class NPCManager
         return null;
     }
 
-    public void update(double deltaTime) {
-        for (NPC npc : this.npcs) {
+    public void update(double deltaTime)
+    {
+        for (NPC npc : this.npcs)
+        {
             npc.update(deltaTime, this.npcs);
         }
     }

@@ -26,6 +26,7 @@ public class NPCTester extends Application
 
     private boolean debug = true;
 
+
     public static void main(String[] args)
     {
         launch(NPCTester.class);
@@ -69,7 +70,7 @@ public class NPCTester extends Application
     {
         npcManager = new NPCManager();
 
-        pathfinding = new Pathfinding(16, 16, 128, 128);
+        pathfinding = new Pathfinding(32, 32, 128, 128);
 
         for (int i = 0; i < 20; i++)
         {
@@ -78,7 +79,7 @@ public class NPCTester extends Application
 
         for (int i = 0; i < 1; i++)
         {
-            NPC npc = new NPC(new Person("Test", 0), 200, 100 - i * 100, 10, 0, 10, 10, "/NPC/NPC1 male.png");
+            NPC npc = new NPC(new Person("Ewout", 0), 200, 100 - i * 100, 10, 10, "/NPC/NPC1 male.png");
             npcManager.addNPC(npc);
             //        npc.setTargetRotation(Math.PI * 1.5);
 //            npc.goToDestination(200, 200);

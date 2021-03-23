@@ -11,17 +11,49 @@ public class TimeManager
 
     private TimeType timeType;
     private Schedule schedule;
+    private LocalTime nextChange;
+    private ArrayList<Lesson> lessons;
 
     public TimeManager(Schedule schedule, TimeType timeType)
     {
         this.timeType = timeType;
         this.schedule = schedule;
+        this.nextChange = timeType.getTime();
     }
 
+    public void update(Long deltatime)
+    {
+        timeType.update(deltatime);
+    }
 
     public ArrayList<Lesson> getCurrentLessons()
     {
-        return schedule.getOverlappingLessons(getTime());
+
+        lessons = schedule.getOverlappingLessons(getTime());
+        nextChange = null;
+        for (Lesson lesson : lessons)
+        {
+            LocalTime endTime = lesson.getEndTime();
+            if (nextChange == null || endTime.isBefore(nextChange))
+            {
+                nextChange = endTime;
+            }
+        }
+
+        if (nextChange == null)
+        {
+            nextChange = schedule.nextLesson(timeType.getTime());
+        }
+
+
+        return lessons;
+
+
+    }
+
+    public boolean isChanged()
+    {
+        return timeType.getTime().isAfter(nextChange);
     }
 
     public LocalTime getTime()

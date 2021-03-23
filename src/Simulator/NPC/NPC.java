@@ -1,6 +1,7 @@
 package Simulator.NPC;
 
 import Data.Person;
+import Simulator.Maploading.TiledMap;
 import Simulator.Pathfinding.Direction;
 import Simulator.Pathfinding.Pathfinding;
 import Simulator.Pathfinding.PathfindingTile;
@@ -17,13 +18,14 @@ public class NPC
     private Person person;
     private double x;
     private double y;
-    private double xSpeed;
-    private double ySpeed;
     private int width;
     private int height;
     private Point2D destination;
     // rotation from 0 to 2 * Math.PI
     private double rotation;
+    // Rotation direction, 1 for left, -1 for right.
+    private int rotationDirection;
+    private PathfindingTile currentTile;
 
     private int speed;
     private double targetRotation;
@@ -35,16 +37,20 @@ public class NPC
     private Pathfinding currentPathfinding;
     private boolean onTargetTile;
 
-    public NPC(Person person, double x, double y, double xSpeed, double ySpeed, int width, int height, int rotation, int speed, int rotationSpeed, String npcAppearance)
+    //TODO Temporary for testing class behavior.
+    private static double yCompontent = 600;
+
+
+    public NPC(Person person, double x, double y, int width, int height, int rotation, int speed, int rotationSpeed, String npcAppearance)
     {
         this.person = person;
         this.x = x;
         this.y = y;
-        this.xSpeed = xSpeed;
-        this.ySpeed = ySpeed;
         this.width = width;
         this.height = height;
         this.rotation = rotation;
+        this.rotationDirection = 1;
+        this.currentTile = null;
         this.speed = speed;
         this.targetRotation = rotation;
         this.rotationSpeed = rotationSpeed;
@@ -52,9 +58,14 @@ public class NPC
         this.appearance = new NPCSprites(npcAppearance);
     }
 
-    public NPC(Person person, double x, double y, double xSpeed, double ySpeed, int width, int height, String imageLocation)
+    public NPC(Person person, double x, double y, int width, int height, String imageLocation)
     {
-        this(person, x, y, xSpeed, ySpeed, width, height, 0, 10, 10, imageLocation);
+        this(person, x, y, width, height, 0, 10, 20, imageLocation);
+    }
+    
+    public NPC(Person person)
+    {
+        this(person, 550, yComponent(), 10, 10, randomSprite());
     }
 
     /**
@@ -88,8 +99,9 @@ public class NPC
             destinationUpdate();
 
             // prints the texture of the npc correctly
-            this.appearance.frameUpdater(x, y);
+            this.appearance.locationUpdater(x, y);
             this.appearance.directionUpdater(rotation);
+            this.appearance.calculateUpdater(rotation);
         }
     }
 
@@ -140,7 +152,7 @@ public class NPC
     public void rotationUpdate(double deltaTime)
     {
         // only move if the rotation matches the target rotation
-        if (rotation == targetRotation)
+        if (rotation == targetRotation || rotation == targetRotation + Math.PI * 2)
         {
             double distance = deltaTime * speed;
 
@@ -165,10 +177,12 @@ public class NPC
         }
         else
         {
-            double rotationModifier = 0.1;
+            double rotationModifier = 0.05;
 
             // slowly rotate
-            rotation += rotationModifier * deltaTime * rotationSpeed;
+            double oldRotation = rotation;
+            rotation += rotationModifier * deltaTime * rotationSpeed * rotationDirection;
+            System.out.println("Oldrotation: " + oldRotation + " new rotation: " + rotation + " target rotation: " + targetRotation);
 
             if (rotation > Math.PI * 2)
             {
@@ -176,10 +190,12 @@ public class NPC
             }
 
             double epsilon = 0.1;
-            if (rotation + epsilon >= targetRotation && rotation - epsilon <= targetRotation)
+            if ((rotation + epsilon >= targetRotation && rotation - epsilon <= targetRotation) ||
+            rotation + Math.PI * 2 + epsilon >= targetRotation && rotation + Math.PI * 2 - epsilon <= targetRotation)
             {
                 // if the rotation is within a small margin of the target rotation just set the rotation to equal the targetrotation
                 // Otherwise it won't ever exactly become the same with modifying it with deltaTime
+                System.out.println("Setting rotation to equal target rotation with rotation: " + rotation + " and targetrotation: " + targetRotation);
                 rotation = targetRotation;
             }
         }
@@ -218,7 +234,7 @@ public class NPC
             angle += 2 * Math.PI;
         }
 
-        targetRotation = angle;
+        setTargetRotation(angle);
     }
 
     /**
@@ -229,6 +245,9 @@ public class NPC
      */
     public void draw(FXGraphics2D fxGraphics2D, boolean debug)
     {
+        //draws the sprite
+        this.appearance.draw(fxGraphics2D, this.atDestination, this.x, this.y, this.person.getName());
+
         if (debug) {
             // draw the hitbox and exact destination
             fxGraphics2D.draw(new Rectangle2D.Double(x, y, width, height));
@@ -240,8 +259,6 @@ public class NPC
                 fxGraphics2D.setColor(Color.BLACK);
             }
         }
-
-        this.appearance.draw(fxGraphics2D, this.atDestination, this.x, this.y, this.rotation);
     }
 
     public Person getPerson()
@@ -256,6 +273,7 @@ public class NPC
         atDestination = false;
         destination = null;
         onTargetTile = false;
+        this.currentTile = null;
     }
 
     /**
@@ -283,34 +301,41 @@ public class NPC
      */
     private void pathfindingUpdate(double deltaTime)
     {
-        Point2D exactDestination = currentPathfinding.getExactDestination();
-        PathfindingTile currentTile = currentPathfinding.getTile((int) (y / currentPathfinding.getTileHeight()), (int) (x / currentPathfinding.getTileWidth()));
-        if (currentTile != null)
+        PathfindingTile newTile = currentPathfinding.getTile((int) (y / currentPathfinding.getTileHeight()), (int) (x / currentPathfinding.getTileWidth()));
+        if (newTile != null)
         {
-            if (currentTile == currentPathfinding.getDestinationTile())
+            if (newTile == this.currentTile) {
+                // if still on the same time only move
+                rotationUpdate(deltaTime);
+            }
+            else if (newTile == currentPathfinding.getDestinationTile())
             {
+                // if within the destination tile move towards the exact destination
+                Point2D exactDestination = currentPathfinding.getExactDestination();
                 onTargetTile = true;
                 goToDestination((int) exactDestination.getX(), (int) exactDestination.getY());
             }
             else
             {
-                Direction tileDirection = currentTile.getDirection();
+                this.currentTile = newTile;
+                // if within a new tile, get new directions to the next tile
+                Direction tileDirection = this.currentTile.getDirection();
                 // set the target rotation to be the same as the current tile
                 if (tileDirection == Direction.UP)
                 {
-                    targetRotation = Math.PI / 2;
+                    setTargetRotation(Math.PI * 0.5);
                 }
                 else if (tileDirection == Direction.LEFT)
                 {
-                    targetRotation = Math.PI;
+                    setTargetRotation(Math.PI);
                 }
                 else if (tileDirection == Direction.RIGHT)
                 {
-                    targetRotation = 0;
+                    setTargetRotation(0);
                 }
                 else if (tileDirection == Direction.DOWN)
                 {
-                    targetRotation = 1.5 * Math.PI;
+                    setTargetRotation(Math.PI * 1.5);
                 }
 
                 // update rotation,
@@ -319,5 +344,74 @@ public class NPC
                 rotationUpdate(deltaTime);
             }
         }
+    }
+
+    public boolean isAtDestination()
+    {
+        return atDestination;
+    }
+
+    public Point2D getCurrentLocation(){
+        return new Point2D.Double(this.x, this.y);
+    }
+
+    public static String randomSprite(){
+        ArrayList<String> imagePaths = new ArrayList<>();
+        imagePaths.add("/NPC/NPC1 male.png");
+        imagePaths.add("/NPC/NPC2 male.png");
+        imagePaths.add("/NPC/NPC3 female.png");
+        imagePaths.add("/NPC/NPC4 female.png");
+
+        return imagePaths.get((int)(Math.random()*4));
+    }
+
+
+    //TODO temprotray for testing
+    public static int yComponent(){
+        yCompontent +=50;
+        return (int)yCompontent;
+    }
+
+    /**
+     * Set the targetrotation to a given angle
+     * Also determines the rotation direction (leftwards or rightwards) to rotate in, always takes the rotation direction that has to rotate the least
+     * @param angle
+     */
+    public void setTargetRotation(double angle)
+    {
+        // If the angle isn't within the bounds then adjust it untill it is
+        while (!(angle >= 0 && angle < Math.PI * 2))
+        {
+            if (angle < 0)
+            {
+                angle += Math.PI * 2;
+            }
+            else if (angle >= Math.PI * 2)
+            {
+                angle -= Math.PI * 2;
+            }
+        }
+
+        // so as to not have to calculate with negative numbers, add a full circle to both the current and target rotation
+        double currentRotation = rotation + Math.PI * 2;
+        double easierAngle = angle + Math.PI * 2;
+        System.out.println("setting rotation to: " + angle + " with current rotation at: " + rotation);
+
+        // if the angle falls into the 180 degrees lower than the currentrotation, or if the angle falls outside of the 180 degrees higher than the currentrotation then rotate to the left
+        // otherwise rotate to the right
+        if ((easierAngle <= currentRotation && easierAngle > currentRotation - Math.PI) || (easierAngle >= currentRotation + Math.PI))
+        {
+            System.out.println("Setting rotation direction to 1 with current: " + rotation + " and target: " + angle);
+            System.out.println("ROTATING TO THE LEFT");
+            rotationDirection = -1;
+        }
+        else
+        {
+            System.out.println("Setting rotation direction to -1 with current: " + rotation + " and target: " + angle);
+            System.out.println("ROTATING TO THE RIGHT");
+            rotationDirection = 1;
+        }
+
+        targetRotation = angle;
     }
 }
