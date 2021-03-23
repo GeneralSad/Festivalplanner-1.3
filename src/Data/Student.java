@@ -22,6 +22,11 @@ public class Student extends Person implements Serializable
         group.addStudent(this);
     }
 
+    public Group getGroup()
+    {
+        return group;
+    }
+
     public String toDetailString()
     {
         return "Naam: " + super.name + "\nLeeftijd: " + super.age;

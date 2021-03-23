@@ -11,9 +11,8 @@ import java.util.List;
 
 /**
  * Auteurs: Leon
- *
+ * <p>
  * Deze code zorgt ervoor dat een schedule aangemaakt kan worden en de nodige functies heeft die later nodig zijn
- *
  */
 
 public class Schedule implements Serializable
@@ -171,6 +170,23 @@ public class Schedule implements Serializable
         return false;
     }
 
+    public LocalTime nextLesson(LocalTime localTime)
+    {
+        LocalTime localTime1 = localTime;
+        for (Lesson lesson : lessonArrayList)
+        {
+            if (localTime1.equals(localTime) && lesson.getBeginTime().isAfter(localTime1))
+            {
+                localTime1 = lesson.getBeginTime();
+            }
+            else if (lesson.getBeginTime().isBefore(localTime1) && lesson.getBeginTime().isAfter(localTime))
+            {
+                localTime1 = lesson.getBeginTime();
+            }
+        }
+        return localTime1;
+    }
+
 
     public ArrayList<Lesson> getOverlappingLessons(LocalTime time)
     {
@@ -235,6 +251,25 @@ public class Schedule implements Serializable
             }
         }
         teacherObservableList.remove(teacher);
+    }
+
+    public boolean hasFutureLesson(Student student, LocalTime localTime)
+    {
+        for (Lesson lesson : lessonArrayList)
+        {
+            if (lesson.getGroups().contains(student.getGroup()))
+            {
+                if (lesson.getEndTime().isAfter(localTime))
+                {
+                    return true;
+                }
+            }
+        }
+
+
+        return false;
+
+
     }
 
     public void removeLesson(Lesson lesson)

@@ -30,12 +30,14 @@ import java.util.ArrayList;
  * Hier wordt ervoor gezorgd dat de applicatie goed wordt opgestart en hier worden ook wat test dingen in het programma gezet
  */
 
+
 public class GUI extends Application
 {
     private Schedule schedule;
     private String filePath = "src/Data/storedSchedule";
     private DataStorage dataStorage = new DataStorage();
     private Simulator simulator;
+    private static TiledMap tiledmap = new TiledMap("/TiledMaps/MapFinal.json");
 
 
     public static void main(String[] args)
@@ -92,7 +94,7 @@ public class GUI extends Application
         Scene scene = new Scene(tabPane);
 
 
-        TiledMap tiledmap = new TiledMap("/TiledMaps/MapFinal.json");
+
         addMouseScrolling(canvas);
 
         simulator = new Simulator(schedule);
@@ -111,7 +113,8 @@ public class GUI extends Application
 
                 graphicsContext.setImageSmoothing(false);
                 FXGraphics2D fxGraphics2D =  new FXGraphics2D(graphicsContext);
-                fxGraphics2D.setBackground(Color.WHITE);
+                fxGraphics2D.setBackground(Color.GRAY);
+
                 fxGraphics2D.clearRect(0, 0, (int) canvas.getWidth(), (int) canvas.getHeight());
                 tiledmap.draw(fxGraphics2D);
                 simulator.draw(fxGraphics2D);
@@ -144,7 +147,7 @@ public class GUI extends Application
             groups.add(new Group("C2"));
             groups.add(new Group("C3"));
             groups.add(new Group("C4"));
-            Student test = new Student("test", 12, c1);
+
 
             ArrayList<Classroom> classrooms = new ArrayList<>();
             classrooms.add(new Classroom(1));
@@ -226,4 +229,8 @@ public class GUI extends Application
 
     }
 
+    public static TiledMap getTiledmap()
+    {
+        return tiledmap;
+    }
 }

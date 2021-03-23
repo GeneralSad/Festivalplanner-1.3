@@ -40,6 +40,11 @@ public class TimeManager
             }
         }
 
+        if (nextChange == null)
+        {
+            nextChange = schedule.nextLesson(timeType.getTime());
+        }
+
 
         return lessons;
 
