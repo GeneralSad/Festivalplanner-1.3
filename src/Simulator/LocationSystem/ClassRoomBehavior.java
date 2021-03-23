@@ -7,14 +7,16 @@ import Simulator.Pathfinding.Pathfinding;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
-public class ClassRoom
+public class ClassRoomBehavior
 {
     private ArrayList<Seat> seats;
+    public Seat teacherSeat;
     private Point2D entry;
 
-    public ClassRoom(ArrayList<Seat> seats, Point2D entry)
+    public ClassRoomBehavior(ArrayList<Seat> seats, Seat teacherSeat, Point2D entry)
     {
         this.seats = seats;
+        this.teacherSeat = teacherSeat;
         this.entry = entry;
     }
 
@@ -22,10 +24,15 @@ public class ClassRoom
         Seat selectedSeat = claimEmptySeat(student);
         student.appearance.setSitting(true, selectedSeat.getOrientation());
 
+
+
+
         Pathfinding pathfinding = new Pathfinding(GUI.getTiledmap());
-        student.setPathfinding(pathfinding);
-        pathfinding.addNpc(student);
+
         pathfinding.setDestination((int)selectedSeat.getSeat().getX(), (int)selectedSeat.getSeat().getY());
+        student.setPathfinding(pathfinding);
+
+
 
     }
 
@@ -37,6 +44,7 @@ public class ClassRoom
         student.appearance.setSitting(false, leaveFilledSeat(student).getOrientation());
 
         Pathfinding pathfinding = new Pathfinding(GUI.getTiledmap());
+        System.out.println("fjfjfjfjf");
         student.setPathfinding(pathfinding);
         pathfinding.addNpc(student);
         pathfinding.setDestination((int)entry.getX(), (int)entry.getY());
@@ -49,9 +57,14 @@ public class ClassRoom
     public Seat claimEmptySeat(NPC student) throws IllegalArgumentException{
         for (Seat s : seats)
         {
-            if (s.isEmpte()){
-                s.setStudent(student);
-                return s;
+            if (s.getSeat().distance(teacherSeat.getSeat()) <= 0.1){
+            } else
+            {
+                if (s.isEmpte())
+                {
+                    s.setStudent(student);
+                    return s;
+                }
             }
         }
         throw new IllegalArgumentException("Not enough seats!");

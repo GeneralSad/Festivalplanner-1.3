@@ -21,6 +21,7 @@ import org.jfree.fx.FXGraphics2D;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
@@ -150,14 +151,14 @@ public class GUI extends Application
 
 
             ArrayList<Classroom> classrooms = new ArrayList<>();
-            classrooms.add(new Classroom(1));
-            classrooms.add(new Classroom(2));
-            classrooms.add(new Classroom(3));
-            classrooms.add(new Classroom(4));
-            classrooms.add(new Classroom(5));
-            classrooms.add(new Classroom(6));
-            classrooms.add(new Classroom(7));
-            classrooms.add(new Classroom(8));
+            classrooms.add(new Classroom(1, new Point2D.Double(550, 550)));
+            classrooms.add(new Classroom(2, new Point2D.Double(1000, 550)));
+            classrooms.add(new Classroom(3, new Point2D.Double(500, 820)));
+            classrooms.add(new Classroom(4, new Point2D.Double(600, 820)));
+            classrooms.add(new Classroom(5, new Point2D.Double(950, 820)));
+            classrooms.add(new Classroom(6, new Point2D.Double(1050, 820)));
+            classrooms.add(new Classroom(7, new Point2D.Double(500, 1120)));
+            classrooms.add(new Classroom(8, new Point2D.Double(600, 1120)));
             ArrayList<Lesson> lessons = new ArrayList<>();
             lessons.add(new Lesson(LocalTime.of(15, 30), LocalTime.of(16, 30), teachers.get(0), classrooms.get(0), groups));
             lessons.add(new Lesson(LocalTime.of(9, 0), LocalTime.of(10, 0), teachers.get(1), classrooms.get(1), groups.get(1)));
@@ -224,6 +225,8 @@ public class GUI extends Application
 
             lastX = -10000;
             lastY = -10000;
+
+            System.out.println("X: " + event.getX() + "Y: " +  event.getY());
 
         });
 

@@ -103,19 +103,19 @@ public class NPCSprites
                     }
 
                 } else {
-                    graphics2D.drawImage(getStanding()[sittingRotation +dir], (int) x-8, (int)y-16, null);
+                    graphics2D.drawImage(getStanding()[sittingRotation], (int) x, (int)y-12, null);
                 }
 
             } else if (onPhone){
                 if (dir == 18)
-                graphics2D.drawImage(getPhonening()[frame], (int) x-8, (int)y -16, null);
+                graphics2D.drawImage(getPhonening()[frame], (int) x-4, (int)y -12, null);
             } else
             {
-                graphics2D.drawImage(getStanding()[frame + dir], (int) x-8, (int)y -16, null);
+                graphics2D.drawImage(getStanding()[frame + dir], (int) x-4, (int)y -12, null);
             }
 
         } else {
-            graphics2D.drawImage(getRunning()[frame + dir], (int) x-8, (int)y -16, null);
+            graphics2D.drawImage(getRunning()[frame + dir], (int) x-4, (int)y -12, null);
 
             if (dir == 18 && frame == 4)
             {

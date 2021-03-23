@@ -32,7 +32,7 @@ public class Simulator
     private NPCManager npcManager = new NPCManager();
     private TimeManager timeManager;
     private Schedule schedule;
-    private int speedfactor = 10;
+    private int speedfactor = 4;
     private ArrayList<Student> studentsOnScreen = new ArrayList<>();
     private LocationManager locationManager;
 
@@ -48,14 +48,17 @@ public class Simulator
 
     public void update(long deltatime)
     {
-        npcManager.update(deltatime / 1000000000.0);
+        npcManager.update((deltatime / 1000000000.0)*speedfactor);
         timeManager.update(deltatime);
+
+        ArrayList<NPC> npcOnScreen = new ArrayList<>();
 
         if (timeManager.isChanged())
         {
             System.out.println(timeManager.getTime());
             ArrayList<Lesson> lessons = timeManager.getCurrentLessons();
             ArrayList<Student> studentsWithLesson = new ArrayList<>();
+
 
 
             for (Lesson lesson : lessons)
@@ -79,47 +82,57 @@ public class Simulator
                     for (int i = 0; i < 3; i++)
                     {
                         System.out.println(student.getName() + ": de student komt de school binnen en gaat naar zijn les");
+
+
                         NPC npc = new NPC(student);
+                        npcOnScreen.add(npc);
                         Pathfinding pathfinding = new Pathfinding(GUI.getTiledmap());
                         npc.setPathfinding(pathfinding);
                         pathfinding.addNpc(npc);
+
+
 
 
                         if (locationManager == null)
                         {
                             locationManager = new LocationManager();
 
+                        }else if (pathfinding.getDestinationTile() == null){
+
+                            pathfinding.setDestination((int) student.getGroup().getClassroom().getEntry().getX(), (int) student.getGroup().getClassroom().getEntry().getY());
 
                         }
-                        locationManager.scriptedLesson(npc);
-
 
                         npcManager.addNPC(npc);
                         studentsOnScreen.add(student);
+                        }
                     }
                 }
-            }
 
 
-
-            ArrayList<Student> studentsOnScreenPlaceHolder = new ArrayList<>(studentsOnScreen);
-            for (Student student : studentsOnScreenPlaceHolder)
-            {
-                if (!studentsWithLesson.contains(student))
+                ArrayList<Student> studentsOnScreenPlaceHolder = new ArrayList<>(studentsOnScreen);
+                for (Student student : studentsOnScreenPlaceHolder)
                 {
-                    if (!schedule.hasFutureLesson(student, timeManager.getTime()))
+                    if (!studentsWithLesson.contains(student))
                     {
-                        System.out.println(student.getName() + ": Student heeft geen les meer");
-                        studentsOnScreen.remove(student);
-                    }
-                    else
-                    {
-                        System.out.println(student.getName() + ": Student heeft nog een les maar nu niet");
+                        if (!schedule.hasFutureLesson(student, timeManager.getTime()))
+                        {
+                            System.out.println(student.getName() + ": Student heeft geen les meer");
+                            studentsOnScreen.remove(student);
+                        }
+                        else
+                        {
+                            System.out.println(student.getName() + ": Student heeft nog een les maar nu niet");
+                        }
                     }
                 }
+
+
             }
 
-
+        for (NPC npc : npcOnScreen)
+        {
+             locationManager.scriptedLesson(npc, npc.getCurrentPathfinding());
 
         }
 

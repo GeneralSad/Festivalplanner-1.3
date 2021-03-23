@@ -111,7 +111,6 @@ public class TiledLayer
                     AffineTransform affineTransform = new AffineTransform();
                     affineTransform.translate(this.tiledMap.getTileWidth() * (i % tiledMap.getWidth()), this.tiledMap.getTileHeight() * (i / tiledMap.getHeight()));
 
-                    double rotation = 0.0;
                     // if there is any rotation change the affinetransform accordingly
                     if (currentRotation != 0)
                     {
@@ -122,7 +121,7 @@ public class TiledLayer
                             // image is a bit up so compensate on the y
                             affineTransform.translate(0, this.tiledMap.getTileHeight());
                             affineTransform.rotate(Math.PI * -0.5);
-                            rotation = 90;
+
 
                         }
                         else if (currentRotation == ROTATION_LEFT_TWICE)
@@ -131,7 +130,6 @@ public class TiledLayer
                             // image is a bit up and to the left so compensate on the y and x
                             affineTransform.translate(this.tiledMap.getTileWidth(), this.tiledMap.getTileHeight());
                             affineTransform.rotate(Math.PI * -1);
-                            rotation = 180;
 
                         }
                         else if (currentRotation == ROTATION_LEFT_THRICE)
@@ -140,7 +138,6 @@ public class TiledLayer
                             // image is a bit to the left so compensate on the x
                             affineTransform.translate(this.tiledMap.getTileWidth(), 0);
                             affineTransform.rotate(Math.PI * -1.5);
-                            rotation = 270;
 
 
                         }
@@ -149,14 +146,12 @@ public class TiledLayer
                             // Scale the y axis to be reversed and compensate the translation for the reversed axis
                             affineTransform.scale(1, -1);
                             affineTransform.translate(0, -this.tiledMap.getTileHeight());
-                            rotation = 0;
                         }
                         else if (currentRotation == ROTATION_VERTICAL)
                         {
                             // Scale the x axis to be reversed and compensate the translation of the reversed axis
                             affineTransform.scale(-1, 1);
                             affineTransform.translate(-this.tiledMap.getTileWidth(), 0);
-                            rotation = 180;
 
                         }
                         else if (currentRotation == ROTATION_HORIZONTAL_AND_LEFT_ONCE)
@@ -177,6 +172,16 @@ public class TiledLayer
                         }
                     }
 
+                    double rotation;
+                    if ((gid - tiledSet.getFirstGID() == 0)){
+                        rotation = 0.0;
+                    } else if ((int) gid - tiledSet.getFirstGID() == 1 || (int) gid - tiledSet.getFirstGID() == 5){
+                        rotation = 180;
+                    } else if ((int) gid - tiledSet.getFirstGID() == 2 && (int) gid - tiledSet.getFirstGID() == 3){
+                        rotation = 270;
+                    } else {
+                        rotation = 90;
+                    }
                     //puts the affinetranform and the boolean data in an hashmap of afffinetransmos
                     transform.put(affineTransform, rotation);
 
@@ -197,8 +202,8 @@ public class TiledLayer
     public boolean containsMethodeBoolean(Point2D point2D){
         for (Map.Entry<AffineTransform, Double> entry:transform.entrySet())
         {
-            if (entry.getKey().getTranslateX() < point2D.getX() && entry.getKey().getTranslateX() + tiledMap.getTileWidth() > point2D.getX()
-                && entry.getKey().getTranslateY() < point2D.getY() && entry.getKey().getTranslateY() + tiledMap.getTileHeight() > point2D.getY()){
+            if (entry.getKey().getTranslateX() <= point2D.getX() && entry.getKey().getTranslateX() + tiledMap.getTileWidth() > point2D.getX()
+                && entry.getKey().getTranslateY() <= point2D.getY() && entry.getKey().getTranslateY() + tiledMap.getTileHeight() > point2D.getY()){
 
                 return true;
             }

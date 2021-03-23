@@ -38,7 +38,8 @@ public class NPC
     private boolean onTargetTile;
 
     //TODO Temporary for testing class behavior.
-    private static double yCompontent = 600;
+    private static double yCompontent = 575;
+    private static double xComponent = 1300;
 
 
     public NPC(Person person, double x, double y, int width, int height, int rotation, int speed, int rotationSpeed, String npcAppearance)
@@ -65,7 +66,7 @@ public class NPC
     
     public NPC(Person person)
     {
-        this(person, 550, yComponent(), 10, 10, randomSprite());
+        this(person, xComponent(), yComponent(), 8, 16, randomSprite());
     }
 
     /**
@@ -182,7 +183,7 @@ public class NPC
             // slowly rotate
             double oldRotation = rotation;
             rotation += rotationModifier * deltaTime * rotationSpeed * rotationDirection;
-            System.out.println("Oldrotation: " + oldRotation + " new rotation: " + rotation + " target rotation: " + targetRotation);
+           // System.out.println("Oldrotation: " + oldRotation + " new rotation: " + rotation + " target rotation: " + targetRotation);
 
             if (rotation > Math.PI * 2)
             {
@@ -195,7 +196,7 @@ public class NPC
             {
                 // if the rotation is within a small margin of the target rotation just set the rotation to equal the targetrotation
                 // Otherwise it won't ever exactly become the same with modifying it with deltaTime
-                System.out.println("Setting rotation to equal target rotation with rotation: " + rotation + " and targetrotation: " + targetRotation);
+               // System.out.println("Setting rotation to equal target rotation with rotation: " + rotation + " and targetrotation: " + targetRotation);
                 rotation = targetRotation;
             }
         }
@@ -248,7 +249,7 @@ public class NPC
         //draws the sprite
         this.appearance.draw(fxGraphics2D, this.atDestination, this.x, this.y, this.person.getName());
 
-        if (debug) {
+        if (true) {
             // draw the hitbox and exact destination
             fxGraphics2D.draw(new Rectangle2D.Double(x, y, width, height));
 
@@ -368,8 +369,20 @@ public class NPC
 
     //TODO temprotray for testing
     public static int yComponent(){
-        yCompontent +=50;
+        yCompontent +=25;
+        if (yCompontent > 650){
+            yCompontent = 575;
+        }
         return (int)yCompontent;
+    }
+
+    //TODO temprotray for testing
+    public static int xComponent(){
+        xComponent += 25;
+        if (xComponent > 1400){
+            xComponent = 1300;
+        }
+        return (int)xComponent;
     }
 
     /**
@@ -395,23 +408,27 @@ public class NPC
         // so as to not have to calculate with negative numbers, add a full circle to both the current and target rotation
         double currentRotation = rotation + Math.PI * 2;
         double easierAngle = angle + Math.PI * 2;
-        System.out.println("setting rotation to: " + angle + " with current rotation at: " + rotation);
+       // System.out.println("setting rotation to: " + angle + " with current rotation at: " + rotation);
 
         // if the angle falls into the 180 degrees lower than the currentrotation, or if the angle falls outside of the 180 degrees higher than the currentrotation then rotate to the left
         // otherwise rotate to the right
         if ((easierAngle <= currentRotation && easierAngle > currentRotation - Math.PI) || (easierAngle >= currentRotation + Math.PI))
         {
-            System.out.println("Setting rotation direction to 1 with current: " + rotation + " and target: " + angle);
-            System.out.println("ROTATING TO THE LEFT");
+         //   System.out.println("Setting rotation direction to 1 with current: " + rotation + " and target: " + angle);
+           // System.out.println("ROTATING TO THE LEFT");
             rotationDirection = -1;
         }
         else
         {
-            System.out.println("Setting rotation direction to -1 with current: " + rotation + " and target: " + angle);
-            System.out.println("ROTATING TO THE RIGHT");
-            rotationDirection = 1;
+//            System.out.println("ROTATING TO THE RIGHT");
+  //          rotationDirection = 1;
         }
 
         targetRotation = angle;
+    }
+
+    public Pathfinding getCurrentPathfinding()
+    {
+        return currentPathfinding;
     }
 }
