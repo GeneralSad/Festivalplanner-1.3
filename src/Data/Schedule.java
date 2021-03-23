@@ -11,9 +11,8 @@ import java.util.List;
 
 /**
  * Auteurs: Leon
- *
+ * <p>
  * Deze code zorgt ervoor dat een schedule aangemaakt kan worden en de nodige functies heeft die later nodig zijn
- *
  */
 
 public class Schedule implements Serializable
@@ -84,7 +83,7 @@ public class Schedule implements Serializable
         // First check if there are no conflicts with other lessonArrayList
         LocalTime beginTime = lesson.getBeginTime();
         LocalTime endTime = lesson.getEndTime();
-        ArrayList<Lesson> overLappingLesson = getOverlappingTime(beginTime, endTime);
+        ArrayList<Lesson> overLappingLesson = getOverlappingLessons(beginTime, endTime);
 
         checkLesson(lesson, overLappingLesson);
         // if an exception was thrown then the method stops so the following statement isn't reached
@@ -171,8 +170,30 @@ public class Schedule implements Serializable
         return false;
     }
 
+    public LocalTime nextLesson(LocalTime localTime)
+    {
+        LocalTime localTime1 = localTime;
+        for (Lesson lesson : lessonArrayList)
+        {
+            if (localTime1.equals(localTime) && lesson.getBeginTime().isAfter(localTime1))
+            {
+                localTime1 = lesson.getBeginTime();
+            }
+            else if (lesson.getBeginTime().isBefore(localTime1) && lesson.getBeginTime().isAfter(localTime))
+            {
+                localTime1 = lesson.getBeginTime();
+            }
+        }
+        return localTime1;
+    }
 
-    public ArrayList<Lesson> getOverlappingTime(LocalTime beginTime, LocalTime endTime)
+
+    public ArrayList<Lesson> getOverlappingLessons(LocalTime time)
+    {
+        return getOverlappingLessons(time, time);
+    }
+
+    public ArrayList<Lesson> getOverlappingLessons(LocalTime beginTime, LocalTime endTime)
     {
 
         ArrayList<Lesson> overlappingTimeLesson = new ArrayList<>();
@@ -230,6 +251,25 @@ public class Schedule implements Serializable
             }
         }
         teacherObservableList.remove(teacher);
+    }
+
+    public boolean hasFutureLesson(Student student, LocalTime localTime)
+    {
+        for (Lesson lesson : lessonArrayList)
+        {
+            if (lesson.getGroups().contains(student.getGroup()))
+            {
+                if (lesson.getEndTime().isAfter(localTime))
+                {
+                    return true;
+                }
+            }
+        }
+
+
+        return false;
+
+
     }
 
     public void removeLesson(Lesson lesson)
@@ -305,5 +345,6 @@ public class Schedule implements Serializable
     {
         return allEndingTimes;
     }
+
 
 }

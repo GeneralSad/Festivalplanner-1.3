@@ -3,7 +3,12 @@ package Simulator.Maploading;
 import org.jfree.fx.FXGraphics2D;
 
 import javax.json.*;
+import java.awt.*;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Represents a full tiledmap with all the different tiledsets and tiledlayers
@@ -74,6 +79,9 @@ public class TiledMap
      * @param fxGraphics2D
      */
     public void draw(FXGraphics2D fxGraphics2D) {
+        fxGraphics2D.clearRect(-4000, -4000, 4000, 4000);
+        fxGraphics2D.setBackground(Color.white);
+
         for (TiledLayer tiledLayer : this.tiledLayers) {
             tiledLayer.draw(fxGraphics2D);
         }
@@ -83,6 +91,43 @@ public class TiledMap
     {
         return tiledSets;
     }
+
+
+    /**
+     * these 3 methodes are responsible for giving back a boolean when a point is in a specic zoning
+     * @param point2D point that is checked
+     * @return a boolean
+     */
+    public boolean IsWalkableTile(Point2D point2D){
+        return tiledLayers.get(tiledLayers.size()-2).containsMethodeBoolean(point2D);
+    }
+
+    public boolean IsSitableTile(Point2D point2D){
+        return tiledLayers.get(tiledLayers.size()-1).containsMethodeBoolean(point2D);
+    }
+
+    public boolean IsWalkableArea(Point2D point2D){
+        return tiledLayers.get(tiledLayers.size()-3).containsMethodeBoolean(point2D);
+    }
+
+
+    /**
+     * these 3 methodes are parse all the tiles that hava specifick boolean and return those in a hasmap with theri point and orientation
+     * @return
+     */
+    public LinkedHashMap<Point2D, Double> getAllSitableTiles(){
+        return tiledLayers.get(tiledLayers.size()-1).allMethodeBoolean();
+    }
+
+    public LinkedHashMap<Point2D, Double> getAllWalkableTiles(){
+        return tiledLayers.get(tiledLayers.size()-3).allMethodeBoolean();
+    }
+
+    public LinkedHashMap<Point2D, Double> getAllAreaTiles(){
+        return tiledLayers.get(tiledLayers.size()-2).allMethodeBoolean();
+    }
+
+
 
     public int getHeight()
     {
