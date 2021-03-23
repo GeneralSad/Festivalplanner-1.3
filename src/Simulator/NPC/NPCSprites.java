@@ -97,13 +97,13 @@ public class NPCSprites
             if (sitting){
                 if (sittingRotation == 0 || sittingRotation== 12){
                     if (sittingRotation == 0){
-                        graphics2D.drawImage(getSitting()[frame], (int) x+6, (int)y-14, null);
+                        graphics2D.drawImage(getSitting()[frame], (int) x-4, (int)y-14, null);
                     } else {
-                        graphics2D.drawImage(getSitting()[frame + 5], (int) x+6, (int)y-14, null);
+                        graphics2D.drawImage(getSitting()[frame + 5], (int) x+2, (int)y-14, null);
                     }
 
                 } else {
-                    graphics2D.drawImage(getStanding()[sittingRotation], (int) x, (int)y-12, null);
+                    graphics2D.drawImage(getStanding()[sittingRotation], (int) x-8, (int)y-12, null);
                 }
 
             } else if (onPhone){

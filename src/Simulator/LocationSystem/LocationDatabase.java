@@ -34,13 +34,14 @@ public class LocationDatabase
 
                 if (GUI.getTiledmap().IsSitableTile(selected)){
 
-                    System.out.println("rot" + GUI.getTiledmap().getAllSitableTiles().get(selected));
-                    seats.add(new Seat(selected, null,GUI.getTiledmap().getAllSitableTiles().get(selected)));
+                    seats.add(new Seat(new Point2D.Double(selected.getX() + 8, selected.getY()), null,GUI.getTiledmap().getAllSitableTiles().get(selected)));
+
+
+
                 }
                 selected = new Point2D.Double(selected.getX() + GUI.getTiledmap().getTileWidth(), selected.getY());
             } else {
 
-                System.out.println("next");
                 selected = new Point2D.Double(areas.get(indexstart).getX(),
                         selected.getY() + GUI.getTiledmap().getTileHeight());
                 if (!GUI.getTiledmap().IsWalkableArea(selected)){
@@ -51,7 +52,6 @@ public class LocationDatabase
 
         }
 
-        System.out.println(seats.size());
         return seats;
 
     }

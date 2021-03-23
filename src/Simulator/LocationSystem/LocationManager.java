@@ -17,19 +17,18 @@ public class LocationManager
 
     }
 
-    public boolean scriptedLesson(NPC student, Pathfinding pathfinding){
+    public boolean scriptedStartedLesson(NPC student, Pathfinding pathfinding){
 
-
-        for (int i = 0; i < classRoomBehaviors.size(); i++)
+        if (student.isAtDestination())
         {
-
-               if (student.isAtDestination()){
-                   pathfinding.removeNpc(student);
-                   student.resetDestination();
-                   classRoomBehaviors.get(i).ScriptedStudentStart(student);
-
-                   return true;
-               }
+            for (int i = 0; i < classRoomBehaviors.size(); i++)
+            {
+                if (student.getCurrentLocation().distance(classRoomBehaviors.get(i).getEntry()) < 30)
+                {
+                    classRoomBehaviors.get(i).ScriptedStudentStart(student);
+                    return true;
+                }
+            }
         }
 
         return false;

@@ -172,15 +172,16 @@ public class TiledLayer
                         }
                     }
 
-                    double rotation;
-                    if ((gid - tiledSet.getFirstGID() == 0)){
+
+                    double rotation = 0.0;
+                    if ((gid - tiledSet.getFirstGID() == 896)){
                         rotation = 0.0;
-                    } else if ((int) gid - tiledSet.getFirstGID() == 1 || (int) gid - tiledSet.getFirstGID() == 5){
-                        rotation = 180;
-                    } else if ((int) gid - tiledSet.getFirstGID() == 2 && (int) gid - tiledSet.getFirstGID() == 3){
-                        rotation = 270;
-                    } else {
+                    } else if ((int) gid - tiledSet.getFirstGID() == 5){
+                        rotation = 180.0;
+                    } else if ((int) gid - tiledSet.getFirstGID() == 4){
                         rotation = 90;
+                    } else if ((int) gid - tiledSet.getFirstGID() == 2){
+                        rotation = 270;
                     }
                     //puts the affinetranform and the boolean data in an hashmap of afffinetransmos
                     transform.put(affineTransform, rotation);

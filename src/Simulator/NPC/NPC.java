@@ -1,6 +1,7 @@
 package Simulator.NPC;
 
 import Data.Person;
+import Simulator.LocationSystem.Seat;
 import Simulator.Maploading.TiledMap;
 import Simulator.Pathfinding.Direction;
 import Simulator.Pathfinding.Pathfinding;
@@ -249,7 +250,7 @@ public class NPC
         //draws the sprite
         this.appearance.draw(fxGraphics2D, this.atDestination, this.x, this.y, this.person.getName());
 
-        if (true) {
+        if (debug) {
             // draw the hitbox and exact destination
             fxGraphics2D.draw(new Rectangle2D.Double(x, y, width, height));
 

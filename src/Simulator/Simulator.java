@@ -32,10 +32,10 @@ public class Simulator
     private NPCManager npcManager = new NPCManager();
     private TimeManager timeManager;
     private Schedule schedule;
-    private int speedfactor = 4;
+    private int speedfactor = 100;
     private ArrayList<Student> studentsOnScreen = new ArrayList<>();
     private LocationManager locationManager;
-
+    private      ArrayList<NPC> npcOnScreen = new ArrayList<>();
 
 
     public Simulator(Schedule schedule)
@@ -48,10 +48,10 @@ public class Simulator
 
     public void update(long deltatime)
     {
-        npcManager.update((deltatime / 1000000000.0)*speedfactor);
+        npcManager.update((deltatime / 1000000000.0)*2);
         timeManager.update(deltatime);
 
-        ArrayList<NPC> npcOnScreen = new ArrayList<>();
+
 
         if (timeManager.isChanged())
         {
@@ -85,22 +85,21 @@ public class Simulator
 
 
                         NPC npc = new NPC(student);
-                        npcOnScreen.add(npc);
+
                         Pathfinding pathfinding = new Pathfinding(GUI.getTiledmap());
                         npc.setPathfinding(pathfinding);
                         pathfinding.addNpc(npc);
 
-
-
+                        npcOnScreen.add(npc);
 
                         if (locationManager == null)
                         {
                             locationManager = new LocationManager();
 
-                        }else if (pathfinding.getDestinationTile() == null){
-
+                        }
+                        if (pathfinding.getExactDestination() == null)
+                        {
                             pathfinding.setDestination((int) student.getGroup().getClassroom().getEntry().getX(), (int) student.getGroup().getClassroom().getEntry().getY());
-
                         }
 
                         npcManager.addNPC(npc);
@@ -132,8 +131,7 @@ public class Simulator
 
         for (NPC npc : npcOnScreen)
         {
-             locationManager.scriptedLesson(npc, npc.getCurrentPathfinding());
-
+             locationManager.scriptedStartedLesson(npc, npc.getCurrentPathfinding());
         }
 
     }
@@ -141,7 +139,7 @@ public class Simulator
 
     public void draw(FXGraphics2D fxGraphics2D)
     {
-        npcManager.draw(fxGraphics2D, false);
+        npcManager.draw(fxGraphics2D, true);
 
         fxGraphics2D.setColor(Color.blue);
 
@@ -150,6 +148,16 @@ public class Simulator
         {
             i++;
             fxGraphics2D.drawString((""+i),(int)entry.getKey().getX(), (int)entry.getKey().getY());
+        }
+
+
+        if (false)
+        {
+            for (int j = 0; j < npcOnScreen.size(); j++)
+            {
+                Point2D test = npcOnScreen.get(j).getCurrentPathfinding().getDestinationTile().getMiddlePoint();
+                fxGraphics2D.fill(new Rectangle.Double(test.getX() - 5, test.getY() - 5, 10, 10));
+            }
         }
     }
 }

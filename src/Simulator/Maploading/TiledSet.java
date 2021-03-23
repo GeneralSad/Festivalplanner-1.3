@@ -50,8 +50,6 @@ public class TiledSet
         } catch (Exception e) {
             System.out.println(e);
         }
-
-
     }
 
     public int getFirstGID()
