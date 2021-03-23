@@ -1,6 +1,6 @@
 package Simulator.LocationSystem;
 
-import GUI.GUI;
+import Simulator.Simulator;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -17,13 +17,13 @@ public class LocationDatabase
 
         ArrayList<Double> orientations = new ArrayList<>();
 
-        for (Map.Entry<Point2D, Double> entry: GUI.getTiledmap().getAllSitableTiles().entrySet())
+        for (Map.Entry<Point2D, Double> entry : Simulator.getTiledmap().getAllSitableTiles().entrySet())
         {
             locations.add(entry.getKey());
             orientations.add(entry.getValue());
         }
 
-        System.out.println(GUI.getTiledmap().getAllSitableTiles().size());
+        System.out.println(Simulator.getTiledmap().getAllSitableTiles().size());
 
         //room 1
         ArrayList<Seat> seats = new ArrayList<>();

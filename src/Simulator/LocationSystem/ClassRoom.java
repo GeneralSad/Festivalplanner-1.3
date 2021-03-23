@@ -1,8 +1,8 @@
 package Simulator.LocationSystem;
 
-import GUI.GUI;
 import Simulator.NPC.NPC;
 import Simulator.Pathfinding.Pathfinding;
+import Simulator.Simulator;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ public class ClassRoom
         Seat selectedSeat = claimEmptySeat(student);
         student.appearance.setSitting(true, selectedSeat.getOrientation());
 
-        Pathfinding pathfinding = new Pathfinding(GUI.getTiledmap());
+        Pathfinding pathfinding = new Pathfinding(Simulator.getTiledmap());
         student.setPathfinding(pathfinding);
         pathfinding.addNpc(student);
         pathfinding.setDestination((int)selectedSeat.getSeat().getX(), (int)selectedSeat.getSeat().getY());
@@ -36,7 +36,7 @@ public class ClassRoom
     public void ScriptedStudentEnd(NPC student){
         student.appearance.setSitting(false, leaveFilledSeat(student).getOrientation());
 
-        Pathfinding pathfinding = new Pathfinding(GUI.getTiledmap());
+        Pathfinding pathfinding = new Pathfinding(Simulator.getTiledmap());
         student.setPathfinding(pathfinding);
         pathfinding.addNpc(student);
         pathfinding.setDestination((int)entry.getX(), (int)entry.getY());
