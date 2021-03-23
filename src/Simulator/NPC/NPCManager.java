@@ -69,12 +69,15 @@ public class NPCManager
         return getNPCFromPerson(person);
     }
 
-    private NPC getNPCFromPerson(Person person)
-    {
-        for (NPC npc : npcs)
-        {
-            if (npc.getPerson() == person)
-            {
+    /**
+     * Look for an NPC based on the Person object it contains
+     * Used by the getNPC and removeNPC methods
+     * @param person
+     * @return
+     */
+    private NPC getNPCFromPerson(Person person) {
+        for (NPC npc : npcs) {
+            if (npc.getPerson() == person) {
                 return npc;
             }
         }
@@ -89,11 +92,9 @@ public class NPCManager
         }
     }
 
-    public void draw(FXGraphics2D fxGraphics2D)
-    {
-        for (NPC npc : this.npcs)
-        {
-            npc.draw(fxGraphics2D);
+    public void draw(FXGraphics2D fxGraphics2D, boolean debug) {
+        for (NPC npc : this.npcs) {
+            npc.draw(fxGraphics2D, debug);
         }
     }
 }

@@ -1,6 +1,9 @@
 package Simulator.NPC;
 
 import Data.Person;
+import Simulator.Pathfinding.Direction;
+import Simulator.Pathfinding.Pathfinding;
+import Simulator.Pathfinding.PathfindingTile;
 import org.jfree.fx.FXGraphics2D;
 
 import java.awt.*;
@@ -28,6 +31,9 @@ public class NPC
 
     private boolean atDestination;
     public NPCSprites appearance;
+
+    private Pathfinding currentPathfinding;
+    private boolean onTargetTile;
 
     public NPC(Person person, double x, double y, double xSpeed, double ySpeed, int width, int height, int rotation, int speed, int rotationSpeed, String npcAppearance)
     {
@@ -68,12 +74,17 @@ public class NPC
         // if at the destination the npc shouldn't do anything regarding movement
         if (!atDestination)
         {
-            // Either do the simple x/y update or a rotation update
-//                    xyUpdate(deltaTime);
-            rotationUpdate(deltaTime);
+            // don't update pathfinding movement if already on the target tile
+            if (currentPathfinding.getDestinationTile() != null && !onTargetTile)
+            {
+                pathfindingUpdate(deltaTime);
+            } else {
+                rotationUpdate(deltaTime);
+            }
 
             // NPC collision
-            if (collisionUpdate(npcs)) {
+            if (collisionUpdate(npcs))
+            {
                 // if a collision would occur, reverse the previous made movement
                 rotationUpdate(-deltaTime);
             }
@@ -97,20 +108,7 @@ public class NPC
         if (destination != null && currentHitBox.contains(destination))
         {
             atDestination = true;
-            System.out.println("Reached destination");
         }
-    }
-
-    /**
-     * Simple xy update for position
-     *
-     * @param deltaTime
-     */
-    private void xyUpdate(double deltaTime)
-    {
-        // Position update
-        this.x += deltaTime * xSpeed;
-        this.y += deltaTime * ySpeed;
     }
 
     /**
@@ -130,7 +128,8 @@ public class NPC
                 // find the other npc hitbox
                 Rectangle2D npcHitBox = new Rectangle2D.Double(npc.x, npc.y, npc.width, npc.height);
 
-                if (thisNpcHitBox.intersects(npcHitBox)) {
+                if (thisNpcHitBox.intersects(npcHitBox))
+                {
                     return true;
                 }
             }
@@ -158,10 +157,12 @@ public class NPC
             double yDiff = (sin * distance);
 
             // ignore negligible differences
-            if (xDiff < 0.00001 && xDiff > -0.00001) {
+            if (xDiff < 0.00001 && xDiff > -0.00001)
+            {
                 xDiff = 0;
             }
-            if (yDiff < 0.00001 && yDiff > -0.00001) {
+            if (yDiff < 0.00001 && yDiff > -0.00001)
+            {
                 yDiff = 0;
             }
 
@@ -175,7 +176,10 @@ public class NPC
             // slowly rotate
             rotation += rotationModifier * deltaTime * rotationSpeed;
 
-//            System.out.println("New rotation: " + rotation);
+            if (rotation > Math.PI * 2)
+            {
+                rotation = 0;
+            }
 
             double epsilon = 0.1;
             if (rotation + epsilon >= targetRotation && rotation - epsilon <= targetRotation)
@@ -187,41 +191,35 @@ public class NPC
         }
     }
 
-    public void setTargetRotation(double targetRotation)
-    {
-        // negative values aren't allowed, as those won't ever be reached
-        this.targetRotation = Math.abs(targetRotation);
-    }
 
     /**
-     * Go to a target destination based on simple x and y position
-     *
+     * Sets a new exact x,y destination
      * @param x
      * @param y
      */
-    public void goToDestinationXY(int x, int y)
+    private void setNewDestination(int x, int y)
     {
-        setNewDestination(x, y);
-        // calculate the total distance from a point and set the x and y speed to be a part of 10 based on how much of the total distance is on the x or y
-        double totalDistance = Math.sqrt(Math.pow(x - this.x, 2) + Math.pow(y - this.y, 2));
-        this.xSpeed = ((x - this.x) / totalDistance * 10);
-        this.ySpeed = ((y - this.y) / totalDistance * 10);
-    }
-
-    private void setNewDestination(int x, int y) {
         destination = new Point2D.Double(x, y);
         atDestination = false;
     }
 
-    public void goToDestinationRotational(int x, int y) {
+    /**
+     * Go to an exact x,y destination
+     * Determines the required angle to get to that destination and sets that as the targetRotation
+     * @param x
+     * @param y
+     */
+    public void goToDestination(int x, int y)
+    {
         setNewDestination(x, y);
 
         // determine the rotation angle and set it as the target rotation
-        double xDiff = x - this.x;
-        double yDiff = this.y - y;
+        double xDiff = x - (this.x + width / 2);
+        double yDiff = (this.y + height / 2) - y;
         double angle = Math.atan2(yDiff, xDiff);
 
-        if (angle < 0) {
+        if (angle < 0)
+        {
             // if it goes over 180 degrees it starts to count in the negative, so adjust for that
             angle += 2 * Math.PI;
         }
@@ -229,16 +227,24 @@ public class NPC
         targetRotation = angle;
     }
 
-    public void draw(FXGraphics2D fxGraphics2D)
+    /**
+     * Draw the npc hitbox and sprite
+     * Only draw the hitbox if the debug parameter is true
+     * @param fxGraphics2D
+     * @param debug
+     */
+    public void draw(FXGraphics2D fxGraphics2D, boolean debug)
     {
-        fxGraphics2D.draw(new Rectangle2D.Double(x, y, width, height));
-        // Draw the destination as a small dot
+        if (debug) {
+            // draw the hitbox and exact destination
+            fxGraphics2D.draw(new Rectangle2D.Double(x, y, width, height));
 
-        if (destination != null)
-        {
-            fxGraphics2D.setColor(Color.RED);
-            fxGraphics2D.draw(new Ellipse2D.Double(destination.getX(), destination.getY(), 1, 1));
-            fxGraphics2D.setColor(Color.BLACK);
+            if (destination != null)
+            {
+                fxGraphics2D.setColor(Color.RED);
+                fxGraphics2D.draw(new Ellipse2D.Double(destination.getX(), destination.getY(), 1, 1));
+                fxGraphics2D.setColor(Color.BLACK);
+            }
         }
 
         //draws the sprite
@@ -248,5 +254,77 @@ public class NPC
     public Person getPerson()
     {
         return person;
+    }
+
+    /**
+     * Set it so the NPC is not at any destination and doesn't have any destination stored
+     */
+    public void resetDestination() {
+        atDestination = false;
+        destination = null;
+        onTargetTile = false;
+    }
+
+    /**
+     * Set the pathfinding to a new pathfinding object
+     * @param pathfinding
+     */
+    public void setPathfinding(Pathfinding pathfinding)
+    {
+        if (this.currentPathfinding != null)
+        {
+            this.currentPathfinding.removeNpc(this);
+        }
+        this.currentPathfinding = pathfinding;
+        this.currentPathfinding.addNpc(this);
+        if (pathfinding.getDestinationTile() != null) {
+            resetDestination();
+        }
+    }
+
+    /**
+     * Update the pathfinding check
+     * looks in what direction the npc has to move according to what tile on the pathfinding field it is on
+     * if the npc is in the destination tile it then starts to move to the exact point on the tile it needs to go to
+     * @param deltaTime
+     */
+    private void pathfindingUpdate(double deltaTime)
+    {
+        Point2D exactDestination = currentPathfinding.getExactDestination();
+        PathfindingTile currentTile = currentPathfinding.getTile((int) (y / currentPathfinding.getTileHeight()), (int) (x / currentPathfinding.getTileWidth()));
+        if (currentTile != null)
+        {
+            if (currentTile == currentPathfinding.getDestinationTile())
+            {
+                onTargetTile = true;
+                goToDestination((int) exactDestination.getX(), (int) exactDestination.getY());
+            }
+            else
+            {
+                Direction tileDirection = currentTile.getDirection();
+                // set the target rotation to be the same as the current tile
+                if (tileDirection == Direction.UP)
+                {
+                    targetRotation = Math.PI / 2;
+                }
+                else if (tileDirection == Direction.LEFT)
+                {
+                    targetRotation = Math.PI;
+                }
+                else if (tileDirection == Direction.RIGHT)
+                {
+                    targetRotation = 0;
+                }
+                else if (tileDirection == Direction.DOWN)
+                {
+                    targetRotation = 1.5 * Math.PI;
+                }
+
+                // update rotation,
+                // rotate if not at the target rotation,
+                // move forward in the rotation direction if at the proper target rotation
+                rotationUpdate(deltaTime);
+            }
+        }
     }
 }
