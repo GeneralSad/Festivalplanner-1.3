@@ -1,5 +1,7 @@
 package Simulator.LocationSystem;
 
+import Data.Classroom;
+import GUI.GUI;
 import Simulator.Simulator;
 
 import java.awt.geom.Point2D;
@@ -9,43 +11,114 @@ import java.util.Map;
 
 public class LocationDatabase
 {
-    public ArrayList<ClassRoom> ClassRoomStudentData(){
-        ArrayList<ClassRoom> classRooms = new ArrayList<>();
 
+    /**
+     * searches for chairs in the area that is selected with a algoritm
+     * @param indexstart the index of a tile were it starts searching needs to be the most left bove tile.
+     * @return a list with all the seats in a classroom
+     */
 
-        ArrayList<Point2D> locations = new ArrayList<>();
+    public ArrayList<Seat> collectSeats(int indexstart){
+        ArrayList<Point2D> areas = new ArrayList<>();
+        ArrayList<Seat> seats = new ArrayList<>();
 
         ArrayList<Double> orientations = new ArrayList<>();
 
         for (Map.Entry<Point2D, Double> entry : Simulator.getTiledmap().getAllSitableTiles().entrySet())
         {
-            locations.add(entry.getKey());
-            orientations.add(entry.getValue());
+            areas.add(entry.getKey());
         }
 
         System.out.println(Simulator.getTiledmap().getAllSitableTiles().size());
 
-        //room 1
-        ArrayList<Seat> seats = new ArrayList<>();
 
-        int index = 0;
-        while (index <= 30){
-            seats.add(new Seat(locations.get(index), null, orientations.get(index)));
+        Point2D selected = areas.get(indexstart);
+        while (true){
+            if (GUI.getTiledmap().IsWalkableTile(selected)){
 
-            index++;
-            if ((index) % 4 == 0){
-                index += 4;
-            } else if (index == 20){
-                index += 6;
+                if (GUI.getTiledmap().IsSitableTile(selected)){
+
+                    seats.add(new Seat(new Point2D.Double(selected.getX() + 8, selected.getY()), null,GUI.getTiledmap().getAllSitableTiles().get(selected)));
+
+
+
+                }
+                selected = new Point2D.Double(selected.getX() + GUI.getTiledmap().getTileWidth(), selected.getY());
+            } else {
+
+                selected = new Point2D.Double(areas.get(indexstart).getX(),
+                        selected.getY() + GUI.getTiledmap().getTileHeight());
+                if (!GUI.getTiledmap().IsWalkableArea(selected)){
+                    break;
+                }
             }
-            System.out.println(index);
+
+
         }
 
+        return seats;
 
-        classRooms.add(new ClassRoom(seats, new Point2D.Double(550, 600)));
-
-        return classRooms;
-
-        //TODO more to come.......
     }
+
+    /**
+     * subjected to change with a area funtion that checks a area and reads all the seats.
+     * @return
+     */
+    public ArrayList<ClassRoomBehavior> ClassRoomStudentData(){
+        //return type
+        ArrayList<ClassRoomBehavior> classRoomBehaviors = new ArrayList<>();
+
+        //room1
+        int index = 0;
+        classRoomBehaviors.add(new ClassRoomBehavior(collectSeats(index)
+                , collectSeats(index).get(12), new Point2D.Double(550, 550)));
+
+        //room2
+        index = 15;
+        classRoomBehaviors.add(new ClassRoomBehavior(collectSeats(index)
+                , collectSeats(index).get(12), new Point2D.Double(1000, 550)));
+
+        //room3
+        index = 232;
+        classRoomBehaviors.add(new ClassRoomBehavior(collectSeats(index)
+                , collectSeats(index).get(0), new Point2D.Double(500, 820)));
+
+
+        //room4
+        index = 241;
+        classRoomBehaviors.add(new ClassRoomBehavior(collectSeats(index)
+                , collectSeats(index).get(0), new Point2D.Double(600, 820)));
+
+
+        //room5
+        index = 250;
+        classRoomBehaviors.add(new ClassRoomBehavior(collectSeats(index)
+                , collectSeats(index).get(0), new Point2D.Double(950, 820)));
+
+
+        //room6
+        index = 259;
+        classRoomBehaviors.add(new ClassRoomBehavior(collectSeats(index)
+                , collectSeats(index).get(0), new Point2D.Double(1050, 820)));
+
+
+        //room7
+        index = 736;
+        classRoomBehaviors.add(new ClassRoomBehavior(collectSeats(index)
+                , collectSeats(index).get(0), new Point2D.Double(500, 1120)));
+
+
+        //room8
+        index = 745;
+        classRoomBehaviors.add(new ClassRoomBehavior(collectSeats(index)
+                , collectSeats(index).get(0), new Point2D.Double(600, 1120)));
+
+
+
+
+
+        return classRoomBehaviors;
+    }
+
+
 }

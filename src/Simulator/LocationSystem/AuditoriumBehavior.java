@@ -7,12 +7,12 @@ import Simulator.Simulator;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
-public class Auditorium
+public class AuditoriumBehavior
 {
     private ArrayList<Seat> seats;
     private Point2D entry;
 
-    public Auditorium(ArrayList<Seat> seats, Point2D entry)
+    public AuditoriumBehavior(ArrayList<Seat> seats, Point2D entry)
     {
         this.seats = seats;
         this.entry = entry;

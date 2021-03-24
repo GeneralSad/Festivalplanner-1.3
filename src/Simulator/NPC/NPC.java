@@ -1,6 +1,8 @@
 package Simulator.NPC;
 
 import Data.Person;
+import Simulator.LocationSystem.Seat;
+import Simulator.Maploading.TiledMap;
 import Simulator.Pathfinding.Direction;
 import Simulator.Pathfinding.Pathfinding;
 import Simulator.Pathfinding.PathfindingTile;
@@ -37,7 +39,8 @@ public class NPC
     private boolean onTargetTile;
 
     //TODO Temporary for testing class behavior.
-    private static double yCompontent = 600;
+    private static double yCompontent = 575;
+    private static double xComponent = 1300;
 
 
     public NPC(Person person, double x, double y, int width, int height, int rotation, int speed, int rotationSpeed, String npcAppearance)
@@ -64,7 +67,7 @@ public class NPC
     
     public NPC(Person person)
     {
-        this(person, 550, yComponent(), 10, 10, randomSprite());
+        this(person, xComponent(), yComponent(), 8, 16, randomSprite());
     }
 
     /**
@@ -367,8 +370,20 @@ public class NPC
 
     //TODO temprotray for testing
     public static int yComponent(){
-        yCompontent +=50;
+        yCompontent +=25;
+        if (yCompontent > 650){
+            yCompontent = 575;
+        }
         return (int)yCompontent;
+    }
+
+    //TODO temprotray for testing
+    public static int xComponent(){
+        xComponent += 25;
+        if (xComponent > 1400){
+            xComponent = 1300;
+        }
+        return (int)xComponent;
     }
 
     /**
@@ -412,5 +427,10 @@ public class NPC
         }
 
         targetRotation = angle;
+    }
+
+    public Pathfinding getCurrentPathfinding()
+    {
+        return currentPathfinding;
     }
 }

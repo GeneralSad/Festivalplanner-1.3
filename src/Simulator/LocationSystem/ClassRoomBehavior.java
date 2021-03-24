@@ -1,31 +1,36 @@
 package Simulator.LocationSystem;
 
+import GUI.GUI;
 import Simulator.NPC.NPC;
 import Simulator.Pathfinding.Pathfinding;
-import Simulator.Simulator;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
-public class ClassRoom
+public class ClassRoomBehavior
 {
     private ArrayList<Seat> seats;
+    public Seat teacherSeat;
     private Point2D entry;
+    private ArrayList<NPC> handeld = new ArrayList<>();
 
-    public ClassRoom(ArrayList<Seat> seats, Point2D entry)
+    public ClassRoomBehavior(ArrayList<Seat> seats, Seat teacherSeat, Point2D entry)
     {
         this.seats = seats;
+        this.teacherSeat = teacherSeat;
         this.entry = entry;
     }
 
     public void ScriptedStudentStart(NPC student){
-        Seat selectedSeat = claimEmptySeat(student);
-        student.appearance.setSitting(true, selectedSeat.getOrientation());
+        if (!handeld.contains(student))
+        {
+            Seat selectedSeat = claimEmptySeat(student);
+            student.appearance.setSitting(true, selectedSeat.getOrientation());
+            student.resetDestination();
+            student.getCurrentPathfinding().setDestination((int) selectedSeat.getSeat().getX(), (int) selectedSeat.getSeat().getY());
+            handeld.add(student);
+        }
 
-        Pathfinding pathfinding = new Pathfinding(Simulator.getTiledmap());
-        student.setPathfinding(pathfinding);
-        pathfinding.addNpc(student);
-        pathfinding.setDestination((int)selectedSeat.getSeat().getX(), (int)selectedSeat.getSeat().getY());
 
     }
 
@@ -36,7 +41,7 @@ public class ClassRoom
     public void ScriptedStudentEnd(NPC student){
         student.appearance.setSitting(false, leaveFilledSeat(student).getOrientation());
 
-        Pathfinding pathfinding = new Pathfinding(Simulator.getTiledmap());
+        Pathfinding pathfinding = new Pathfinding(GUI.getTiledmap());
         student.setPathfinding(pathfinding);
         pathfinding.addNpc(student);
         pathfinding.setDestination((int)entry.getX(), (int)entry.getY());
@@ -47,14 +52,16 @@ public class ClassRoom
     }
 
     public Seat claimEmptySeat(NPC student) throws IllegalArgumentException{
-        for (Seat s : seats)
-        {
-            if (s.isEmpte()){
-                s.setStudent(student);
-                return s;
-            }
+        for (Seat s : seats){
+
+                if (s.isEmpte())
+                {
+                    s.setStudent(student);
+                    return s;
+                }
         }
-        throw new IllegalArgumentException("Not enough seats!");
+
+        throw new IllegalArgumentException("Not enough seats! Total seats is: " + seats.size());
     }
 
     public Seat leaveFilledSeat(NPC student){

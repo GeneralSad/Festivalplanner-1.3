@@ -32,9 +32,10 @@ public class Simulator
     private TimeManager timeManager;
     private Schedule schedule;
     private static TiledMap tiledmap = new TiledMap("/TiledMaps/MapFinal.json");
-    private int speedfactor = 0;
+    private int speedfactor = 100;
     private ArrayList<Student> studentsOnScreen = new ArrayList<>();
     private LocationManager locationManager;
+    private      ArrayList<NPC> npcOnScreen = new ArrayList<>();
     private int maxSpeedFactor = 100;
 
 
@@ -72,6 +73,7 @@ public class Simulator
             ArrayList<Student> studentsWithLesson = new ArrayList<>();
 
 
+
             for (Lesson lesson : lessons)
             {
                 for (Group group : lesson.getGroups())
@@ -98,21 +100,23 @@ public class Simulator
                         npc.setPathfinding(pathfinding);
                         pathfinding.addNpc(npc);
 
+                        npcOnScreen.add(npc);
 
                         if (locationManager == null)
                         {
                             locationManager = new LocationManager();
 
-
                         }
-                        locationManager.scriptedLesson(npc);
-
+                        if (pathfinding.getExactDestination() == null)
+                        {
+                            pathfinding.setDestination((int) student.getGroup().getClassroom().getEntry().getX(), (int) student.getGroup().getClassroom().getEntry().getY());
+                        }
 
                         npcManager.addNPC(npc);
                         studentsOnScreen.add(student);
+                        }
                     }
                 }
-            }
 
 
             ArrayList<Student> studentsOnScreenPlaceHolder = new ArrayList<>(studentsOnScreen);
@@ -120,7 +124,7 @@ public class Simulator
             {
                 if (!studentsWithLesson.contains(student))
                 {
-                    if (!schedule.hasFutureLesson(student, timeManager.getTime()))
+                    if (!studentsWithLesson.contains(student))
                     {
                         //System.out.println(student.getName() + ": Student heeft geen les meer");
                         studentsOnScreen.remove(student);
@@ -130,7 +134,14 @@ public class Simulator
                         //System.out.println(student.getName() + ": Student heeft nog een les maar nu niet");
                     }
                 }
+
+
             }
+
+            //TODO De for loop hieronder is misschien niet goed
+        for (NPC npc : npcOnScreen)
+        {
+             locationManager.scriptedStartedLesson(npc, npc.getCurrentPathfinding());
         }
 
     }
@@ -148,7 +159,16 @@ public class Simulator
             i++;
             fxGraphics2D.drawString(("" + i), (int) entry.getKey().getX(), (int) entry.getKey().getY());
         }
-        fxGraphics2D.setColor(Color.gray);
+
+
+        if (false)
+        {
+            for (int j = 0; j < npcOnScreen.size(); j++)
+            {
+                Point2D test = npcOnScreen.get(j).getCurrentPathfinding().getDestinationTile().getMiddlePoint();
+                fxGraphics2D.fill(new Rectangle.Double(test.getX() - 5, test.getY() - 5, 10, 10));
+            }
+        }
     }
 
     public String getFormattedTime()

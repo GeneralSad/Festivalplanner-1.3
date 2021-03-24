@@ -45,6 +45,7 @@ public class Lesson implements Serializable
     private void addGroup(Group group)
     {
         this.groups.add(group);
+        group.setClassroom(this.classroom);
     }
 
     public String getFormatBeginTime()
