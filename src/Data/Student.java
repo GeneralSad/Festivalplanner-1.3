@@ -14,12 +14,18 @@ public class Student extends Person implements Serializable
 
 
     private Group group;
+    private Classroom classroom;
 
     public Student(String name, int age, Group group)
     {
         super(name, age);
         this.group = group;
         group.addStudent(this);
+    }
+
+    public Group getGroup()
+    {
+        return group;
     }
 
     public String toDetailString()

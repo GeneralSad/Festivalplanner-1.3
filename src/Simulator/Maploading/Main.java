@@ -25,7 +25,7 @@ public class Main extends Application
     public void start(Stage primaryStage) throws Exception
     {
         BorderPane mainPane = new BorderPane();
-        resizableCanvas = new ResizableCanvas(fxGraphics2D -> draw(fxGraphics2D), mainPane);
+        resizableCanvas = new ResizableCanvas(this::draw, mainPane);
 
         mainPane.setCenter(resizableCanvas);
         FXGraphics2D fxGraphics2D = new FXGraphics2D(resizableCanvas.getGraphicsContext2D());

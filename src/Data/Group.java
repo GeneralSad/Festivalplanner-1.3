@@ -14,6 +14,7 @@ public class Group implements Serializable
 {
     private String className;
     private ArrayList<Student> students;
+    private Classroom classroom;
 
 
     public Group(String className)
@@ -63,5 +64,15 @@ public class Group implements Serializable
     public String toString()
     {
         return this.className;
+    }
+
+    public Classroom getClassroom()
+    {
+        return classroom;
+    }
+
+    public void setClassroom(Classroom classroom)
+    {
+        this.classroom = classroom;
     }
 }

@@ -34,13 +34,14 @@ public class TiledSet
 //        this.imageWidth = jsonObject.getInt("imagewidth");
         this.imagePath = jsonObject.getString("image");
         this.tiles = new ArrayList<>();
-        init();
+        init(jsonObject);
     }
 
     /**
      * Slices all the tiles from the original image and stores them as Tile objects in a list
      */
-    private void init() {
+    private void init(JsonObject jsonObject) {
+
         try {
             image = ImageIO.read(getClass().getResource("/TiledMaps/" + this.imagePath));
             for (int i = 0; i < this.tileCount; i++) {
@@ -69,4 +70,10 @@ public class TiledSet
     public BufferedImage getTile(int gid) {
         return this.tiles.get(gid).getTileImage();
     }
+
+    public Tile TileData(int gid){
+        return this.tiles.get(gid);
+    }
+
+
 }
