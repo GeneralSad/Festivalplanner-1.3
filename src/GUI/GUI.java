@@ -174,7 +174,7 @@ public class GUI extends Application
                 fxGraphics2D.clearRect(0, 0, (int) canvas.getWidth(), (int) canvas.getHeight());
 
                 simulator.draw(fxGraphics2D);
-                long deltatime = now - last;
+                long deltatime = (now - last);
                 simulator.update(deltatime);
 
                 timeLabel.setText(simulator.getFormattedTime());

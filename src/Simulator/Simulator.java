@@ -33,10 +33,10 @@ public class Simulator
     private TimeManager timeManager;
     private Schedule schedule;
     private static TiledMap tiledmap = new TiledMap("/TiledMaps/MapFinal.json");
-    private int speedfactor = 100;
+    private int speedfactor = 1;
     private ArrayList<Student> studentsOnScreen = new ArrayList<>();
     private LocationManager locationManager;
-    private      ArrayList<NPC> npcOnScreen = new ArrayList<>();
+    private ArrayList<NPC> npcOnScreen = new ArrayList<>();
     private int maxSpeedFactor = 100;
 
 
@@ -62,7 +62,7 @@ public class Simulator
         {
             deltaTimeMultiplier = 1 + this.speedfactor / 10.0;
         }
-        npcManager.update((deltatime / 1000000000.0) * deltaTimeMultiplier);
+        npcManager.update((deltatime / 1e9) * deltaTimeMultiplier);
 
 
         timeManager.update(deltatime);
@@ -88,12 +88,10 @@ public class Simulator
                 if (studentsOnScreen.contains(student))
                 {
                     //System.out.println(student.getName() + ": Student word van huidige locatie naar nieuwe les verplaatst");
-                    System.out.println("Reached if statement, student already on screen");
                 }
                 else
                 {
-                    System.out.println("Reached else statement, student not yet on screen, adding it");
-                    for (int i = 0; i < 3; i++)
+                    for (int i = 0; i < 1; i++)
                     {
                         //System.out.println(student.getName() + ": de student komt de school binnen en gaat naar zijn les");
                         NPC npc = new NPC(student);
@@ -194,9 +192,6 @@ public class Simulator
         }
         timeManager.setSpeedFactor(this.speedfactor);
     }
-
-
-
 
 
 }

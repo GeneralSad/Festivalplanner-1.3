@@ -40,7 +40,7 @@ public class NPC
 
     //TODO Temporary for testing class behavior.
     private static double yCompontent = 575;
-    private static double xComponent = 1300;
+    private static double xComponent = 1280;
 
 
     public NPC(Person person, double x, double y, int width, int height, int rotation, int speed, int rotationSpeed, String npcAppearance)
@@ -68,6 +68,11 @@ public class NPC
     public NPC(Person person)
     {
         this(person, xComponent(), yComponent(), 8, 16, randomSprite());
+    }
+
+    public NPC(Person person, int x, int y)
+    {
+        this(person, x, y, 8, 16, randomSprite());
     }
 
     /**
@@ -370,7 +375,7 @@ public class NPC
 
     //TODO temprotray for testing
     public static int yComponent(){
-        yCompontent +=25;
+        yCompontent +=16;
         if (yCompontent > 650){
             yCompontent = 575;
         }
@@ -379,10 +384,7 @@ public class NPC
 
     //TODO temprotray for testing
     public static int xComponent(){
-        xComponent += 25;
-        if (xComponent > 1400){
-            xComponent = 1300;
-        }
+        xComponent += 16;
         return (int)xComponent;
     }
 

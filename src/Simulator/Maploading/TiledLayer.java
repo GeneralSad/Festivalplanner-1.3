@@ -30,8 +30,6 @@ public class TiledLayer
 
     private ArrayList<Tile> tilesInLayer;
 
-    //    private LinkedHashMap<AffineTransform, Double> transform = new LinkedHashMap<>();
-
     public TiledLayer(JsonObject jsonObject, TiledMap tiledMap)
     {
         this.tiledMap = tiledMap;
@@ -269,8 +267,6 @@ public class TiledLayer
         {
             for (Tile tile : tilesInLayer)
             {
-                int tileRow = tile.getRow();
-                int tileColumn = tile.getColumn();
                 if (tile.getRow() == row && tile.getColumn() == column)
                 {
                     return tile;
