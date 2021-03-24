@@ -94,7 +94,6 @@ public class GUI extends Application
         Scene scene = new Scene(tabPane);
 
 
-
         addMouseScrolling(canvas);
 
         simulator = new Simulator(schedule);
@@ -112,7 +111,7 @@ public class GUI extends Application
                 }
 
                 graphicsContext.setImageSmoothing(false);
-                FXGraphics2D fxGraphics2D =  new FXGraphics2D(graphicsContext);
+                FXGraphics2D fxGraphics2D = new FXGraphics2D(graphicsContext);
                 fxGraphics2D.setBackground(Color.GRAY);
 
                 fxGraphics2D.clearRect(0, 0, (int) canvas.getWidth(), (int) canvas.getHeight());
@@ -194,7 +193,8 @@ public class GUI extends Application
                 zoomFactor = 2.0 - zoomFactor;
             }
 
-            if (!(node.getScaleY() * zoomFactor > 5) && !(node.getScaleY() * zoomFactor < 0.9)) {
+            if (!(node.getScaleY() * zoomFactor > 5) && !(node.getScaleY() * zoomFactor < 1))
+            {
                 node.setScaleX(node.getScaleX() * zoomFactor);
                 node.setScaleY(node.getScaleY() * zoomFactor);
             }
@@ -204,23 +204,39 @@ public class GUI extends Application
 
     private double lastX = -10000;
     private double lastY = -10000;
+    private double x = 0;
+    private double y = 0;
 
-    public void addMouseClickDrag(Node node, FXGraphics2D fxGraphics2D) {
-        node.setOnMouseDragged((event) -> {
+    public void addMouseClickDrag(Node node, FXGraphics2D fxGraphics2D)
+    {
+        node.setOnMouseDragged((event) ->
+        {
 
-            if (lastX == -10000 && lastY == -10000) {
+            if (lastX == -10000 && lastY == -10000)
+            {
                 lastX = event.getX();
                 lastY = event.getY();
             }
 
-            fxGraphics2D.translate(event.getX() - lastX, event.getY() - lastY);
+            if ((x + (event.getX() - lastX)) > -1200 && (y + (event.getY() - lastY)) > -1200 && (x + (event.getX() - lastX)) < 1500 && (y + (event.getY() - lastY)) < 550)
+            {
 
-            lastX = event.getX();
-            lastY = event.getY();
+                fxGraphics2D.translate(event.getX() - lastX, event.getY() - lastY);
+
+                this.x += (event.getX() - lastX);
+                this.y += (event.getY() - lastY);
+
+                //System.out.println("X: " + (x + (event.getX() - lastX) + ", Y: " + (y + (event.getY() - lastY))));
+
+                lastX = event.getX();
+                lastY = event.getY();
+
+            }
 
         });
 
-        node.setOnMouseReleased(event -> {
+        node.setOnMouseReleased(event ->
+        {
 
             lastX = -10000;
             lastY = -10000;
@@ -233,4 +249,10 @@ public class GUI extends Application
     {
         return tiledmap;
     }
+
+    public static TiledMap getWalkablemap()
+    {
+        return new TiledMap("/TiledMaps/MapFinal.json", true);
+    }
+
 }

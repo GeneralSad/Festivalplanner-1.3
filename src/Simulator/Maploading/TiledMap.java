@@ -32,6 +32,15 @@ public class TiledMap
         init();
     }
 
+    public TiledMap(String jsonFileName, boolean bool)
+    {
+        this.jsonFileName = jsonFileName;
+        this.tiledLayers = new ArrayList<>();
+        this.tiledSets = new ArrayList<>();
+        walkInit();
+    }
+
+
     public int getTileHeight()
     {
         return tileHeight;
@@ -74,6 +83,33 @@ public class TiledMap
         }
     }
 
+    private void walkInit()
+    {
+        JsonReader jsonReader = null;
+        jsonReader = Json.createReader(getClass().getResourceAsStream(jsonFileName));
+        JsonObject root = jsonReader.readObject();
+
+        this.width = root.getInt("width");
+        this.height = root.getInt("height");
+        this.tileHeight = root.getInt("tileheight");
+        this.tileWidth = root.getInt("tilewidth");
+
+        JsonArray tilesets = root.getJsonArray("tilesets");
+        for (int i = 0; i < tilesets.size(); i++) {
+            try {
+                TiledSet tiledSet = new TiledSet(tilesets.getJsonObject(i));
+                this.tiledSets.add(tiledSet);
+            } catch (NullPointerException e) {
+                System.out.println("Tileset nr: " + i + " couldn't load");
+            }
+
+        }
+
+        JsonArray tileLayers = root.getJsonArray("layers");
+        TiledLayer tiledLayer = new TiledLayer(tileLayers.getJsonObject(tileLayers.size()-3), this);
+        tiledLayers.add(tiledLayer);
+    }
+
     /**
      * Draw all tiledlayers in the list of tiledlayers
      * @param fxGraphics2D
@@ -94,7 +130,7 @@ public class TiledMap
 
 
     /**
-     * these 3 methodes are responsible for giving back a boolean when a point is in a specic zoning
+     * these 3 methodes are responsible for giving back a boolean when a point is in a specific zoning
      * @param point2D point that is checked
      * @return a boolean
      */
@@ -127,7 +163,9 @@ public class TiledMap
         return tiledLayers.get(tiledLayers.size()-2).allMethodeBoolean();
     }
 
-
+    public TiledLayer getWalkableLayers() {
+        return tiledLayers.get(tiledLayers.size()-3);
+    }
 
     public int getHeight()
     {
