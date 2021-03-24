@@ -1,36 +1,44 @@
 package GUI;
 
+import Data.Schedule;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
 
+/**
+ * Auteurs:
+ *
+ * Deze code zorgt ervoor dat er een popup wordt aangemaakt
+ *
+ */
 
-public class PopupController
+public class PopupController extends Stage
 {
     private Stage stage = new Stage();
     private ArrayList<PopUpTab> popups = new ArrayList<>();
 
 
-    protected PopupController()
+    protected PopupController(Stage mainstage, Schedule schedule)
     {
-        TabLesson popUpLesson = new TabLesson();
-        TabTeacher tabTeacher = new TabTeacher();
-        TabClass tabClass = new TabClass();
-
-        popups.add(popUpLesson);
-        popups.add(tabTeacher);
-        popups.add(tabClass);
-    }
-
-    protected Stage popupWindowStage()
-    {
-
         stage.setHeight(720);
         stage.setWidth(1280);
+        TabLesson tabLesson = new TabLesson(schedule);
+        TabTeacher tabTeacher = new TabTeacher(schedule, tabLesson);
+        TabClass tabClass = new TabClass(schedule, tabLesson);
+
+        popups.add(tabLesson);
+        popups.add(tabTeacher);
+        popups.add(tabClass);
+
+
         TabPane tabPane = new TabPane();
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
@@ -40,12 +48,15 @@ public class PopupController
         }
 
 
-        Scene scene = new Scene(tabPane);
+        Scene scene = new Scene(tabPane, 1280, 570);
 
-        stage.setScene(scene);
-        stage.setTitle("PopupController");
+        this.setScene(scene);
+        this.setTitle("Editor");
+        this.initModality(Modality.APPLICATION_MODAL);
+        this.initOwner(mainstage);
+        this.showAndWait();
 
-        return stage;
+
     }
 
 
@@ -58,32 +69,43 @@ public class PopupController
         }
 
 
+        String text = label.getText();
+        String[] lines = text.split("\n");
 
-            String text = label.getText();
-            String[] lines = text.split("\n");
-
-            StringBuilder newText = new StringBuilder();
+        StringBuilder newText = new StringBuilder();
 
 
-            for (int j = 0; j < line + 1; j++)
+        for (int j = 0; j < line + 1; j++)
+        {
+            if (j == line)
             {
-                if (j == line)
-                {
-                    newText.append(string).append("\n");
-                }
-                else if (j > lines.length - 1)
-                {
-                    newText.append("\n");
-                }
-                else
-                {
-                    newText.append(lines[j]).append("\n");
-                }
-
+                newText.append(string).append("\n");
+            }
+            else if (j > lines.length - 1)
+            {
+                newText.append("\n");
+            }
+            else
+            {
+                newText.append(lines[j]).append("\n");
             }
 
-            label.setText(String.valueOf(newText));
+        }
 
+        label.setText(String.valueOf(newText));
+
+    }
+
+    //Zorgt ervoor dat een nieuwe VBox die aangemaakt wordt de goede dimensies krijgt
+    public static VBox awesomeVBox(Node... elements)
+    {
+        int spacingDistance = 10;
+        VBox vBox = new VBox();
+        vBox.getChildren().addAll(elements);
+        vBox.setSpacing(spacingDistance);
+        vBox.setPadding(new Insets(10, 10, 10, 10));
+
+        return vBox;
     }
 
 
