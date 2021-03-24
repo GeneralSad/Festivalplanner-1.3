@@ -17,6 +17,11 @@ public class SpeedFactoredTime implements TimeType
     }
 
 
+    public int getSpeedFactor()
+    {
+        return speedFactor;
+    }
+
     @Override
     public LocalTime getTime()
     {

@@ -1,28 +1,29 @@
 package GUI;
 
 import Data.*;
-import Simulator.Maploading.TiledMap;
 import Simulator.Simulator;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.input.DragEvent;
 import javafx.scene.input.ScrollEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.*;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import org.jfree.fx.FXGraphics2D;
 
-import java.awt.*;
-import java.awt.geom.AffineTransform;
 import java.time.LocalTime;
 import java.util.ArrayList;
+
+//import java.awt.*;
 
 /**
  * Auteurs:
@@ -37,7 +38,7 @@ public class GUI extends Application
     private String filePath = "src/Data/storedSchedule";
     private DataStorage dataStorage = new DataStorage();
     private Simulator simulator;
-    private static TiledMap tiledmap = new TiledMap("/TiledMaps/MapFinal.json");
+    Label speedFactorLabel = new Label("");
 
 
     public static void main(String[] args)
@@ -78,13 +79,54 @@ public class GUI extends Application
         bottomHBox.getChildren().add(reloadSchedule);
         canvasContainer.setBottom(bottomHBox);
 
+        Pane pane = new Pane();
         BorderPane borderPane = new BorderPane();
-
         Tab simulatorTab = new Tab("Simulator");
         Canvas canvas = new Canvas(2048, 2048);
         GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
 
-        borderPane.setCenter(canvas);
+        pane.getChildren().add(canvas);
+        pane.setPrefSize(1280, 720);
+        borderPane.setCenter(pane);
+
+
+        FlowPane topBar = new FlowPane();
+        topBar.setAlignment(Pos.CENTER);
+        Label timeLabel = new Label("(9:00");
+        Font font = new Font("Courier", 48);
+        timeLabel.setFont(font);
+        topBar.getChildren().add(timeLabel);
+        borderPane.setTop(topBar);
+        Background background = new Background(new BackgroundFill(javafx.scene.paint.Color.gray(0.5), CornerRadii.EMPTY, Insets.EMPTY));
+        borderPane.setBackground(background);
+
+        VBox vBox = new VBox();
+
+
+        HBox speedSettingsBox = new HBox();
+        Button speedUpButton = new Button("Vernsel");
+        speedUpButton.setOnAction(event ->
+        {
+            int speedfactor = simulator.getSpeedfactor();
+            simulator.setSpeedfactor(speedfactor + 10);
+            updateLabel();
+        });
+
+
+        Button slowDownButton = new Button("Vertraag");
+        slowDownButton.setOnAction(event ->
+        {
+            int speedfactor = simulator.getSpeedfactor();
+            simulator.setSpeedfactor(speedfactor - 10);
+            updateLabel();
+        });
+
+        vBox.getChildren().addAll(speedFactorLabel, speedSettingsBox);
+        speedFactorLabel.setFont(new Font("Arial", 16));
+        speedSettingsBox.getChildren().addAll(slowDownButton, speedUpButton);
+        speedSettingsBox.setAlignment(Pos.BOTTOM_LEFT);
+        borderPane.setBottom(vBox);
+
         simulatorTab.setContent(borderPane);
 
 
@@ -97,7 +139,6 @@ public class GUI extends Application
         addMouseScrolling(canvas);
 
         simulator = new Simulator(schedule);
-
         new AnimationTimer()
         {
             long last = -1;
@@ -112,13 +153,15 @@ public class GUI extends Application
 
                 graphicsContext.setImageSmoothing(false);
                 FXGraphics2D fxGraphics2D = new FXGraphics2D(graphicsContext);
-                fxGraphics2D.setBackground(Color.GRAY);
+                //fxGraphics2D.setBackground(Color.GRAY);
 
                 fxGraphics2D.clearRect(0, 0, (int) canvas.getWidth(), (int) canvas.getHeight());
-                tiledmap.draw(fxGraphics2D);
+
                 simulator.draw(fxGraphics2D);
                 long deltatime = now - last;
                 simulator.update(deltatime);
+
+                timeLabel.setText(simulator.getFormattedTime());
                 addMouseClickDrag(canvas, fxGraphics2D);
                 last = now;
 
@@ -179,6 +222,19 @@ public class GUI extends Application
         else
         {
             System.out.println("properly loaded a schedule");
+        }
+    }
+
+    private void updateLabel()
+    {
+        int speedfactor = simulator.getSpeedfactor();
+        if (speedfactor == 0)
+        {
+            speedFactorLabel.setText("De simulatie word niet vernseld");
+        }
+        else
+        {
+            speedFactorLabel.setText("De simulatie word " + speedfactor + " keer sneller afgespeeld");
         }
     }
 
