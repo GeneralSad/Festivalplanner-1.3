@@ -60,6 +60,7 @@ public class LocationDatabase
 
     }
 
+
     /**
      * subjected to change with a area funtion that checks a area and reads all the seats.
      * @return
@@ -77,6 +78,7 @@ public class LocationDatabase
         index = 15;
         classRoomBehaviors.add(new ClassRoomBehavior(collectSeats(index)
                 , collectSeats(index).get(12), new Point2D.Double(1000, 550)));
+        //TODO Above line of code gives indexoutofbounds, index 12, size 4
 
         //room3
         index = 232;
