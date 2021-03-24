@@ -44,8 +44,7 @@ public class Simulator
     {
         timeManager = new TimeManager(schedule, new NormalTime(LocalTime.of(9, 0, 0)));
         this.schedule = schedule;
-
-
+        locationManager = new LocationManager();
     }
 
     public static TiledMap getTiledmap()
@@ -101,11 +100,6 @@ public class Simulator
 
                         npcOnScreen.add(npc);
 
-                        if (locationManager == null)
-                        {
-                            locationManager = new LocationManager();
-
-                        }
                         if (pathfinding.getExactDestination() == null)
                         {
                             pathfinding.setDestination((int) student.getGroup().getClassroom().getEntry().getX(), (int) student.getGroup().getClassroom().getEntry().getY());

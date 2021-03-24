@@ -1,8 +1,6 @@
 package Simulator.NPC;
 
 import Data.Person;
-import Simulator.LocationSystem.Seat;
-import Simulator.Maploading.TiledMap;
 import Simulator.Pathfinding.Direction;
 import Simulator.Pathfinding.Pathfinding;
 import Simulator.Pathfinding.PathfindingTile;
@@ -81,7 +79,7 @@ public class NPC
      * @param deltaTime
      * @param npcs
      */
-    public void update(double deltaTime, ArrayList<NPC> npcs)
+    private void update(double deltaTime, ArrayList<NPC> npcs, boolean allowPushForwardCollision)
     {
         // Only move and update if not at the destination
         // if at the destination the npc shouldn't do anything regarding movement
@@ -92,15 +90,16 @@ public class NPC
             {
                 pathfindingUpdate(deltaTime);
             } else {
-                rotationUpdate(deltaTime);
+                rotationAndMovementUpdate(deltaTime);
             }
 
             // NPC collision
-            if (collisionUpdate(npcs))
-            {
-                // if a collision would occur, reverse the previous made movement
-                rotationUpdate(-deltaTime);
-            }
+            collisionUpdate(npcs, deltaTime, allowPushForwardCollision);
+//            if (collisionUpdate(npcs, deltaTime))
+//            {
+//                // if a collision would occur, reverse the previous made movement
+//                movementUpdate(-deltaTime);
+//            }
 
             // Destination check
             destinationUpdate();
@@ -110,6 +109,10 @@ public class NPC
             this.appearance.directionUpdater(rotation);
             this.appearance.calculateUpdater(rotation);
         }
+    }
+
+    public void update(double deltaTime, ArrayList<NPC> npcs) {
+        update(deltaTime, npcs, true);
     }
 
     /**
@@ -126,14 +129,60 @@ public class NPC
 
     /**
      * Check collision with other npcs
-     *
+     * Pushes forward an npc which is collided with if the allowPushBack parameter is true
      * @param npcs
      */
-    private boolean collisionUpdate(ArrayList<NPC> npcs)
+    private void collisionUpdate(ArrayList<NPC> npcs, double deltaTime, boolean allowPushForward)
     {
-        Rectangle2D thisNpcHitBox = new Rectangle2D.Double(this.x, this.y, this.width, this.height);
+        if (!hardCollisionCheck(deltaTime, npcs)) {
+            softCollisionCheck(deltaTime, npcs);
+        }
+//        Rectangle2D thisNpcHitBox = new Rectangle2D.Double(this.x, this.y, this.width, this.height);
+//
+//        // check for all other npcs if this npc would collide
+//        for (NPC npc : npcs)
+//        {
+//            if (npc != this)
+//            {
+//                // find the other npc hitbox
+//                Rectangle2D npcHitBox = new Rectangle2D.Double(npc.x, npc.y, npc.width, npc.height);
+//
+//                if (thisNpcHitBox.intersects(npcHitBox))
+//                {
+//                    if (allowPushForward)
+//                    {
+//                        // push the other npc a bit further
+//                        // but that npc is not allowed to create a chain effect of pushingforward
+//                        npc.update(0.5 * deltaTime, npcs, false);
+//                    }
+//                    // don't allow moving into the other npc, so reset the made movement
+//                    movementUpdate(-deltaTime);
+//                    return true;
+//                }
+//            }
+//        }
+//        return false;
+    }
 
-        // check for all other npcs if this npc would collide
+    private void softCollisionCheck(double deltaTime, ArrayList<NPC> npcs) {
+        Rectangle2D softCollisionBox = new Rectangle2D.Double(this.x - this.width / 2, this.y - this.height / 2, this.width * 2, this.height * 2);
+        if (collisionCheck(npcs, softCollisionBox)) {
+            // Walk back a bit, but not fully
+            movementUpdate(-0.9 * deltaTime);
+        }
+    }
+
+    private boolean hardCollisionCheck(double deltaTime, ArrayList<NPC> npcs) {
+        Rectangle2D hardCollisionBox = new Rectangle2D.Double(this.x, this.y, this.width, this.height);
+        if (collisionCheck(npcs, hardCollisionBox)) {
+            // Completely reset the made movement
+            movementUpdate(-deltaTime);
+            return true;
+        }
+        return false;
+    }
+
+    private boolean collisionCheck(ArrayList<NPC> npcs, Rectangle2D hitbox) {
         for (NPC npc : npcs)
         {
             if (npc != this)
@@ -141,7 +190,7 @@ public class NPC
                 // find the other npc hitbox
                 Rectangle2D npcHitBox = new Rectangle2D.Double(npc.x, npc.y, npc.width, npc.height);
 
-                if (thisNpcHitBox.intersects(npcHitBox))
+                if (hitbox.intersects(npcHitBox))
                 {
                     return true;
                 }
@@ -156,7 +205,7 @@ public class NPC
      *
      * @param deltaTime
      */
-    public void rotationUpdate(double deltaTime)
+    private void movementUpdate(double deltaTime)
     {
         // only move if the rotation matches the target rotation
         if (rotation == targetRotation || rotation == targetRotation + Math.PI * 2)
@@ -182,7 +231,24 @@ public class NPC
             x += xDiff;
             y -= yDiff;
         }
-        else
+    }
+
+    /**
+     * Update both rotation and movement
+     * Seperated because collision should revert movement, but not rotation
+     * @param deltaTime
+     */
+    private void rotationAndMovementUpdate(double deltaTime) {
+        rotationUpdate(deltaTime);
+        movementUpdate(deltaTime);
+    }
+
+    /**
+     * Update purely rotation
+     * @param deltaTime
+     */
+    private void rotationUpdate(double deltaTime) {
+        if (!(rotation == targetRotation || rotation == targetRotation + Math.PI * 2))
         {
             double rotationModifier = 0.05;
 
@@ -197,8 +263,7 @@ public class NPC
             }
 
             double epsilon = 0.1;
-            if ((rotation + epsilon >= targetRotation && rotation - epsilon <= targetRotation) ||
-            rotation + Math.PI * 2 + epsilon >= targetRotation && rotation + Math.PI * 2 - epsilon <= targetRotation)
+            if ((rotation + epsilon >= targetRotation && rotation - epsilon <= targetRotation) || rotation + Math.PI * 2 + epsilon >= targetRotation && rotation + Math.PI * 2 - epsilon <= targetRotation)
             {
                 // if the rotation is within a small margin of the target rotation just set the rotation to equal the targetrotation
                 // Otherwise it won't ever exactly become the same with modifying it with deltaTime
@@ -313,7 +378,7 @@ public class NPC
         {
             if (newTile == this.currentTile) {
                 // if still on the same time only move
-                rotationUpdate(deltaTime);
+                rotationAndMovementUpdate(deltaTime);
             }
             else if (newTile == currentPathfinding.getDestinationTile())
             {
@@ -348,7 +413,7 @@ public class NPC
                 // update rotation,
                 // rotate if not at the target rotation,
                 // move forward in the rotation direction if at the proper target rotation
-                rotationUpdate(deltaTime);
+                rotationAndMovementUpdate(deltaTime);
             }
         }
     }

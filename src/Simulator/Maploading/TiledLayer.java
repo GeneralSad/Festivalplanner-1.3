@@ -275,6 +275,11 @@ public class TiledLayer
         }
         return null;
     }
+
+    public ArrayList<Long> getData()
+    {
+        return data;
+    }
 }
 
 
