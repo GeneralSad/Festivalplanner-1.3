@@ -247,6 +247,41 @@ Voor dit testen gebruik ik de lijst met requirements die in de periodewijzer sta
 Ik ga elke individuele requirement na, kijk of het voldoet aan de eisen en mocht dat niet zijn of niet volledig dan noteer ik waarom niet.
 Dan na de hele lijst na te gaan ga ik de tekortkomingspunten na een voor een en ga die proberen op te lossen.
 
+### bugs fixen
+
+Ik ben een lijst met gevonden bugs nagegaan waar ik zo veel mogelijk kritische bugs heb opgelost en missende functionaliteiten heb toegevoegd.
+
+Over het algemeen ging dit redelijk soepel.
+De meeste bugs waren recht toe rechtaan het probleem opzoeken, gemakkelijk kunnen zien wat het probleem was en hoe het kon worden opgelost en die oplossing toepassen.
+
+Er was alleen een bug waar ik net wat meer moeite mee had.
+Namelijk dat de npcs compleet niet wouden inladen.
+
+Met een beetje zoeken naar waar npcs worden aangemaakt en hoe ze worden getekend ben ik erachter gekomen dat er een exception wordt gethrowed waardoor de code nooit het gedeelte bereikt waarbij de npcs worden toegevoegd aan de lijst met npcs om te gaan tekenen.
+Het stukje code dat de exception veroorzaakt in comments zetten bevestigd dit.
+
+Deze code gaat om het identificeren van zitplekken in lokalen, waar de npcs en docenten dan op kunnen zitten.
+Er worden te weinig zitplekken geïdentificeerd, waardoor er een indexOutOfBounds exception ontstaat.
+
+Een snelle "oplossing" zou een try catch neerzetten zijn, maar uiteindelijk zijn die zitplaatsen ook nodig en de tijd zit nog niet krap genoeg om daar prioriteiten in te stellen, dus pak ik het achterliggende probleem aan.
+
+Het identificeren om te stoppen met zoeken naar zitplaatsen gebeurt door te kijken of een volgende tile op de map niet meer binnen een "area" van lokalen valt.
+Maar dit gebeurt dus te vroegtijdig.
+
+Het inspecteren van de code die er staat geeft geen duidelijke oorzaken van het problemen.
+Wat kleine punten aanpassen die het misschien zouden kunnen veroorzaken lost het niet op.
+Na een tijdje blijven kijken is mijn vermoedden meer gegaan richting de manier waarop wordt gezien of een punt binnen de "area" valt.
+Het kan goed zijn dat daar iets mis mee gaat.
+
+Dus ik ben de manier waarop de tiledLayers worden opgeslagen en ingeladen gaan aanpassen.
+Met nu het doel om het mogelijk te maken om voor een, in de tiledMap de tiledLayers die walkable, seatable en area aangeven als atribuuten op te slaan.
+Met verder daarnaast de tiles die in een tiledLayer zitten, met positie, afbeelding en voor de seats de rotatie richting in een lijst opgeslagen, waarbij tiles met een gid van 0 niet in de lijst zitten (dus alleen tiles met een afbeelding).
+Ten slotte methodes om te kijken of een bepaald x en y punt op een tile valt die binnen die lijst van valide tiles zit.
+
+Met ook een paar aanpassingen aan de methode die de zitplaatsen bepaald om deze veranderingen op te nemen lukt het nu wel om de zitplaatsen te bepalen, waardoor er geen Exception meer wordt gethrowed en de npcs in de simulatie te zien zijn.
+
+
+
 
 # Reflectie op stelling over bedrijfsleven
 
