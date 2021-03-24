@@ -2,11 +2,13 @@ package Simulator.Pathfinding;
 
 import Simulator.Maploading.TiledMap;
 import Simulator.NPC.NPC;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.jfree.fx.FXGraphics2D;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Set;
 
 public class Pathfinding
 {
@@ -54,10 +56,13 @@ public class Pathfinding
      * Initialise the list of all pathfinding tiles
      */
     private void init() {
+
+        //TODO Hier moet bij columnlist.add aan het einde niet altijd true meegegeven worden. Als de tilenummer 0 is dan is het false en anders true.
+
         for (int row = 0; row < totalHeight; row++) {
             ArrayList<PathfindingTile> columnList = new ArrayList<>();
             for (int column = 0; column < totalWidth; column++) {
-                columnList.add(new PathfindingTile(row, column, tileWidth, tileHeight, true));
+                columnList.add(new PathfindingTile(row, column, tileWidth, tileHeight, true)); //TODO Hiero
             }
             this.pathfindingtiles.add(columnList);
         }
@@ -99,7 +104,7 @@ public class Pathfinding
 
         HashSet<PathfindingTile> tilesAlreadyChecked = new HashSet<>();
 
-        // Keep on checking untill there are no new tiles to check
+        // Keep on checking until there are no new tiles to check
         while (!tilesToCheck.isEmpty()) {
             HashSet<PathfindingTile> newTilesToCheck = new HashSet<>();
             for (PathfindingTile origin : tilesToCheck) {

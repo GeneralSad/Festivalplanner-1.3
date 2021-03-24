@@ -406,8 +406,8 @@ public class NPC
         }
         else
         {
-            // System.out.println("Setting rotation direction to -1 with current: " + rotation + " and target: " + angle);
-            //  System.out.println("ROTATING TO THE RIGHT");
+            //System.out.println("Setting rotation direction to -1 with current: " + rotation + " and target: " + angle);
+            //System.out.println("ROTATING TO THE RIGHT");
             rotationDirection = 1;
         }
 

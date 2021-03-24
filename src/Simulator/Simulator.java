@@ -7,6 +7,7 @@ import Data.Student;
 import GUI.GUI;
 import Simulator.LocationSystem.LocationDatabase;
 import Simulator.LocationSystem.LocationManager;
+import Simulator.Maploading.TiledMap;
 import Simulator.NPC.NPC;
 import Simulator.NPC.NPCManager;
 import Simulator.Pathfinding.Pathfinding;
@@ -71,16 +72,16 @@ public class Simulator
 
                 if (studentsOnScreen.contains(student))
                 {
-                    System.out.println(student.getName() + ": Student word van huidige locatie naar nieuwe les verplaatst");
+                    //System.out.println(student.getName() + ": Student word van huidige locatie naar nieuwe les verplaatst");
 
                 }
                 else
                 {
                     for (int i = 0; i < 3; i++)
                     {
-                        System.out.println(student.getName() + ": de student komt de school binnen en gaat naar zijn les");
+                        //System.out.println(student.getName() + ": de student komt de school binnen en gaat naar zijn les");
                         NPC npc = new NPC(student);
-                        Pathfinding pathfinding = new Pathfinding(GUI.getTiledmap());
+                        Pathfinding pathfinding = new Pathfinding(GUI.getWalkablemap());
                         npc.setPathfinding(pathfinding);
                         pathfinding.addNpc(npc);
 
@@ -109,12 +110,12 @@ public class Simulator
                 {
                     if (!schedule.hasFutureLesson(student, timeManager.getTime()))
                     {
-                        System.out.println(student.getName() + ": Student heeft geen les meer");
+                        //System.out.println(student.getName() + ": Student heeft geen les meer");
                         studentsOnScreen.remove(student);
                     }
                     else
                     {
-                        System.out.println(student.getName() + ": Student heeft nog een les maar nu niet");
+                        //System.out.println(student.getName() + ": Student heeft nog een les maar nu niet");
                     }
                 }
             }
