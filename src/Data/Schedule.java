@@ -309,6 +309,17 @@ public class Schedule implements Serializable
         groupObservableList.remove(group);
     }
 
+    public boolean equals(Schedule schedule)
+    {
+
+        if (schedule.getClassroomArrayList().size() == this.getClassroomArrayList().size() && schedule.getGroupArrayList().size() == this.getGroupArrayList().size() && schedule.getTeacherArrayList().size() == this.getTeacherArrayList().size() && schedule.getLessonArrayList().size() == this.getLessonArrayList().size()) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
     public ObservableList<Lesson> getLessons()
     {
         return lessonObservableList;
