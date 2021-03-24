@@ -53,6 +53,25 @@ public class Schedule implements Serializable
 
     }
 
+    /**
+     * Set all attributes of the schedule to be equal to the attributes of a different scheudle
+     * The other schedule should then never be used again, so as to not make sudden changes to the lists
+     * @param scheduleTo
+     */
+    public void setScheduleTo(Schedule scheduleTo) {
+        this.lessonArrayList = scheduleTo.lessonArrayList;
+        this.teacherArrayList = scheduleTo.teacherArrayList;
+        this.groupArrayList = scheduleTo.groupArrayList;
+        this.classroomArrayList = scheduleTo.classroomArrayList;
+
+        this.lessonObservableList = scheduleTo.lessonObservableList;
+        this.teacherObservableList = scheduleTo.teacherObservableList;
+        this.groupObservableList = scheduleTo.groupObservableList;
+
+        this.allStartingTimes = scheduleTo.allStartingTimes;
+        this.allEndingTimes = scheduleTo.allEndingTimes;
+    }
+
     private static ArrayList<LocalTime> getLocalTimes()
     {
         ArrayList<LocalTime> localTimes = new ArrayList<>();
