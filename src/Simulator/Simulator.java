@@ -5,6 +5,7 @@ import Data.Lesson;
 import Data.Schedule;
 import Data.Student;
 import Simulator.LocationSystem.LocationManager;
+import Simulator.Maploading.Tile;
 import Simulator.Maploading.TiledMap;
 import Simulator.NPC.NPC;
 import Simulator.NPC.NPCManager;
@@ -87,10 +88,11 @@ public class Simulator
                 if (studentsOnScreen.contains(student))
                 {
                     //System.out.println(student.getName() + ": Student word van huidige locatie naar nieuwe les verplaatst");
-
+                    System.out.println("Reached if statement, student already on screen");
                 }
                 else
                 {
+                    System.out.println("Reached else statement, student not yet on screen, adding it");
                     for (int i = 0; i < 3; i++)
                     {
                         //System.out.println(student.getName() + ": de student komt de school binnen en gaat naar zijn les");
@@ -154,10 +156,10 @@ public class Simulator
         fxGraphics2D.setColor(Color.blue);
 
         int i = 0;
-        for (Map.Entry<Point2D, Double> entry : getTiledmap().getAllSitableTiles().entrySet())
+        for (Tile tile : getTiledmap().getSeatableLayer().getTilesInLayer())
         {
             i++;
-            fxGraphics2D.drawString(("" + i), (int) entry.getKey().getX(), (int) entry.getKey().getY());
+            fxGraphics2D.drawString(("" + i), tile.getX(), tile.getY());
         }
 
 

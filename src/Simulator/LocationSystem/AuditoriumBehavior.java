@@ -38,7 +38,7 @@ public class AuditoriumBehavior
     private Point2D claimEmptySeat(NPC student) throws IllegalArgumentException{
         for (Seat s : seats)
         {
-            if (s.isEmpte()){
+            if (s.isEmpty()){
                 s.setStudent(student);
                 return s.getSeat();
             }

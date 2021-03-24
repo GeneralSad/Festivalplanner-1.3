@@ -21,7 +21,8 @@ public class ClassRoomBehavior
         this.entry = entry;
     }
 
-    public void ScriptedStudentStart(NPC student){
+    public void ScriptedStudentStart(NPC student)
+    {
         if (!handeld.contains(student))
         {
             Seat selectedSeat = claimEmptySeat(student);
@@ -34,40 +35,47 @@ public class ClassRoomBehavior
 
     }
 
-    public void ScriptedTeacherStart(NPC teacher){
+    public void ScriptedTeacherStart(NPC teacher)
+    {
 
     }
 
-    public void ScriptedStudentEnd(NPC student){
+    public void ScriptedStudentEnd(NPC student)
+    {
         student.appearance.setSitting(false, leaveFilledSeat(student).getOrientation());
 
         Pathfinding pathfinding = new Pathfinding(GUI.getTiledmap());
         student.setPathfinding(pathfinding);
         pathfinding.addNpc(student);
-        pathfinding.setDestination((int)entry.getX(), (int)entry.getY());
+        pathfinding.setDestination((int) entry.getX(), (int) entry.getY());
     }
 
-    public void ScriptedTeacherEnd(NPC teacher){
+    public void ScriptedTeacherEnd(NPC teacher)
+    {
 
     }
 
-    public Seat claimEmptySeat(NPC student) throws IllegalArgumentException{
-        for (Seat s : seats){
+    public Seat claimEmptySeat(NPC student) throws IllegalArgumentException
+    {
+        for (Seat s : seats)
+        {
 
-                if (s.isEmpte())
-                {
-                    s.setStudent(student);
-                    return s;
-                }
+            if (s.isEmpty())
+            {
+                s.setStudent(student);
+                return s;
+            }
         }
 
         throw new IllegalArgumentException("Not enough seats! Total seats is: " + seats.size());
     }
 
-    public Seat leaveFilledSeat(NPC student){
+    public Seat leaveFilledSeat(NPC student)
+    {
         for (Seat s : seats)
         {
-            if (s.getStudent() == student){
+            if (s.getStudent() == student)
+            {
                 s.setStudent(null);
                 return s;
             }

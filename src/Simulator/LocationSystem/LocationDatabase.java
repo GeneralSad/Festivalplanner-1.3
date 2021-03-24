@@ -1,64 +1,74 @@
 package Simulator.LocationSystem;
 
-import Data.Classroom;
 import GUI.GUI;
+import Simulator.Maploading.Tile;
+import Simulator.Maploading.TiledMap;
 import Simulator.Simulator;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
-import java.util.Map;
 
 
 public class LocationDatabase
 {
 
     /**
-     * searches for chairs in the area that is selected with a algoritm
-     * @param indexstart the index of a tile were it starts searching needs to be the most left bove tile.
-     * @return a list with all the seats in a classroom
+     * Searches for seats in a rectangle part of tiles marked as being in the area for classrooms
+     * Starts looking at the given row and column, searches each row untill the end of the area is reached
+     * Stops when on a new row the tile is no longer part of the area
+     * @param rowFrom
+     * @param columnFrom
+     * @return
      */
 
-    public ArrayList<Seat> collectSeats(int indexstart){
-        ArrayList<Point2D> areas = new ArrayList<>();
+    public ArrayList<Seat> collectSeats(int rowFrom, int columnFrom){
         ArrayList<Seat> seats = new ArrayList<>();
+        TiledMap tiledMap = Simulator.getTiledmap();
 
-        ArrayList<Double> orientations = new ArrayList<>();
-
-        for (Map.Entry<Point2D, Double> entry : Simulator.getTiledmap().getAllSitableTiles().entrySet())
+        Tile start = Simulator.getTiledmap().getAreaLayer().getTile(rowFrom, columnFrom);
+        if (start != null)
         {
-            areas.add(entry.getKey());
-        }
+            // position keeps track of the position of tiles to check
+            Point2D position = new Point2D.Double(start.getX(), start.getY());
 
-        System.out.println(Simulator.getTiledmap().getAllSitableTiles().size());
-
-
-        Point2D selected = areas.get(indexstart);
-        while (true){
-            if (GUI.getTiledmap().IsWalkableTile(selected)){
-
-                if (GUI.getTiledmap().IsSitableTile(selected)){
-
-                    seats.add(new Seat(new Point2D.Double(selected.getX() + 8, selected.getY()), null,GUI.getTiledmap().getAllSitableTiles().get(selected)));
-
-
+            boolean running = true;
+            while (running)
+            {
+                // check for the row of the current tile all subsequent tiles untill a tile was found which is not walkable
+                if (tiledMap.isPartOfArea(position))
+                {
+                    if (tiledMap.isSitableTile(position))
+                    {
+                        Tile selected = tiledMap.getSeatableLayer().getTile(position);
+                        if (selected != null)
+                        {
+                            // if the tile is walkable, seatable and exists in the seatablelayer then add a new seat at that tile position
+                            seats.add(new Seat(new Point2D.Double(selected.getX() + 8, selected.getY()), null, selected.getRotation()));
+                        }
+                    }
+                    position.setLocation(position.getX() + tiledMap.getTileWidth(), position.getY());
 
                 }
-                selected = new Point2D.Double(selected.getX() + GUI.getTiledmap().getTileWidth(), selected.getY());
-            } else {
-
-                selected = new Point2D.Double(areas.get(indexstart).getX(),
-                        selected.getY() + GUI.getTiledmap().getTileHeight());
-                if (!GUI.getTiledmap().IsWalkableArea(selected)){
-                    break;
+                else
+                {
+                    // go to a row lower
+                    position.setLocation(start.getX(), position.getY() + tiledMap.getTileHeight());
+                    // if the tile on the lower row is not walkable, then the classroom is finished so stop looking for seats
+                    if (!tiledMap.isPartOfArea(position))
+                    {
+                        running = false;
+                    }
                 }
             }
 
 
+        } else {
+            System.out.println("Collecting seats, starting tile was null");
         }
 
         return seats;
-
     }
+
 
 
     /**
@@ -69,54 +79,52 @@ public class LocationDatabase
         //return type
         ArrayList<ClassRoomBehavior> classRoomBehaviors = new ArrayList<>();
 
+        // Rows and columns are read from Tiled, hovering with the mouse shows the column and row of the tile hovered over, which allows for seeing the starting part of an area
+
         //room1
-        int index = 0;
-        classRoomBehaviors.add(new ClassRoomBehavior(collectSeats(index)
-                , collectSeats(index).get(12), new Point2D.Double(550, 550)));
+        ArrayList<Seat> seats = collectSeats(24, 32);
+        classRoomBehaviors.add(new ClassRoomBehavior(seats
+                , seats.get(12), new Point2D.Double(550, 550)));
 
         //room2
-        index = 15;
-        classRoomBehaviors.add(new ClassRoomBehavior(collectSeats(index)
-                , collectSeats(index).get(12), new Point2D.Double(1000, 550)));
-        //TODO Above line of code gives indexoutofbounds, index 12, size 4
+        seats = collectSeats(24, 52);
+        classRoomBehaviors.add(new ClassRoomBehavior(seats
+                , seats.get(12), new Point2D.Double(1000, 550)));
 
         //room3
-        index = 232;
-        classRoomBehaviors.add(new ClassRoomBehavior(collectSeats(index)
-                , collectSeats(index).get(0), new Point2D.Double(500, 820)));
+        seats = collectSeats(45, 21);
+        classRoomBehaviors.add(new ClassRoomBehavior(seats
+                , seats.get(0), new Point2D.Double(500, 820)));
 
 
         //room4
-        index = 241;
-        classRoomBehaviors.add(new ClassRoomBehavior(collectSeats(index)
-                , collectSeats(index).get(0), new Point2D.Double(600, 820)));
+        seats = collectSeats(45, 38);
+        classRoomBehaviors.add(new ClassRoomBehavior(seats
+                , seats.get(0), new Point2D.Double(600, 820)));
 
 
         //room5
-        index = 250;
-        classRoomBehaviors.add(new ClassRoomBehavior(collectSeats(index)
-                , collectSeats(index).get(0), new Point2D.Double(950, 820)));
+        seats = collectSeats(45, 49);
+        classRoomBehaviors.add(new ClassRoomBehavior(seats
+                , seats.get(0), new Point2D.Double(950, 820)));
 
 
         //room6
-        index = 259;
-        classRoomBehaviors.add(new ClassRoomBehavior(collectSeats(index)
-                , collectSeats(index).get(0), new Point2D.Double(1050, 820)));
+        seats = collectSeats(45, 66);
+        classRoomBehaviors.add(new ClassRoomBehavior(seats
+                , seats.get(0), new Point2D.Double(1050, 820)));
 
 
         //room7
-        index = 736;
-        classRoomBehaviors.add(new ClassRoomBehavior(collectSeats(index)
-                , collectSeats(index).get(0), new Point2D.Double(500, 1120)));
+        seats = collectSeats(62, 21);
+        classRoomBehaviors.add(new ClassRoomBehavior(seats
+                , seats.get(0), new Point2D.Double(500, 1120)));
 
 
         //room8
-        index = 745;
-        classRoomBehaviors.add(new ClassRoomBehavior(collectSeats(index)
-                , collectSeats(index).get(0), new Point2D.Double(600, 1120)));
-
-
-
+        seats = collectSeats(62, 38);
+        classRoomBehaviors.add(new ClassRoomBehavior(seats
+                , seats.get(0), new Point2D.Double(600, 1120)));
 
 
         return classRoomBehaviors;
