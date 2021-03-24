@@ -86,10 +86,8 @@ public class MainWindow extends ResizableCanvas
                 if (last == -1) {
                     last = now;
                 }
-                if (now - last > 1e9) {
-                    update();
-                    last = now;
-                }
+                update();
+                last = now;
             }
         }.start();
 

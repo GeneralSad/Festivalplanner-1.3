@@ -73,7 +73,6 @@ public class Simulator
             ArrayList<Student> studentsWithLesson = new ArrayList<>();
 
 
-
             for (Lesson lesson : lessons)
             {
                 for (Group group : lesson.getGroups())
@@ -96,7 +95,7 @@ public class Simulator
                     {
                         //System.out.println(student.getName() + ": de student komt de school binnen en gaat naar zijn les");
                         NPC npc = new NPC(student);
-                        Pathfinding pathfinding = new Pathfinding(GUI.getWalkablemap());
+                        Pathfinding pathfinding = new Pathfinding(tiledmap/*GUI.getWalkablemap()*/);
                         npc.setPathfinding(pathfinding);
                         pathfinding.addNpc(npc);
 
@@ -114,9 +113,9 @@ public class Simulator
 
                         npcManager.addNPC(npc);
                         studentsOnScreen.add(student);
-                        }
                     }
                 }
+            }
 
 
             ArrayList<Student> studentsOnScreenPlaceHolder = new ArrayList<>(studentsOnScreen);
@@ -139,11 +138,12 @@ public class Simulator
             }
 
             //TODO De for loop hieronder is misschien niet goed
-        for (NPC npc : npcOnScreen)
-        {
-             locationManager.scriptedStartedLesson(npc, npc.getCurrentPathfinding());
-        }
+            for (NPC npc : npcOnScreen)
+            {
+                locationManager.scriptedStartedLesson(npc, npc.getCurrentPathfinding());
+            }
 
+        }
     }
 
     public void draw(FXGraphics2D fxGraphics2D)

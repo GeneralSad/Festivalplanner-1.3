@@ -1,6 +1,7 @@
 package GUI;
 
 import Data.*;
+import Simulator.Maploading.TiledMap;
 import Simulator.Simulator;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -195,14 +196,14 @@ public class GUI extends Application
 
 
             ArrayList<Classroom> classrooms = new ArrayList<>();
-            classrooms.add(new Classroom(1, new Point2D.Double(550, 550)));
-            classrooms.add(new Classroom(2, new Point2D.Double(1000, 550)));
-            classrooms.add(new Classroom(3, new Point2D.Double(500, 820)));
-            classrooms.add(new Classroom(4, new Point2D.Double(600, 820)));
-            classrooms.add(new Classroom(5, new Point2D.Double(950, 820)));
-            classrooms.add(new Classroom(6, new Point2D.Double(1050, 820)));
-            classrooms.add(new Classroom(7, new Point2D.Double(500, 1120)));
-            classrooms.add(new Classroom(8, new Point2D.Double(600, 1120)));
+            classrooms.add(new Classroom(1, new ClassroomEntryPoint(550, 550)));
+            classrooms.add(new Classroom(2, new ClassroomEntryPoint(1000, 550)));
+            classrooms.add(new Classroom(3, new ClassroomEntryPoint(500, 820)));
+            classrooms.add(new Classroom(4, new ClassroomEntryPoint(600, 820)));
+            classrooms.add(new Classroom(5, new ClassroomEntryPoint(950, 820)));
+            classrooms.add(new Classroom(6, new ClassroomEntryPoint(1050, 820)));
+            classrooms.add(new Classroom(7, new ClassroomEntryPoint(500, 1120)));
+            classrooms.add(new Classroom(8, new ClassroomEntryPoint(600, 1120)));
             ArrayList<Lesson> lessons = new ArrayList<>();
             lessons.add(new Lesson(LocalTime.of(15, 30), LocalTime.of(16, 30), teachers.get(0), classrooms.get(0), groups));
             lessons.add(new Lesson(LocalTime.of(9, 0), LocalTime.of(10, 0), teachers.get(1), classrooms.get(1), groups.get(1)));
@@ -308,7 +309,7 @@ public class GUI extends Application
 
     public static TiledMap getTiledmap()
     {
-        return tiledmap;
+        return Simulator.getTiledmap();
     }
 
     public static TiledMap getWalkablemap()
