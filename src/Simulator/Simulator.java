@@ -169,6 +169,8 @@ public class Simulator
                 fxGraphics2D.fill(new Rectangle.Double(test.getX() - 5, test.getY() - 5, 10, 10));
             }
         }
+
+        fxGraphics2D.setColor(Color.BLACK);
     }
 
     public String getFormattedTime()

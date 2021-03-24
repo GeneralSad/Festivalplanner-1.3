@@ -117,7 +117,7 @@ public class GUI extends Application
 
 
         HBox speedSettingsBox = new HBox();
-        Button speedUpButton = new Button("Vernsel");
+        Button speedUpButton = new Button("Versnel");
         speedUpButton.setOnAction(event ->
         {
             int speedfactor = simulator.getSpeedfactor();
@@ -133,6 +133,9 @@ public class GUI extends Application
             simulator.setSpeedfactor(speedfactor - 10);
             updateLabel();
         });
+
+        // update the label so text is displayed at startup
+        speedFactorLabel.setText("De simulatie speelt op normale snelheid");
 
         vBox.getChildren().addAll(speedFactorLabel, speedSettingsBox);
         speedFactorLabel.setFont(new Font("Arial", 16));
@@ -166,7 +169,7 @@ public class GUI extends Application
 
                 graphicsContext.setImageSmoothing(false);
                 FXGraphics2D fxGraphics2D = new FXGraphics2D(graphicsContext);
-                //fxGraphics2D.setBackground(Color.GRAY);
+                fxGraphics2D.setBackground(Color.GRAY);
 
                 fxGraphics2D.clearRect(0, 0, (int) canvas.getWidth(), (int) canvas.getHeight());
 
@@ -243,7 +246,7 @@ public class GUI extends Application
         int speedfactor = simulator.getSpeedfactor();
         if (speedfactor == 0)
         {
-            speedFactorLabel.setText("De simulatie word niet vernseld");
+            speedFactorLabel.setText("De simulatie speelt op normale snelheid");
         }
         else
         {

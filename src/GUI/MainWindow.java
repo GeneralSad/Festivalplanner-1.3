@@ -139,8 +139,6 @@ public class MainWindow extends ResizableCanvas
         {
             graphics2D.drawString(allStartingTimes.get(i) + " -", distanceOfTimeStampsFromLeft + 10, distanceOfTimeStampsFromTop + 20 + i * timeStampVerticalSpacing);
             graphics2D.drawString(allEndingTimes.get(i) + "", distanceOfTimeStampsFromLeft + 10, distanceOfTimeStampsFromTop + 40 + i * timeStampVerticalSpacing);
-            int y = (distanceOfTimeStampsFromTop + +i * timeStampVerticalSpacing);
-            graphics2D.drawLine(distanceOfTimeStampsFromLeft, y, distanceOfTimeStampsFromLeft + 100, y);
         }
         graphics2D.setFont(oldFont);
 
@@ -158,11 +156,11 @@ public class MainWindow extends ResizableCanvas
             graphics2D.drawString("Pauze", distanceOfClassroomsFromLeft + i * classroomTableWidth, distanceOfTimeStampsFromTop + 30 + 6 * timeStampVerticalSpacing);
         }
 
-        // interne horizontale lijnen van het rooster
+        // horizontale lijnen van het rooster tekenen
         for (int i = 0; i < amountOfTimeStamps + 1; i++)
         {
             int y = distanceOfTimeStampsFromTop + i * timeStampVerticalSpacing;
-            graphics2D.drawLine(distanceOfClassroomsFromLeft, y, distanceOfClassroomsFromLeft + classroomTableWidth * amountOfClassrooms, y);
+            graphics2D.drawLine(distanceOfTimeStampsFromLeft, y, distanceOfClassroomsFromLeft + classroomTableWidth * amountOfClassrooms, y);
         }
 
         // Tekenen van de lessen
