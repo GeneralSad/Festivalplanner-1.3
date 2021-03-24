@@ -281,12 +281,3 @@ public class TiledLayer
         return data;
     }
 }
-
-
-
-
-
-
-
-
-

@@ -70,7 +70,7 @@ public class NPC
 
     public NPC(Person person, int x, int y)
     {
-        this(person, x, y, 8, 16, randomSprite());
+        this(person, x, y, 8, 8, randomSprite());
     }
 
     /**
@@ -94,12 +94,7 @@ public class NPC
             }
 
             // NPC collision
-            collisionUpdate(npcs, deltaTime, allowPushForwardCollision);
-//            if (collisionUpdate(npcs, deltaTime))
-//            {
-//                // if a collision would occur, reverse the previous made movement
-//                movementUpdate(-deltaTime);
-//            }
+            collisionUpdate(npcs, deltaTime);
 
             // Destination check
             destinationUpdate();
@@ -132,54 +127,13 @@ public class NPC
      * Pushes forward an npc which is collided with if the allowPushBack parameter is true
      * @param npcs
      */
-    private void collisionUpdate(ArrayList<NPC> npcs, double deltaTime, boolean allowPushForward)
+    private void collisionUpdate(ArrayList<NPC> npcs, double deltaTime)
     {
-        if (!hardCollisionCheck(deltaTime, npcs)) {
-            softCollisionCheck(deltaTime, npcs);
-        }
-//        Rectangle2D thisNpcHitBox = new Rectangle2D.Double(this.x, this.y, this.width, this.height);
-//
-//        // check for all other npcs if this npc would collide
-//        for (NPC npc : npcs)
-//        {
-//            if (npc != this)
-//            {
-//                // find the other npc hitbox
-//                Rectangle2D npcHitBox = new Rectangle2D.Double(npc.x, npc.y, npc.width, npc.height);
-//
-//                if (thisNpcHitBox.intersects(npcHitBox))
-//                {
-//                    if (allowPushForward)
-//                    {
-//                        // push the other npc a bit further
-//                        // but that npc is not allowed to create a chain effect of pushingforward
-//                        npc.update(0.5 * deltaTime, npcs, false);
-//                    }
-//                    // don't allow moving into the other npc, so reset the made movement
-//                    movementUpdate(-deltaTime);
-//                    return true;
-//                }
-//            }
-//        }
-//        return false;
-    }
-
-    private void softCollisionCheck(double deltaTime, ArrayList<NPC> npcs) {
-        Rectangle2D softCollisionBox = new Rectangle2D.Double(this.x - this.width / 2, this.y - this.height / 2, this.width * 2, this.height * 2);
-        if (collisionCheck(npcs, softCollisionBox)) {
-            // Walk back a bit, but not fully
-            movementUpdate(-0.9 * deltaTime);
-        }
-    }
-
-    private boolean hardCollisionCheck(double deltaTime, ArrayList<NPC> npcs) {
         Rectangle2D hardCollisionBox = new Rectangle2D.Double(this.x, this.y, this.width, this.height);
         if (collisionCheck(npcs, hardCollisionBox)) {
             // Completely reset the made movement
             movementUpdate(-deltaTime);
-            return true;
         }
-        return false;
     }
 
     private boolean collisionCheck(ArrayList<NPC> npcs, Rectangle2D hitbox) {
@@ -450,6 +404,9 @@ public class NPC
     //TODO temprotray for testing
     public static int xComponent(){
         xComponent += 16;
+        if (xComponent > 1500) {
+            xComponent = 1280;
+        }
         return (int)xComponent;
     }
 

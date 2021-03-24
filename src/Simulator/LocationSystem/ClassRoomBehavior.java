@@ -31,8 +31,6 @@ public class ClassRoomBehavior
             student.getCurrentPathfinding().setDestination((int) selectedSeat.getSeat().getX(), (int) selectedSeat.getSeat().getY());
             handeld.add(student);
         }
-
-
     }
 
     public void ScriptedTeacherStart(NPC teacher)
@@ -57,17 +55,27 @@ public class ClassRoomBehavior
 
     public Seat claimEmptySeat(NPC student) throws IllegalArgumentException
     {
-        for (Seat s : seats)
-        {
+        Seat seat = getFurthestSeat(student.getCurrentLocation());
+        if (seat != null) {
+            seat.setStudent(student);
+            return seat;
+        }
+        throw new IllegalArgumentException("Not enough seats! Total seats is: " + seats.size());
+    }
 
-            if (s.isEmpty())
-            {
-                s.setStudent(student);
-                return s;
+    public Seat getFurthestSeat(Point2D from) {
+        Seat furthest = null;
+        double furthestDistanceSoFar = 0;
+        for (Seat s : seats) {
+            if (s.isEmpty()) {
+                double distance = from.distance(s.getSeat());
+                if (distance > furthestDistanceSoFar) {
+                    furthestDistanceSoFar = distance;
+                    furthest = s;
+                }
             }
         }
-
-        throw new IllegalArgumentException("Not enough seats! Total seats is: " + seats.size());
+        return furthest;
     }
 
     public Seat leaveFilledSeat(NPC student)

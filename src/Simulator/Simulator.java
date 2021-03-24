@@ -62,8 +62,6 @@ public class Simulator
             deltaTimeMultiplier = 1 + this.speedfactor / 10.0;
         }
         npcManager.update((deltatime / 1e9) * deltaTimeMultiplier);
-
-
         timeManager.update(deltatime);
 
         if (timeManager.isChanged() || speedfactor < 0)
@@ -83,31 +81,28 @@ public class Simulator
 
             for (Student student : studentsWithLesson)
             {
-
                 if (studentsOnScreen.contains(student))
                 {
                     //System.out.println(student.getName() + ": Student word van huidige locatie naar nieuwe les verplaatst");
+                    //TODO check if necessary to move to new lesson
                 }
                 else
                 {
-                    for (int i = 0; i < 1; i++)
+                    //System.out.println(student.getName() + ": de student komt de school binnen en gaat naar zijn les");
+                    NPC npc = new NPC(student);
+                    Pathfinding pathfinding = new Pathfinding(tiledmap/*GUI.getWalkablemap()*/);
+                    npc.setPathfinding(pathfinding);
+                    pathfinding.addNpc(npc);
+
+                    npcOnScreen.add(npc);
+
+                    if (pathfinding.getExactDestination() == null)
                     {
-                        //System.out.println(student.getName() + ": de student komt de school binnen en gaat naar zijn les");
-                        NPC npc = new NPC(student);
-                        Pathfinding pathfinding = new Pathfinding(tiledmap/*GUI.getWalkablemap()*/);
-                        npc.setPathfinding(pathfinding);
-                        pathfinding.addNpc(npc);
-
-                        npcOnScreen.add(npc);
-
-                        if (pathfinding.getExactDestination() == null)
-                        {
-                            pathfinding.setDestination((int) student.getGroup().getClassroom().getEntry().getX(), (int) student.getGroup().getClassroom().getEntry().getY());
-                        }
-
-                        npcManager.addNPC(npc);
-                        studentsOnScreen.add(student);
+                        pathfinding.setDestination((int) student.getGroup().getClassroom().getEntry().getX(), (int) student.getGroup().getClassroom().getEntry().getY());
                     }
+
+                    npcManager.addNPC(npc);
+                    studentsOnScreen.add(student);
                 }
             }
 
@@ -117,26 +112,18 @@ public class Simulator
             {
                 if (!studentsWithLesson.contains(student))
                 {
-                    if (!studentsWithLesson.contains(student))
-                    {
-                        //System.out.println(student.getName() + ": Student heeft geen les meer");
-                        studentsOnScreen.remove(student);
-                    }
-                    else
-                    {
-                        //System.out.println(student.getName() + ": Student heeft nog een les maar nu niet");
-                    }
+                    studentsOnScreen.remove(student);
                 }
-
-
             }
 
-            //TODO De for loop hieronder is misschien niet goed
-            for (NPC npc : npcOnScreen)
-            {
-                locationManager.scriptedStartedLesson(npc, npc.getCurrentPathfinding());
-            }
 
+        }
+
+        //TODO De for loop hieronder is misschien niet goed
+        //TODO Check
+        for (NPC npc : npcOnScreen)
+        {
+            locationManager.scriptedStartedLesson(npc, npc.getCurrentPathfinding());
         }
     }
 
@@ -147,13 +134,15 @@ public class Simulator
 
         fxGraphics2D.setColor(Color.blue);
 
-        int i = 0;
+        // draw seat numbers
+        int number = 0;
         for (Tile tile : getTiledmap().getSeatableLayer().getTilesInLayer())
         {
-            i++;
-            fxGraphics2D.drawString(("" + i), tile.getX(), tile.getY());
+            number++;
+            fxGraphics2D.drawString(("" + number), tile.getX(), tile.getY());
         }
 
+        fxGraphics2D.setColor(Color.BLACK);
 
         if (false)
         {
@@ -163,8 +152,6 @@ public class Simulator
                 fxGraphics2D.fill(new Rectangle.Double(test.getX() - 5, test.getY() - 5, 10, 10));
             }
         }
-
-        fxGraphics2D.setColor(Color.BLACK);
     }
 
     public String getFormattedTime()
@@ -186,6 +173,4 @@ public class Simulator
         }
         timeManager.setSpeedFactor(this.speedfactor);
     }
-
-
 }

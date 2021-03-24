@@ -194,6 +194,7 @@ public class GUI extends Application
         this.schedule = DataStorage.loadSchedule(this.filePath);
         if (this.schedule == null)
         {
+            // Manual schedule loading:
 //            System.out.println("Couldn't load a schedule");
 //            ArrayList<Teacher> teachers = new ArrayList<>();
 //            teachers.add(new Teacher("Etiënne", 30, "Hardware"));

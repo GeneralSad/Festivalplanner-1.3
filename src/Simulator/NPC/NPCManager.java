@@ -17,17 +17,27 @@ public class NPCManager
 
     public void addNPC(Person person, double x, double y, int width, int height, int rotation, int speed, int rotationSpeed, String image)
     {
-        this.npcs.add(new NPC(person, x, y, width, height, rotation, speed, rotationSpeed, image));
+        // only add an npc if the person doesn't already exist
+        if (getNPCFromPerson(person) == null)
+        {
+            this.npcs.add(new NPC(person, x, y, width, height, rotation, speed, rotationSpeed, image));
+        }
     }
 
     public void addNPC(Person person, double x, double y, int width, int height, String image)
     {
-        this.npcs.add(new NPC(person, x, y, width, height, image));
+        // only add an npc if the person doesn't already exist
+        if (getNPCFromPerson(person) == null)
+        {
+            this.npcs.add(new NPC(person, x, y, width, height, image));
+        }
     }
 
     public void addNPC(NPC npc)
     {
-        this.npcs.add(npc);
+        if (!this.npcs.contains(npc) && getNPCFromPerson(npc.getPerson()) == null) {
+            this.npcs.add(npc);
+        }
     }
 
     public void removeNPC(NPC npc)

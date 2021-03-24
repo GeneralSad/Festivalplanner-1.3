@@ -100,7 +100,6 @@ public class NPCTester extends Application
         graphics2D.clearRect(0, 0, (int) this.resizableCanvas.getWidth(), (int) this.resizableCanvas.getHeight());
 
         npcManager.draw(graphics2D, debug);
-
         pathfinding.draw(graphics2D, debug);
     }
 }
