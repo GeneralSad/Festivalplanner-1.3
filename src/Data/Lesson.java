@@ -5,8 +5,16 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
+/**
+ * Auteurs: Leon
+ *
+ * Deze code zorgt ervoor dat een les aangemaakt kan worden en de nodige functies heeft die later nodig zijn
+ *
+ */
+
 public class Lesson implements Serializable
 {
+
 
     private LocalTime beginTime;
     private LocalTime endTime;
@@ -20,7 +28,8 @@ public class Lesson implements Serializable
         this.endTime = endTime;
         this.teacher = teacher;
         this.classroom = classroom;
-        this.groups = groups;
+        this.groups = new ArrayList<>();
+        this.groups.addAll(groups);
     }
 
     public Lesson(LocalTime beginTime, LocalTime endTime, Teacher teacher, Classroom classroom, Group className)
@@ -33,19 +42,24 @@ public class Lesson implements Serializable
         addGroup(className);
     }
 
-    public void addGroup(Group group) {
+    private void addGroup(Group group)
+    {
         this.groups.add(group);
+        group.setClassroom(this.classroom);
     }
 
-    public String getFormatBeginTime() {
+    public String getFormatBeginTime()
+    {
         return formatTimeString(this.beginTime);
     }
 
-    public String getFormatEndTime() {
+    public String getFormatEndTime()
+    {
         return formatTimeString(this.endTime);
     }
 
-    private String formatTimeString(LocalTime localTime) {
+    private String formatTimeString(LocalTime localTime)
+    {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
         return localTime.format(dtf);
     }
@@ -53,8 +67,12 @@ public class Lesson implements Serializable
     @Override
     public String toString()
     {
-        return "Lesson: " + this.teacher.getSubject() + "\nBegins: " + beginTime + "\nEnds: " + endTime + "\nTeacher: "
-                + teacher.getName() + "\nClassroom: " + classroom.getClassroom() + "\nGroups: " + getGroupNames(groups);
+        return "Vak: " + this.teacher.getSubject() + "\nBegint: " + beginTime + "\nEindigt: " + endTime + "\nLeraar: " + teacher.getName() + "\nKlaslokaal: " + classroom.getClassroom() + "\nKlassen: " + getGroupNames(groups);
+    }
+
+    public String toShortString()
+    {
+        return "Les: " + this.teacher.getSubject() + ", Tijd vanaf: " + beginTime + " tot: " + endTime + ", Lokaal: " + ", Klassen: " + getGroupNames(groups);
     }
 
     public LocalTime getBeginTime()
@@ -107,7 +125,8 @@ public class Lesson implements Serializable
         this.groups = groups;
     }
 
-    public String getGroupNames(ArrayList<Group> groups) {
+    public String getGroupNames(ArrayList<Group> groups)
+    {
 
         StringBuilder str = new StringBuilder();
 
@@ -118,11 +137,17 @@ public class Lesson implements Serializable
 
         String commaString = str.toString();
 
-        if (commaString.length() > 0) {
+        if (commaString.length() > 0)
+        {
             commaString = commaString.substring(0, commaString.length() - 2);
         }
 
         return commaString;
     }
 
+
+    public Lesson clone()
+    {
+        return new Lesson(this.beginTime, this.endTime, this.teacher, this.classroom, this.groups);
+    }
 }

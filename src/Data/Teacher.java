@@ -2,38 +2,22 @@ package Data;
 
 import java.io.Serializable;
 
-public class Teacher implements Serializable
+/**
+ * Auteurs: Leon
+ *
+ * Deze code zorgt ervoor dat een leraar aangemaakt kan worden en de nodige functies heeft die later nodig zijn
+ *
+ */
+
+public class Teacher extends Person implements Serializable
 {
 
-    private String name;
-    private int age;
     private String subject;
 
     public Teacher(String name, int age, String subject)
     {
-        this.name = name;
-        this.age = age;
+        super(name, age);
         this.subject = subject;
-    }
-
-    public String getName()
-    {
-        return name;
-    }
-
-    public void setName(String name)
-    {
-        this.name = name;
-    }
-
-    public int getAge()
-    {
-        return age;
-    }
-
-    public void setAge(int age)
-    {
-        this.age = age;
     }
 
     public String getSubject()
@@ -45,4 +29,9 @@ public class Teacher implements Serializable
     {
         this.subject = subject;
     }
+
+    public String toDetailString() {
+        return "Naam: " + super.name + "\nLeeftijd: " + super.age + "\nVak: " + this.subject;
+    }
+
 }

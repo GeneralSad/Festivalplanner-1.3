@@ -2,36 +2,35 @@ package Data;
 
 import java.io.Serializable;
 
-public class Student implements Serializable
+/**
+ * Auteurs: Leon
+ *
+ * Deze code zorgt ervoor dat een student aangemaakt kan worden en de nodige functies heeft die later nodig zijn
+ *
+ */
+
+public class Student extends Person implements Serializable
 {
 
-    private String name;
-    private int age;
+
+    private Group group;
+    private Classroom classroom;
 
     public Student(String name, int age, Group group)
     {
-        this.name = name;
-        this.age = age;
+        super(name, age);
+        this.group = group;
+        group.addStudent(this);
     }
 
-    public String getName()
+    public Group getGroup()
     {
-        return name;
+        return group;
     }
 
-    public void setName(String name)
+    public String toDetailString()
     {
-        this.name = name;
-    }
-
-    public int getAge()
-    {
-        return age;
-    }
-
-    public void setAge(int age)
-    {
-        this.age = age;
+        return "Naam: " + super.name + "\nLeeftijd: " + super.age;
     }
 
 }
