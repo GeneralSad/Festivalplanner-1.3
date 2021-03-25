@@ -12,6 +12,8 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
+//TODO make collision better so npcs don't get stuck when moving in opposite directions
+
 public class NPC
 {
     private Person person;

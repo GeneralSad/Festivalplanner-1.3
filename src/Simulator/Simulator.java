@@ -21,6 +21,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Map;
 
+//TODO making time go backward can be done by saving npc data every ~15 min and allowing to go backwards to the saved points
+
 /**
  * Auteurs: Leon
  * <p>

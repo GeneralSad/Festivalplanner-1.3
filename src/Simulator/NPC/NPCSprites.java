@@ -9,6 +9,7 @@ import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+//TODO load sprites at the start and give npc a pointer to the image, instead of giving each npc a new image
 public class NPCSprites
 {
     //sprites loading
