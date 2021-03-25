@@ -28,25 +28,10 @@ public class TimeManager
 
     public ArrayList<Lesson> getCurrentLessons()
     {
-
-        lessons = schedule.getOverlappingLessons(getTime());
-        nextChange = null;
-        for (Lesson lesson : lessons)
-        {
-            LocalTime endTime = lesson.getEndTime();
-            if (nextChange == null || endTime.isBefore(nextChange))
-            {
-                nextChange = endTime;
-            }
-        }
-
-        if (nextChange == null)
-        {
-            nextChange = schedule.nextLesson(timeType.getTime());
-        }
-
+        nextChange = schedule.nextLesson(timeType.getTime());
+        nextChange = nextChange.plusMinutes(1);
+        lessons = schedule.getOverlappingLessons(nextChange);
         return lessons;
-
 
     }
 
