@@ -85,12 +85,12 @@ public class Simulator
             {
                 if (studentsOnScreen.contains(student))
                 {
-                    //System.out.println(student.getName() + ": Student word van huidige locatie naar nieuwe les verplaatst");
+                    System.out.println(student.getName() + ": Student word van huidige locatie naar nieuwe les verplaatst");
                     //TODO check if necessary to move to new lesson
                 }
                 else
                 {
-                    //System.out.println(student.getName() + ": de student komt de school binnen en gaat naar zijn les");
+                    System.out.println(student.getName() + ": de student komt de school binnen en gaat naar zijn les");
                     NPC npc = new NPC(student);
                     Pathfinding pathfinding = new Pathfinding(tiledmap/*GUI.getWalkablemap()*/);
                     npc.setPathfinding(pathfinding);
@@ -114,6 +114,7 @@ public class Simulator
             {
                 if (!studentsWithLesson.contains(student))
                 {
+                    System.out.println(student.getName() + ": wordt verwijderd");
                     studentsOnScreen.remove(student);
                 }
             }
