@@ -36,10 +36,13 @@ public class Simulator
     private Schedule schedule;
     private static TiledMap tiledmap = new TiledMap("/TiledMaps/MapFinal.json");
     private int speedfactor = 1;
-    private ArrayList<Student> studentsOnScreen = new ArrayList<>();
+
     private LocationManager locationManager;
-    private ArrayList<NPC> npcOnScreen = new ArrayList<>();
     private int maxSpeedFactor = 100;
+
+    private ArrayList<NPC> npcOnScreen = new ArrayList<>();
+    private ArrayList<Student> studentsOnScreen = new ArrayList<>();
+    private ArrayList<Lesson> lessonsPassed = new ArrayList<>();
 
 
     public Simulator(Schedule schedule)
@@ -68,59 +71,123 @@ public class Simulator
 
         if (timeManager.isChanged() || speedfactor < 0)
         {
-            System.out.println(timeManager.getTime());
             ArrayList<Lesson> lessons = timeManager.getCurrentLessons();
-            ArrayList<Student> studentsWithLesson = new ArrayList<>();
-
 
             for (Lesson lesson : lessons)
             {
-                for (Group group : lesson.getGroups())
+                if (!lessonsPassed.contains(lesson))
                 {
-                    studentsWithLesson.addAll(group.getStudents());
-                }
-            }
-
-            for (Student student : studentsWithLesson)
-            {
-                if (studentsOnScreen.contains(student))
-                {
-                    System.out.println(student.getName() + ": Student word van huidige locatie naar nieuwe les verplaatst");
-                    //TODO check if necessary to move to new lesson
-                }
-                else
-                {
-                    System.out.println(student.getName() + ": de student komt de school binnen en gaat naar zijn les");
-                    NPC npc = new NPC(student);
-                    Pathfinding pathfinding = new Pathfinding(tiledmap/*GUI.getWalkablemap()*/);
-                    npc.setPathfinding(pathfinding);
-                    pathfinding.addNpc(npc);
-
-                    npcOnScreen.add(npc);
-
-                    if (pathfinding.getExactDestination() == null)
+                    for (int i = 0; i < lesson.getGroups().size(); i++)
                     {
-                        pathfinding.setDestination((int) student.getGroup().getClassroom().getEntry().getX(), (int) student.getGroup().getClassroom().getEntry().getY());
+                        for (int j = 0; j < lesson.getGroups().get(i).getStudents().size(); j++)
+                        {
+                            Student s = lesson.getGroups().get(i).getStudents().get(j);
+                            if (studentsOnScreen.contains(s))
+                            {
+
+                                System.out.println(s.getName() + ": Student word van huidige locatie naar nieuwe les verplaatst");
+                                for (int k = 0; k < npcOnScreen.size(); k++)
+                                {
+                                    if (npcOnScreen.get(i).getPerson().equals(s))
+                                    {
+                                        npcOnScreen.get(i).resetDestination();
+                                        npcOnScreen.get(i).getCurrentPathfinding().setDestination((int) lesson.getClassroom().getEntry().getX(), (int) lesson.getClassroom().getEntry().getY());
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                System.out.println(s.getName() + ": de student komt de school binnen en gaat naar zijn les");
+                                NPC npc = new NPC(s);
+                                Pathfinding pathfinding = new Pathfinding(tiledmap/*GUI.getWalkablemap()*/);
+                                npc.setPathfinding(pathfinding);
+                                pathfinding.addNpc(npc);
+                                npcOnScreen.add(npc);
+
+                                if (pathfinding.getExactDestination() == null)
+                                {
+                                    pathfinding.setDestination((int) lesson.getClassroom().getEntry().getX(), (int) lesson.getClassroom().getEntry().getY());
+                                }
+                                npcManager.addNPC(npc);
+                                studentsOnScreen.add(s);
+                            }
+
+                        }
+
                     }
 
-                    npcManager.addNPC(npc);
-                    studentsOnScreen.add(student);
+
                 }
+
+
+                lessonsPassed.add(lesson);
+
+
             }
-
-
-            ArrayList<Student> studentsOnScreenPlaceHolder = new ArrayList<>(studentsOnScreen);
-            for (Student student : studentsOnScreenPlaceHolder)
-            {
-                if (!studentsWithLesson.contains(student))
-                {
-                    System.out.println(student.getName() + ": wordt verwijderd");
-                    studentsOnScreen.remove(student);
-                }
-            }
-
-
         }
+
+
+
+
+
+
+
+//
+//            for (Lesson lesson : lessons)
+//            {
+//                for (Group group : lesson.getGroups())
+//                {
+//                    studentsWithLesson.addAll(group.getStudents());
+//                }
+//            }
+//
+//            for (Student student : studentsWithLesson)
+//            {
+//                if (studentsOnScreen.contains(student))
+//                {
+//                    System.out.println(student.getName() + ": Student word van huidige locatie naar nieuwe les verplaatst");
+//                    for (int i = 0; i < npcOnScreen.size(); i++)
+//                    {
+//                        if (npcOnScreen.get(i).getPerson().equals(student)){
+//                            npcOnScreen.get(i).resetDestination();
+//                            npcOnScreen.get(i).getCurrentPathfinding().setDestination((int)student.getGroup().getClassroom().getEntry().getX(), (int)student.getGroup().getClassroom().getEntry().getY());
+//                        }
+//
+//                    }
+//                }
+//                else
+//                {
+//                    System.out.println(student.getName() + ": de student komt de school binnen en gaat naar zijn les");
+//                    NPC npc = new NPC(student);
+//                    Pathfinding pathfinding = new Pathfinding(tiledmap/*GUI.getWalkablemap()*/);
+//                    npc.setPathfinding(pathfinding);
+//                    pathfinding.addNpc(npc);
+//
+//                    npcOnScreen.add(npc);
+//
+//                    if (pathfinding.getExactDestination() == null)
+//                    {
+//                        pathfinding.setDestination((int) student.getGroup().getClassroom().getEntry().getX(), (int) student.getGroup().getClassroom().getEntry().getY());
+//                    }
+//
+//                    npcManager.addNPC(npc);
+//                    studentsOnScreen.add(student);
+//                }
+//            }
+
+
+//            ArrayList<Student> studentsOnScreenPlaceHolder = new ArrayList<>(studentsOnScreen);
+//            for (Student student : studentsOnScreenPlaceHolder)
+//            {
+//                if (!studentsWithLesson.contains(student))
+//                {
+//                    System.out.println(student.getName() + ": wordt verwijderd");
+//                    studentsOnScreen.remove(student);
+//                }
+//            }
+//
+//
+//        }
 
         //TODO De for loop hieronder is misschien niet goed
         //TODO Check
