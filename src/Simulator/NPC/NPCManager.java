@@ -15,19 +15,29 @@ public class NPCManager
         this.npcs = new ArrayList<>();
     }
 
-    public void addNPC(Person person, double x, double y, double xSpeed, double ySpeed, int width, int height, int rotation, int speed, int rotationSpeed, String image)
+    public void addNPC(Person person, double x, double y, int width, int height, int rotation, int speed, int rotationSpeed, String image)
     {
-        this.npcs.add(new NPC(person, x, y, xSpeed, ySpeed, width, height, rotation, speed, rotationSpeed, image));
+        // only add an npc if the person doesn't already exist
+        if (getNPCFromPerson(person) == null)
+        {
+            this.npcs.add(new NPC(person, x, y, width, height, rotation, speed, rotationSpeed, image));
+        }
     }
 
-    public void addNPC(Person person, double x, double y, double xSpeed, double ySpeed, int width, int height, String image)
+    public void addNPC(Person person, double x, double y, int width, int height, String image)
     {
-        this.npcs.add(new NPC(person, x, y, xSpeed, ySpeed, width, height, image));
+        // only add an npc if the person doesn't already exist
+        if (getNPCFromPerson(person) == null)
+        {
+            this.npcs.add(new NPC(person, x, y, width, height, image));
+        }
     }
 
     public void addNPC(NPC npc)
     {
-        this.npcs.add(npc);
+        if (!this.npcs.contains(npc) && getNPCFromPerson(npc.getPerson()) == null) {
+            this.npcs.add(npc);
+        }
     }
 
     public void removeNPC(NPC npc)
@@ -44,11 +54,10 @@ public class NPCManager
         }
     }
 
-    public void setLocation(Point2D point2D)
-    {
-        for (NPC npc : npcs)
+    public void setDirectTargetLocation(Point2D point2D){
+        for (NPC npc: npcs)
         {
-            npc.goToDestinationXY((int) point2D.getX(), (int) point2D.getY());
+            npc.goToDestination((int)point2D.getX(), (int)point2D.getY());
         }
     }
 
@@ -69,12 +78,15 @@ public class NPCManager
         return getNPCFromPerson(person);
     }
 
-    private NPC getNPCFromPerson(Person person)
-    {
-        for (NPC npc : npcs)
-        {
-            if (npc.getPerson() == person)
-            {
+    /**
+     * Look for an NPC based on the Person object it contains
+     * Used by the getNPC and removeNPC methods
+     * @param person
+     * @return
+     */
+    private NPC getNPCFromPerson(Person person) {
+        for (NPC npc : npcs) {
+            if (npc.getPerson() == person) {
                 return npc;
             }
         }
@@ -89,11 +101,9 @@ public class NPCManager
         }
     }
 
-    public void draw(FXGraphics2D fxGraphics2D)
-    {
-        for (NPC npc : this.npcs)
-        {
-            npc.draw(fxGraphics2D);
+    public void draw(FXGraphics2D fxGraphics2D, boolean debug) {
+        for (NPC npc : this.npcs) {
+            npc.draw(fxGraphics2D, debug);
         }
     }
 }

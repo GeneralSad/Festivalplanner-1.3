@@ -9,4 +9,5 @@ public interface TimeType
 
     void update(Long deltatime);
 
+    int getSpeedFactor();
 }
