@@ -1,7 +1,9 @@
 package Simulator.Pathfinding;
 
+import Simulator.Maploading.TiledLayer;
 import Simulator.Maploading.TiledMap;
 import Simulator.NPC.NPC;
+import Simulator.Simulator;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.jfree.fx.FXGraphics2D;
 
@@ -26,7 +28,13 @@ public class Pathfinding
 
     public Pathfinding(TiledMap tiledMapBase)
     {
-        this(tiledMapBase.getTileWidth(), tiledMapBase.getTileHeight(), tiledMapBase.getWidth(), tiledMapBase.getHeight());
+        this.npcs = new ArrayList<>();
+        this.pathfindingtiles = new ArrayList<>();
+        this.tileWidth = tiledMapBase.getTileWidth();
+        this.tileHeight = tiledMapBase.getTileHeight();
+        this.totalWidth = tiledMapBase.getWidth();
+        this.totalHeight = tiledMapBase.getHeight();
+        initWithTiledMap();
     }
 
     public Pathfinding(int tileWidth, int tileHeight, int totalWidth, int totalHeight)
@@ -56,13 +64,28 @@ public class Pathfinding
      * Initialise the list of all pathfinding tiles
      */
     private void init() {
+        for (int row = 0; row < totalHeight; row++) {
+            ArrayList<PathfindingTile> columnList = new ArrayList<>();
+            for (int column = 0; column < totalWidth; column++) {
+                columnList.add(new PathfindingTile(row, column, tileWidth, tileHeight, true));
+            }
+            this.pathfindingtiles.add(columnList);
+        }
+    }
 
-        //TODO Hier moet bij columnlist.add aan het einde niet altijd true meegegeven worden. Als de tilenummer 0 is dan is het false en anders true.
+    private void initWithTiledMap() {
+        TiledLayer walkable = Simulator.getTiledmap().getWalkableLayer();
+        int tiledMapHeight = Simulator.getTiledmap().getHeight();
 
         for (int row = 0; row < totalHeight; row++) {
             ArrayList<PathfindingTile> columnList = new ArrayList<>();
             for (int column = 0; column < totalWidth; column++) {
-                columnList.add(new PathfindingTile(row, column, tileWidth, tileHeight, true)); //TODO Hiero
+                long gid = walkable.getData().get(row * tiledMapHeight + column);
+                if (gid != 0) {
+                    columnList.add(new PathfindingTile(row, column, tileWidth, tileHeight, true));
+                } else {
+                    columnList.add(new PathfindingTile(row, column, tileWidth, tileHeight, false));
+                }
             }
             this.pathfindingtiles.add(columnList);
         }

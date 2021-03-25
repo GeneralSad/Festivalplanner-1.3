@@ -1,6 +1,7 @@
 package GUI;
 
 import Data.*;
+import Simulator.Maploading.TiledMap;
 import Simulator.Simulator;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -77,6 +78,15 @@ public class GUI extends Application
 
 
         Button reloadSchedule = new Button("Herladen");
+        reloadSchedule.setOnAction(event -> {
+            Schedule loaded = DataStorage.loadSchedule(filePath);
+            if (loaded != null) {
+                System.out.println("Setting new schedule");
+                this.schedule.setScheduleTo(loaded);
+            } else {
+                System.out.println("Loaded was null");
+            }
+        });
 
         bottomHBox.getChildren().add(saveScheduleButton);
         bottomHBox.getChildren().add(reloadSchedule);
@@ -107,7 +117,7 @@ public class GUI extends Application
 
 
         HBox speedSettingsBox = new HBox();
-        Button speedUpButton = new Button("Vernsel");
+        Button speedUpButton = new Button("Versnel");
         speedUpButton.setOnAction(event ->
         {
             int speedfactor = simulator.getSpeedfactor();
@@ -123,6 +133,9 @@ public class GUI extends Application
             simulator.setSpeedfactor(speedfactor - 10);
             updateLabel();
         });
+
+        // update the label so text is displayed at startup
+        speedFactorLabel.setText("De simulatie speelt op normale snelheid");
 
         vBox.getChildren().addAll(speedFactorLabel, speedSettingsBox);
         speedFactorLabel.setFont(new Font("Arial", 16));
@@ -156,12 +169,12 @@ public class GUI extends Application
 
                 graphicsContext.setImageSmoothing(false);
                 FXGraphics2D fxGraphics2D = new FXGraphics2D(graphicsContext);
-                //fxGraphics2D.setBackground(Color.GRAY);
+                fxGraphics2D.setBackground(Color.GRAY);
 
                 fxGraphics2D.clearRect(0, 0, (int) canvas.getWidth(), (int) canvas.getHeight());
 
                 simulator.draw(fxGraphics2D);
-                long deltatime = now - last;
+                long deltatime = (now - last);
                 simulator.update(deltatime);
 
                 timeLabel.setText(simulator.getFormattedTime());
@@ -181,44 +194,45 @@ public class GUI extends Application
         this.schedule = DataStorage.loadSchedule(this.filePath);
         if (this.schedule == null)
         {
-            System.out.println("Couldn't load a schedule");
-            ArrayList<Teacher> teachers = new ArrayList<>();
-            teachers.add(new Teacher("Etiënne", 30, "Hardware"));
-            teachers.add(new Teacher("Johan", 36, "Graphics"));
-            teachers.add(new Teacher("Maurice", -1, "Programmeren"));
-            ArrayList<Group> groups = new ArrayList<>();
-            Group c1 = new Group("C1");
-            groups.add(c1);
-            groups.add(new Group("C2"));
-            groups.add(new Group("C3"));
-            groups.add(new Group("C4"));
-
-
-            ArrayList<Classroom> classrooms = new ArrayList<>();
-            classrooms.add(new Classroom(1, new Point2D.Double(550, 550)));
-            classrooms.add(new Classroom(2, new Point2D.Double(1000, 550)));
-            classrooms.add(new Classroom(3, new Point2D.Double(500, 820)));
-            classrooms.add(new Classroom(4, new Point2D.Double(600, 820)));
-            classrooms.add(new Classroom(5, new Point2D.Double(950, 820)));
-            classrooms.add(new Classroom(6, new Point2D.Double(1050, 820)));
-            classrooms.add(new Classroom(7, new Point2D.Double(500, 1120)));
-            classrooms.add(new Classroom(8, new Point2D.Double(600, 1120)));
-            ArrayList<Lesson> lessons = new ArrayList<>();
-            lessons.add(new Lesson(LocalTime.of(15, 30), LocalTime.of(16, 30), teachers.get(0), classrooms.get(0), groups));
-            lessons.add(new Lesson(LocalTime.of(9, 0), LocalTime.of(10, 0), teachers.get(1), classrooms.get(1), groups.get(1)));
-            lessons.add(new Lesson(LocalTime.of(10, 0), LocalTime.of(11, 0), teachers.get(2), classrooms.get(2), groups.get(0)));
-            lessons.add(new Lesson(LocalTime.of(9, 0), LocalTime.of(11, 0), teachers.get(0), classrooms.get(3), groups.get(3)));
-            lessons.add(new Lesson(LocalTime.of(12, 30), LocalTime.of(13, 30), teachers.get(1), classrooms.get(4), groups.get(2)));
-            lessons.add(new Lesson(LocalTime.of(13, 30), LocalTime.of(14, 30), teachers.get(2), classrooms.get(3), groups.get(0)));
-            lessons.add(new Lesson(LocalTime.of(16, 30), LocalTime.of(17, 30), teachers.get(0), classrooms.get(2), groups));
-            lessons.add(new Lesson(LocalTime.of(11, 0), LocalTime.of(12, 0), teachers.get(0), classrooms.get(7), groups));
-
-            for (Group group : groups)
-            {
-                group.addStudent(new Student(group.getGroupName() + "test", 12, group));
-            }
-
-            this.schedule = new Schedule(lessons, teachers, groups, classrooms);
+            // Manual schedule loading:
+//            System.out.println("Couldn't load a schedule");
+//            ArrayList<Teacher> teachers = new ArrayList<>();
+//            teachers.add(new Teacher("Etiënne", 30, "Hardware"));
+//            teachers.add(new Teacher("Johan", 36, "Graphics"));
+//            teachers.add(new Teacher("Maurice", -1, "Programmeren"));
+//            ArrayList<Group> groups = new ArrayList<>();
+//            Group c1 = new Group("C1");
+//            groups.add(c1);
+//            groups.add(new Group("C2"));
+//            groups.add(new Group("C3"));
+//            groups.add(new Group("C4"));
+//
+//
+//            ArrayList<Classroom> classrooms = new ArrayList<>();
+//            classrooms.add(new Classroom(1, new ClassroomEntryPoint(550, 550)));
+//            classrooms.add(new Classroom(2, new ClassroomEntryPoint(1000, 550)));
+//            classrooms.add(new Classroom(3, new ClassroomEntryPoint(500, 820)));
+//            classrooms.add(new Classroom(4, new ClassroomEntryPoint(600, 820)));
+//            classrooms.add(new Classroom(5, new ClassroomEntryPoint(950, 820)));
+//            classrooms.add(new Classroom(6, new ClassroomEntryPoint(1050, 820)));
+//            classrooms.add(new Classroom(7, new ClassroomEntryPoint(500, 1120)));
+//            classrooms.add(new Classroom(8, new ClassroomEntryPoint(600, 1120)));
+//            ArrayList<Lesson> lessons = new ArrayList<>();
+//            lessons.add(new Lesson(LocalTime.of(15, 30), LocalTime.of(16, 30), teachers.get(0), classrooms.get(0), groups));
+//            lessons.add(new Lesson(LocalTime.of(9, 0), LocalTime.of(10, 0), teachers.get(1), classrooms.get(1), groups.get(1)));
+//            lessons.add(new Lesson(LocalTime.of(10, 0), LocalTime.of(11, 0), teachers.get(2), classrooms.get(2), groups.get(0)));
+//            lessons.add(new Lesson(LocalTime.of(9, 0), LocalTime.of(11, 0), teachers.get(0), classrooms.get(3), groups.get(3)));
+//            lessons.add(new Lesson(LocalTime.of(12, 30), LocalTime.of(13, 30), teachers.get(1), classrooms.get(4), groups.get(2)));
+//            lessons.add(new Lesson(LocalTime.of(13, 30), LocalTime.of(14, 30), teachers.get(2), classrooms.get(3), groups.get(0)));
+//            lessons.add(new Lesson(LocalTime.of(16, 30), LocalTime.of(17, 30), teachers.get(0), classrooms.get(2), groups));
+//            lessons.add(new Lesson(LocalTime.of(11, 0), LocalTime.of(12, 0), teachers.get(0), classrooms.get(7), groups));
+//
+//            for (Group group : groups)
+//            {
+//                group.addStudent(new Student(group.getGroupName() + "test", 12, group));
+//            }
+//
+//            this.schedule = new Schedule(lessons, teachers, groups, classrooms);
 
 
         }
@@ -233,7 +247,7 @@ public class GUI extends Application
         int speedfactor = simulator.getSpeedfactor();
         if (speedfactor == 0)
         {
-            speedFactorLabel.setText("De simulatie word niet vernseld");
+            speedFactorLabel.setText("De simulatie speelt op normale snelheid");
         }
         else
         {
@@ -308,7 +322,7 @@ public class GUI extends Application
 
     public static TiledMap getTiledmap()
     {
-        return tiledmap;
+        return Simulator.getTiledmap();
     }
 
     public static TiledMap getWalkablemap()
