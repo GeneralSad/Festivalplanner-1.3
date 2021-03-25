@@ -1,12 +1,16 @@
 package Simulator.Pathfinding;
 
+import Simulator.Maploading.TiledLayer;
 import Simulator.Maploading.TiledMap;
 import Simulator.NPC.NPC;
+import Simulator.Simulator;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.jfree.fx.FXGraphics2D;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Set;
 
 public class Pathfinding
 {
@@ -24,7 +28,13 @@ public class Pathfinding
 
     public Pathfinding(TiledMap tiledMapBase)
     {
-        this(tiledMapBase.getTileWidth(), tiledMapBase.getTileHeight(), tiledMapBase.getWidth(), tiledMapBase.getHeight());
+        this.npcs = new ArrayList<>();
+        this.pathfindingtiles = new ArrayList<>();
+        this.tileWidth = tiledMapBase.getTileWidth();
+        this.tileHeight = tiledMapBase.getTileHeight();
+        this.totalWidth = tiledMapBase.getWidth();
+        this.totalHeight = tiledMapBase.getHeight();
+        initWithTiledMap();
     }
 
     public Pathfinding(int tileWidth, int tileHeight, int totalWidth, int totalHeight)
@@ -58,6 +68,24 @@ public class Pathfinding
             ArrayList<PathfindingTile> columnList = new ArrayList<>();
             for (int column = 0; column < totalWidth; column++) {
                 columnList.add(new PathfindingTile(row, column, tileWidth, tileHeight, true));
+            }
+            this.pathfindingtiles.add(columnList);
+        }
+    }
+
+    private void initWithTiledMap() {
+        TiledLayer walkable = Simulator.getTiledmap().getWalkableLayer();
+        int tiledMapHeight = Simulator.getTiledmap().getHeight();
+
+        for (int row = 0; row < totalHeight; row++) {
+            ArrayList<PathfindingTile> columnList = new ArrayList<>();
+            for (int column = 0; column < totalWidth; column++) {
+                long gid = walkable.getData().get(row * tiledMapHeight + column);
+                if (gid != 0) {
+                    columnList.add(new PathfindingTile(row, column, tileWidth, tileHeight, true));
+                } else {
+                    columnList.add(new PathfindingTile(row, column, tileWidth, tileHeight, false));
+                }
             }
             this.pathfindingtiles.add(columnList);
         }
@@ -99,7 +127,7 @@ public class Pathfinding
 
         HashSet<PathfindingTile> tilesAlreadyChecked = new HashSet<>();
 
-        // Keep on checking untill there are no new tiles to check
+        // Keep on checking until there are no new tiles to check
         while (!tilesToCheck.isEmpty()) {
             HashSet<PathfindingTile> newTilesToCheck = new HashSet<>();
             for (PathfindingTile origin : tilesToCheck) {

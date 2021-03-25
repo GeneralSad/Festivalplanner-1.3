@@ -18,12 +18,19 @@ public class ReverseTime implements TimeType
     @Override
     public LocalTime getTime()
     {
-        return time;
+        return timeType.getTime();
     }
 
     @Override
     public void update(Long deltatime)
     {
-        time = time.plusNanos(deltatime * -1);
+        timeType.update(deltatime);
     }
+
+    @Override
+    public int getSpeedFactor()
+    {
+        return timeType.getSpeedFactor();
+    }
+
 }

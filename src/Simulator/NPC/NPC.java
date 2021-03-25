@@ -1,8 +1,6 @@
 package Simulator.NPC;
 
 import Data.Person;
-import Simulator.LocationSystem.Seat;
-import Simulator.Maploading.TiledMap;
 import Simulator.Pathfinding.Direction;
 import Simulator.Pathfinding.Pathfinding;
 import Simulator.Pathfinding.PathfindingTile;
@@ -13,6 +11,8 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
+
+//TODO make collision better so npcs don't get stuck when moving in opposite directions
 
 public class NPC
 {
@@ -40,7 +40,7 @@ public class NPC
 
     //TODO Temporary for testing class behavior.
     private static double yCompontent = 575;
-    private static double xComponent = 1300;
+    private static double xComponent = 1280;
 
 
     public NPC(Person person, double x, double y, int width, int height, int rotation, int speed, int rotationSpeed, String npcAppearance)
@@ -70,13 +70,18 @@ public class NPC
         this(person, xComponent(), yComponent(), 8, 16, randomSprite());
     }
 
+    public NPC(Person person, int x, int y)
+    {
+        this(person, x, y, 8, 8, randomSprite());
+    }
+
     /**
      * Main update method
      *
      * @param deltaTime
      * @param npcs
      */
-    public void update(double deltaTime, ArrayList<NPC> npcs)
+    private void update(double deltaTime, ArrayList<NPC> npcs, boolean allowPushForwardCollision)
     {
         // Only move and update if not at the destination
         // if at the destination the npc shouldn't do anything regarding movement
@@ -87,15 +92,11 @@ public class NPC
             {
                 pathfindingUpdate(deltaTime);
             } else {
-                rotationUpdate(deltaTime);
+                rotationAndMovementUpdate(deltaTime);
             }
 
             // NPC collision
-            if (collisionUpdate(npcs))
-            {
-                // if a collision would occur, reverse the previous made movement
-                rotationUpdate(-deltaTime);
-            }
+            collisionUpdate(npcs, deltaTime);
 
             // Destination check
             destinationUpdate();
@@ -105,6 +106,10 @@ public class NPC
             this.appearance.directionUpdater(rotation);
             this.appearance.calculateUpdater(rotation);
         }
+    }
+
+    public void update(double deltaTime, ArrayList<NPC> npcs) {
+        update(deltaTime, npcs, true);
     }
 
     /**
@@ -121,14 +126,19 @@ public class NPC
 
     /**
      * Check collision with other npcs
-     *
+     * Pushes forward an npc which is collided with if the allowPushBack parameter is true
      * @param npcs
      */
-    private boolean collisionUpdate(ArrayList<NPC> npcs)
+    private void collisionUpdate(ArrayList<NPC> npcs, double deltaTime)
     {
-        Rectangle2D thisNpcHitBox = new Rectangle2D.Double(this.x, this.y, this.width, this.height);
+        Rectangle2D hardCollisionBox = new Rectangle2D.Double(this.x, this.y, this.width, this.height);
+        if (collisionCheck(npcs, hardCollisionBox)) {
+            // Completely reset the made movement
+            movementUpdate(-deltaTime);
+        }
+    }
 
-        // check for all other npcs if this npc would collide
+    private boolean collisionCheck(ArrayList<NPC> npcs, Rectangle2D hitbox) {
         for (NPC npc : npcs)
         {
             if (npc != this)
@@ -136,7 +146,7 @@ public class NPC
                 // find the other npc hitbox
                 Rectangle2D npcHitBox = new Rectangle2D.Double(npc.x, npc.y, npc.width, npc.height);
 
-                if (thisNpcHitBox.intersects(npcHitBox))
+                if (hitbox.intersects(npcHitBox))
                 {
                     return true;
                 }
@@ -151,7 +161,7 @@ public class NPC
      *
      * @param deltaTime
      */
-    public void rotationUpdate(double deltaTime)
+    private void movementUpdate(double deltaTime)
     {
         // only move if the rotation matches the target rotation
         if (rotation == targetRotation || rotation == targetRotation + Math.PI * 2)
@@ -177,14 +187,31 @@ public class NPC
             x += xDiff;
             y -= yDiff;
         }
-        else
+    }
+
+    /**
+     * Update both rotation and movement
+     * Seperated because collision should revert movement, but not rotation
+     * @param deltaTime
+     */
+    private void rotationAndMovementUpdate(double deltaTime) {
+        rotationUpdate(deltaTime);
+        movementUpdate(deltaTime);
+    }
+
+    /**
+     * Update purely rotation
+     * @param deltaTime
+     */
+    private void rotationUpdate(double deltaTime) {
+        if (!(rotation == targetRotation || rotation == targetRotation + Math.PI * 2))
         {
             double rotationModifier = 0.05;
 
             // slowly rotate
             double oldRotation = rotation;
             rotation += rotationModifier * deltaTime * rotationSpeed * rotationDirection;
-           // System.out.println("Oldrotation: " + oldRotation + " new rotation: " + rotation + " target rotation: " + targetRotation);
+            //System.out.println("Oldrotation: " + oldRotation + " new rotation: " + rotation + " target rotation: " + targetRotation);
 
             if (rotation > Math.PI * 2)
             {
@@ -192,12 +219,11 @@ public class NPC
             }
 
             double epsilon = 0.1;
-            if ((rotation + epsilon >= targetRotation && rotation - epsilon <= targetRotation) ||
-            rotation + Math.PI * 2 + epsilon >= targetRotation && rotation + Math.PI * 2 - epsilon <= targetRotation)
+            if ((rotation + epsilon >= targetRotation && rotation - epsilon <= targetRotation) || rotation + Math.PI * 2 + epsilon >= targetRotation && rotation + Math.PI * 2 - epsilon <= targetRotation)
             {
                 // if the rotation is within a small margin of the target rotation just set the rotation to equal the targetrotation
                 // Otherwise it won't ever exactly become the same with modifying it with deltaTime
-               // System.out.println("Setting rotation to equal target rotation with rotation: " + rotation + " and targetrotation: " + targetRotation);
+                //System.out.println("Setting rotation to equal target rotation with rotation: " + rotation + " and targetrotation: " + targetRotation);
                 rotation = targetRotation;
             }
         }
@@ -308,7 +334,7 @@ public class NPC
         {
             if (newTile == this.currentTile) {
                 // if still on the same time only move
-                rotationUpdate(deltaTime);
+                rotationAndMovementUpdate(deltaTime);
             }
             else if (newTile == currentPathfinding.getDestinationTile())
             {
@@ -343,7 +369,7 @@ public class NPC
                 // update rotation,
                 // rotate if not at the target rotation,
                 // move forward in the rotation direction if at the proper target rotation
-                rotationUpdate(deltaTime);
+                rotationAndMovementUpdate(deltaTime);
             }
         }
     }
@@ -370,7 +396,7 @@ public class NPC
 
     //TODO temprotray for testing
     public static int yComponent(){
-        yCompontent +=25;
+        yCompontent +=16;
         if (yCompontent > 650){
             yCompontent = 575;
         }
@@ -379,9 +405,9 @@ public class NPC
 
     //TODO temprotray for testing
     public static int xComponent(){
-        xComponent += 25;
-        if (xComponent > 1400){
-            xComponent = 1300;
+        xComponent += 16;
+        if (xComponent > 1500) {
+            xComponent = 1280;
         }
         return (int)xComponent;
     }
@@ -409,20 +435,21 @@ public class NPC
         // so as to not have to calculate with negative numbers, add a full circle to both the current and target rotation
         double currentRotation = rotation + Math.PI * 2;
         double easierAngle = angle + Math.PI * 2;
-       // System.out.println("setting rotation to: " + angle + " with current rotation at: " + rotation);
+        //System.out.println("setting rotation to: " + angle + " with current rotation at: " + rotation);
 
         // if the angle falls into the 180 degrees lower than the currentrotation, or if the angle falls outside of the 180 degrees higher than the currentrotation then rotate to the left
         // otherwise rotate to the right
         if ((easierAngle <= currentRotation && easierAngle > currentRotation - Math.PI) || (easierAngle >= currentRotation + Math.PI))
         {
-         //   System.out.println("Setting rotation direction to 1 with current: " + rotation + " and target: " + angle);
-           // System.out.println("ROTATING TO THE LEFT");
+            //System.out.println("Setting rotation direction to 1 with current: " + rotation + " and target: " + angle);
+            //System.out.println("ROTATING TO THE LEFT");
             rotationDirection = -1;
         }
         else
         {
-//            System.out.println("ROTATING TO THE RIGHT");
-  //          rotationDirection = 1;
+            //System.out.println("Setting rotation direction to -1 with current: " + rotation + " and target: " + angle);
+            //System.out.println("ROTATING TO THE RIGHT");
+            rotationDirection = 1;
         }
 
         targetRotation = angle;
