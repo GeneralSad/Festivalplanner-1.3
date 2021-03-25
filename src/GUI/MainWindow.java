@@ -53,8 +53,6 @@ public class MainWindow extends ResizableCanvas
         this.allStartingTimes = schedule.getAllStartingTimes();
         this.allEndingTimes = schedule.getAllEndingTimes();
 
-
-
         initialise();
     }
 
