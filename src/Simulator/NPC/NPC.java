@@ -1,5 +1,6 @@
 package Simulator.NPC;
 
+import Data.ClassroomEntryPoint;
 import Data.Person;
 import Simulator.Pathfinding.Direction;
 import Simulator.Pathfinding.Pathfinding;
@@ -252,8 +253,8 @@ public class NPC
         setNewDestination(x, y);
 
         // determine the rotation angle and set it as the target rotation
-        double xDiff = x - (this.x + width / 2);
-        double yDiff = (this.y + height / 2) - y;
+        double xDiff = x - (this.x + width / 2.0);
+        double yDiff = (this.y + height / 2.0) - y;
         double angle = Math.atan2(yDiff, xDiff);
 
         if (angle < 0)
@@ -458,5 +459,28 @@ public class NPC
     public Pathfinding getCurrentPathfinding()
     {
         return currentPathfinding;
+    }
+
+
+    public void setDestination(ClassroomEntryPoint classroomEntryPoint)
+    {
+        this.currentPathfinding.setDestination((int) classroomEntryPoint.x, (int) classroomEntryPoint.y);
+    }
+
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (obj instanceof NPC)
+        {
+            NPC otherNPC = (NPC) obj;
+            return this.person.equals(otherNPC.person);
+
+        }
+        else
+        {
+            return false;
+        }
+
     }
 }

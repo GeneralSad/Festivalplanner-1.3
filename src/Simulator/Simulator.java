@@ -19,7 +19,6 @@ import java.awt.geom.Point2D;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Map;
 
 //TODO making time go backward can be done by saving npc data every ~15 min and allowing to go backwards to the saved points
 
@@ -41,7 +40,7 @@ public class Simulator
     private int maxSpeedFactor = 100;
 
     private ArrayList<NPC> npcOnScreen = new ArrayList<>();
-    private ArrayList<Student> studentsOnScreen = new ArrayList<>();
+    // private ArrayList<Student> studentsOnScreen = new ArrayList<>();
     private ArrayList<Lesson> lessonsPassed = new ArrayList<>();
 
 
@@ -77,28 +76,31 @@ public class Simulator
             {
                 if (!lessonsPassed.contains(lesson))
                 {
-                    for (int i = 0; i < lesson.getGroups().size(); i++)
+                    ArrayList<Group> groups = lesson.getGroups();
+                    for (Group group : groups)
                     {
-                        for (int j = 0; j < lesson.getGroups().get(i).getStudents().size(); j++)
+                        ArrayList<Student> students = group.getStudents();
+                        for (Student student : students)
                         {
-                            Student s = lesson.getGroups().get(i).getStudents().get(j);
-                            if (studentsOnScreen.contains(s))
+                            if (npcOnScreen.contains(new NPC(student)))
                             {
-
-                                System.out.println(s.getName() + ": Student word van huidige locatie naar nieuwe les verplaatst");
-                                for (int k = 0; k < npcOnScreen.size(); k++)
+                                System.out.println(student.getName() + ": Student word van huidige locatie naar nieuwe les verplaatst");
+                                for (NPC npc : npcOnScreen)
                                 {
-                                    if (npcOnScreen.get(i).getPerson().equals(s))
+                                    if (npc.getPerson().equals(student))
                                     {
-                                        npcOnScreen.get(i).resetDestination();
-                                        npcOnScreen.get(i).getCurrentPathfinding().setDestination((int) lesson.getClassroom().getEntry().getX(), (int) lesson.getClassroom().getEntry().getY());
+                                        npc.resetDestination();
+
+                                        npc.setDestination(lesson.getClassroom().getEntry());
+
+                                        //npc.getCurrentPathfinding().setDestination((int) lesson.getClassroom().getEntry().getX(), (int) lesson.getClassroom().getEntry().getY());
                                     }
                                 }
                             }
                             else
                             {
-                                System.out.println(s.getName() + ": de student komt de school binnen en gaat naar zijn les");
-                                NPC npc = new NPC(s);
+                                System.out.println(student.getName() + ": de student komt de school binnen en gaat naar zijn les");
+                                NPC npc = new NPC(student);
                                 Pathfinding pathfinding = new Pathfinding(tiledmap/*GUI.getWalkablemap()*/);
                                 npc.setPathfinding(pathfinding);
                                 pathfinding.addNpc(npc);
@@ -109,7 +111,6 @@ public class Simulator
                                     pathfinding.setDestination((int) lesson.getClassroom().getEntry().getX(), (int) lesson.getClassroom().getEntry().getY());
                                 }
                                 npcManager.addNPC(npc);
-                                studentsOnScreen.add(s);
                             }
 
                         }
@@ -119,7 +120,6 @@ public class Simulator
 
                 }
 
-
                 lessonsPassed.add(lesson);
 
 
@@ -127,67 +127,62 @@ public class Simulator
         }
 
 
+        //
+        //            for (Lesson lesson : lessons)
+        //            {
+        //                for (Group group : lesson.getGroups())
+        //                {
+        //                    studentsWithLesson.addAll(group.getStudents());
+        //                }
+        //            }
+        //
+        //            for (Student student : studentsWithLesson)
+        //            {
+        //                if (studentsOnScreen.contains(student))
+        //                {
+        //                    System.out.println(student.getName() + ": Student word van huidige locatie naar nieuwe les verplaatst");
+        //                    for (int i = 0; i < npcOnScreen.size(); i++)
+        //                    {
+        //                        if (npcOnScreen.get(i).getPerson().equals(student)){
+        //                            npcOnScreen.get(i).resetDestination();
+        //                            npcOnScreen.get(i).getCurrentPathfinding().setDestination((int)student.getGroup().getClassroom().getEntry().getX(), (int)student.getGroup().getClassroom().getEntry().getY());
+        //                        }
+        //
+        //                    }
+        //                }
+        //                else
+        //                {
+        //                    System.out.println(student.getName() + ": de student komt de school binnen en gaat naar zijn les");
+        //                    NPC npc = new NPC(student);
+        //                    Pathfinding pathfinding = new Pathfinding(tiledmap/*GUI.getWalkablemap()*/);
+        //                    npc.setPathfinding(pathfinding);
+        //                    pathfinding.addNpc(npc);
+        //
+        //                    npcOnScreen.add(npc);
+        //
+        //                    if (pathfinding.getExactDestination() == null)
+        //                    {
+        //                        pathfinding.setDestination((int) student.getGroup().getClassroom().getEntry().getX(), (int) student.getGroup().getClassroom().getEntry().getY());
+        //                    }
+        //
+        //                    npcManager.addNPC(npc);
+        //                    studentsOnScreen.add(student);
+        //                }
+        //            }
 
 
-
-
-
-//
-//            for (Lesson lesson : lessons)
-//            {
-//                for (Group group : lesson.getGroups())
-//                {
-//                    studentsWithLesson.addAll(group.getStudents());
-//                }
-//            }
-//
-//            for (Student student : studentsWithLesson)
-//            {
-//                if (studentsOnScreen.contains(student))
-//                {
-//                    System.out.println(student.getName() + ": Student word van huidige locatie naar nieuwe les verplaatst");
-//                    for (int i = 0; i < npcOnScreen.size(); i++)
-//                    {
-//                        if (npcOnScreen.get(i).getPerson().equals(student)){
-//                            npcOnScreen.get(i).resetDestination();
-//                            npcOnScreen.get(i).getCurrentPathfinding().setDestination((int)student.getGroup().getClassroom().getEntry().getX(), (int)student.getGroup().getClassroom().getEntry().getY());
-//                        }
-//
-//                    }
-//                }
-//                else
-//                {
-//                    System.out.println(student.getName() + ": de student komt de school binnen en gaat naar zijn les");
-//                    NPC npc = new NPC(student);
-//                    Pathfinding pathfinding = new Pathfinding(tiledmap/*GUI.getWalkablemap()*/);
-//                    npc.setPathfinding(pathfinding);
-//                    pathfinding.addNpc(npc);
-//
-//                    npcOnScreen.add(npc);
-//
-//                    if (pathfinding.getExactDestination() == null)
-//                    {
-//                        pathfinding.setDestination((int) student.getGroup().getClassroom().getEntry().getX(), (int) student.getGroup().getClassroom().getEntry().getY());
-//                    }
-//
-//                    npcManager.addNPC(npc);
-//                    studentsOnScreen.add(student);
-//                }
-//            }
-
-
-//            ArrayList<Student> studentsOnScreenPlaceHolder = new ArrayList<>(studentsOnScreen);
-//            for (Student student : studentsOnScreenPlaceHolder)
-//            {
-//                if (!studentsWithLesson.contains(student))
-//                {
-//                    System.out.println(student.getName() + ": wordt verwijderd");
-//                    studentsOnScreen.remove(student);
-//                }
-//            }
-//
-//
-//        }
+        //            ArrayList<Student> studentsOnScreenPlaceHolder = new ArrayList<>(studentsOnScreen);
+        //            for (Student student : studentsOnScreenPlaceHolder)
+        //            {
+        //                if (!studentsWithLesson.contains(student))
+        //                {
+        //                    System.out.println(student.getName() + ": wordt verwijderd");
+        //                    studentsOnScreen.remove(student);
+        //                }
+        //            }
+        //
+        //
+        //        }
 
         //TODO De for loop hieronder is misschien niet goed
         //TODO Check
@@ -214,11 +209,11 @@ public class Simulator
 
         fxGraphics2D.setColor(Color.BLACK);
 
-        if (false)
+        if (true)
         {
-            for (int j = 0; j < npcOnScreen.size(); j++)
+            for (NPC npc : npcOnScreen)
             {
-                Point2D test = npcOnScreen.get(j).getCurrentPathfinding().getDestinationTile().getMiddlePoint();
+                Point2D test = npc.getCurrentPathfinding().getDestinationTile().getMiddlePoint();
                 fxGraphics2D.fill(new Rectangle.Double(test.getX() - 5, test.getY() - 5, 10, 10));
             }
         }

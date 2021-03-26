@@ -4,12 +4,12 @@ import java.io.Serializable;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Auteurs: Leon
- *
+ * <p>
  * Deze code zorgt ervoor dat een les aangemaakt kan worden en de nodige functies heeft die later nodig zijn
- *
  */
 
 public class Lesson implements Serializable
@@ -145,7 +145,28 @@ public class Lesson implements Serializable
         return commaString;
     }
 
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass())
+        {
+            return false;
+        }
+        Lesson lesson = (Lesson) o;
+        return Objects.equals(beginTime, lesson.beginTime) && Objects.equals(endTime, lesson.endTime) && Objects.equals(teacher, lesson.teacher) && Objects.equals(classroom, lesson.classroom) && Objects.equals(groups, lesson.groups);
+    }
 
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(beginTime, endTime, teacher, classroom, groups);
+    }
+
+    @Override
     public Lesson clone()
     {
         return new Lesson(this.beginTime, this.endTime, this.teacher, this.classroom, this.groups);
