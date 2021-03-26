@@ -9,6 +9,7 @@ import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+//TODO load sprites at the start and give npc a pointer to the image, instead of giving each npc a new image
 public class NPCSprites
 {
     //sprites loading
@@ -97,25 +98,25 @@ public class NPCSprites
             if (sitting){
                 if (sittingRotation == 0 || sittingRotation== 12){
                     if (sittingRotation == 0){
-                        graphics2D.drawImage(getSitting()[frame], (int) x+6, (int)y-14, null);
+                        graphics2D.drawImage(getSitting()[frame], (int) x-4, (int)y-14, null);
                     } else {
-                        graphics2D.drawImage(getSitting()[frame + 5], (int) x+6, (int)y-14, null);
+                        graphics2D.drawImage(getSitting()[frame + 5], (int) x+2, (int)y-14, null);
                     }
 
                 } else {
-                    graphics2D.drawImage(getStanding()[sittingRotation +dir], (int) x-8, (int)y-16, null);
+                    graphics2D.drawImage(getStanding()[sittingRotation], (int) x-8, (int)y-12, null);
                 }
 
             } else if (onPhone){
                 if (dir == 18)
-                graphics2D.drawImage(getPhonening()[frame], (int) x-8, (int)y -16, null);
+                graphics2D.drawImage(getPhonening()[frame], (int) x-4, (int)y -12, null);
             } else
             {
-                graphics2D.drawImage(getStanding()[frame + dir], (int) x-8, (int)y -16, null);
+                graphics2D.drawImage(getStanding()[frame + dir], (int) x-4, (int)y -12, null);
             }
 
         } else {
-            graphics2D.drawImage(getRunning()[frame + dir], (int) x-8, (int)y -16, null);
+            graphics2D.drawImage(getRunning()[frame + dir], (int) x-4, (int)y -12, null);
 
             if (dir == 18 && frame == 4)
             {

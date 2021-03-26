@@ -17,11 +17,9 @@ public class Seat
         this.student = student;
     }
 
-    public boolean isEmpte(){
-        if (student == null){
-            return true;
-        }
-        return false;
+    public boolean isEmpty()
+    {
+        return student == null;
     }
 
     public Point2D getSeat()

@@ -1,6 +1,9 @@
 package Data;
 
+import java.awt.geom.Point2D;
 import java.io.Serializable;
+
+//TODO change name of classroom
 
 /**
  * Auteurs: Leon
@@ -12,6 +15,8 @@ import java.io.Serializable;
 
 public class Classroom implements Serializable
 {
+    private ClassroomEntryPoint entry;
+
     @Override
     public String toString()
     {
@@ -20,9 +25,10 @@ public class Classroom implements Serializable
 
     private int classroom;
 
-    public Classroom(int classroom)
+    public Classroom(int classroom, ClassroomEntryPoint entry)
     {
         this.classroom = classroom;
+        this.entry = entry;
     }
 
     public int getClassroom()
@@ -33,6 +39,11 @@ public class Classroom implements Serializable
     public void setClassroom(int classroom)
     {
         this.classroom = classroom;
+    }
+
+    public ClassroomEntryPoint getEntry()
+    {
+        return entry;
     }
 
     // All possible classrooms to choose from

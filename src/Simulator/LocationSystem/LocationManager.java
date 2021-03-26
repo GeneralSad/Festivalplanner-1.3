@@ -1,25 +1,36 @@
 package Simulator.LocationSystem;
 
-import Data.Schedule;
-import GUI.GUI;
 import Simulator.NPC.NPC;
+import Simulator.Pathfinding.Pathfinding;
 
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 public class LocationManager
 {
     private LocationDatabase locations = new LocationDatabase();
-    private ArrayList<ClassRoom> classRooms;
-    private Auditorium auditorium;
+    private ArrayList<ClassRoomBehavior> classRoomBehaviors;
+    private AuditoriumBehavior auditorium;
 
     public LocationManager()
     {
-        classRooms = locations.ClassRoomStudentData();
+        classRoomBehaviors = locations.ClassRoomStudentData();
+
     }
 
-    public void scriptedLesson(NPC student){
+    public boolean scriptedStartedLesson(NPC student, Pathfinding pathfinding){
 
-        classRooms.get(0).ScriptedStudentStart(student);
+        if (student.isAtDestination())
+        {
+            for (int i = 0; i < classRoomBehaviors.size(); i++)
+            {
+                if (student.getCurrentLocation().distance(classRoomBehaviors.get(i).getEntry()) < 30)
+                {
+                    classRoomBehaviors.get(i).ScriptedStudentStart(student);
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }

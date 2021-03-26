@@ -3,7 +3,6 @@ package Simulator.Maploading;
 import javax.imageio.ImageIO;
 import javax.json.JsonObject;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -15,13 +14,10 @@ public class TiledSet
     private int firstGID;
     private int lastGID;
     private String imagePath;
-    private BufferedImage image;
-//    private int imageHeight;
-//    private int imageWidth;
     private int tileCount;
     private int tileHeight;
     private int tileWidth;
-    private ArrayList<Tile> tiles;
+    private ArrayList<BufferedImage> tileImages;
 
     public TiledSet(JsonObject jsonObject) throws NullPointerException {
         this.columns = jsonObject.getInt("columns");
@@ -30,28 +26,25 @@ public class TiledSet
         this.tileWidth = jsonObject.getInt("tilewidth");
         this.firstGID = jsonObject.getInt("firstgid");
         this.lastGID = this.firstGID + this.tileCount;
-//        this.imageHeight = jsonObject.getInt("imageheight");
-//        this.imageWidth = jsonObject.getInt("imagewidth");
         this.imagePath = jsonObject.getString("image");
-        this.tiles = new ArrayList<>();
-        init(jsonObject);
+        this.tileImages = new ArrayList<>();
+        // initialise loading the images
+        init();
     }
 
     /**
-     * Slices all the tiles from the original image and stores them as Tile objects in a list
+     * Slices all the tileImages from the original image and stores them as Tile objects in a list
      */
-    private void init(JsonObject jsonObject) {
+    private void init() {
 
         try {
-            image = ImageIO.read(getClass().getResource("/TiledMaps/" + this.imagePath));
+            BufferedImage image = ImageIO.read(getClass().getResource("/TiledMaps/" + this.imagePath));
             for (int i = 0; i < this.tileCount; i++) {
-                tiles.add(new Tile(image.getSubimage(tileWidth * (i % columns),tileHeight * (i / columns), tileWidth, tileHeight)));
+                tileImages.add(image.getSubimage(tileWidth * (i % columns),tileHeight * (i / columns), tileWidth, tileHeight));
             }
         } catch (Exception e) {
             System.out.println(e);
         }
-
-
     }
 
     public int getFirstGID()
@@ -65,16 +58,20 @@ public class TiledSet
     }
 
     /**
-     * Return the tile associated with the gid by taking that gid as an index out of the tiles list
+     * Return the tile associated with the gid by taking that gid as an index out of the tileImages list
      * @param gid
      * @return
      */
-    public BufferedImage getTile(int gid) {
-        return this.tiles.get(gid).getTileImage();
+    public BufferedImage getTileImage(int gid) {
+        if (gid < tileImages.size()) {
+            return this.tileImages.get(gid);
+        }
+        return null;
     }
 
-    public Tile TileData(int gid){
-        return this.tiles.get(gid);
+    public String getImagePath()
+    {
+        return imagePath;
     }
 
 
