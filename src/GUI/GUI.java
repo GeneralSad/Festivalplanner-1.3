@@ -20,8 +20,6 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import org.jfree.fx.FXGraphics2D;
 
-import java.awt.*;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -41,7 +39,7 @@ public class GUI extends Application
     private String filePath = "src/Data/storedSchedule";
     private DataStorage dataStorage = new DataStorage();
     private Simulator simulator;
-    Label speedFactorLabel = new Label("");
+    private Label speedFactorLabel = new Label("");
 
 
     public static void main(String[] args)
@@ -306,14 +304,6 @@ public class GUI extends Application
 
     }
 
-    public static TiledMap getTiledmap()
-    {
-        return tiledmap;
-    }
 
-    public static TiledMap getWalkablemap()
-    {
-        return new TiledMap("/TiledMaps/MapFinal.json", true);
-    }
 
 }
