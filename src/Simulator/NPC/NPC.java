@@ -129,21 +129,8 @@ public class NPC
         }
     }
 
-    /**
-     * Check collision with other npcs
-     * Pushes forward an npc which is collided with if the allowPushBack parameter is true
-     * @param npcs
-     */
-    private void collisionUpdate(ArrayList<NPC> npcs, double deltaTime)
-    {
-        Rectangle2D hardCollisionBox = new Rectangle2D.Double(this.x, this.y, this.width, this.height);
-        if (collisionCheck(npcs, hardCollisionBox, deltaTime)) {
-            // Completely reset the made movement
-
-        }
-    }
-
-    private boolean collisionCheck(ArrayList<NPC> npcs, Rectangle2D hitbox, double deltaTime) {
+    private void collisionUpdate(ArrayList<NPC> npcs, double deltaTime) {
+        Rectangle2D hitbox = new Rectangle2D.Double(this.x, this.y, this.width, this.height);
         for (NPC npc : npcs)
         {
             // this npc and sitting npcs (at destination) should be ignored
@@ -166,12 +153,9 @@ public class NPC
                         npc.x = thisX;
                         npc.y = thisY;
                     }
-
-                    return true;
                 }
             }
         }
-        return false;
     }
 
     /**
