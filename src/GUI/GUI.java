@@ -320,7 +320,7 @@ public class GUI extends Application
             lastX = -10000;
             lastY = -10000;
 
-            System.out.println("X: " + event.getX() + "Y: " +  event.getY());
+            //System.out.println("X: " + event.getX() + "Y: " +  event.getY());
 
         });
 

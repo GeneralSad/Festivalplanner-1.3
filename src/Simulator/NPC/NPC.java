@@ -40,8 +40,8 @@ public class NPC
     private boolean onTargetTile;
 
     //TODO Temporary for testing class behavior.
-    private static double yCompontent = 575;
-    private static double xComponent = 1280;
+    private static double yComponent = 450;
+    private static double xComponent = 1300;
 
 
     public NPC(Person person, double x, double y, int width, int height, Point2D destination, double rotation, int rotationDirection, PathfindingTile currentTile, int speed, double targetRotation, int rotationSpeed, boolean atDestination, NPCSprites appearance, Pathfinding currentPathfinding, boolean onTargetTile)
@@ -100,6 +100,7 @@ public class NPC
     {
         //Math.floor(Math.random() * (max - min + 1)) + min;
         this(person, xComponent(), yComponent(), 8, 16, randomSprite());
+        generateComponents();
     }
 
     public NPC(Person person, int x, int y)
@@ -426,21 +427,26 @@ public class NPC
     }
 
 
-    //TODO temprotray for testing
-    public static int yComponent(){
-        yCompontent +=16;
-        if (yCompontent > 650){
-            yCompontent = 575;
+    public void generateComponents() {
+
+        xComponent += 16;
+        if (xComponent > 1575) {
+            xComponent = 1310;
+            yComponent += 16;
         }
-        return (int)yCompontent;
+
     }
 
-    //TODO temprotray for testing
-    public static int xComponent(){
-        xComponent += 16;
-        if (xComponent > 1500) {
-            xComponent = 1280;
+    //TODO temporary for testing
+    public static int yComponent(){
+        if (yComponent > 750){
+            yComponent = 450;
         }
+        return (int)yComponent;
+    }
+
+    //TODO temporary for testing
+    public static int xComponent(){
         return (int)xComponent;
     }
 
