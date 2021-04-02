@@ -215,8 +215,8 @@ public class GUI extends Application
             classrooms.add(new Classroom(4, new ClassroomEntryPoint(600, 820)));
             classrooms.add(new Classroom(5, new ClassroomEntryPoint(950, 820)));
             classrooms.add(new Classroom(6, new ClassroomEntryPoint(1050, 820)));
-            classrooms.add(new Classroom(7, new ClassroomEntryPoint(500, 1120)));
-            classrooms.add(new Classroom(8, new ClassroomEntryPoint(600, 1120)));
+            classrooms.add(new Classroom(7, new ClassroomEntryPoint(500, 1110)));
+            classrooms.add(new Classroom(8, new ClassroomEntryPoint(600, 1110)));
             ArrayList<Lesson> lessons = new ArrayList<>();
             lessons.add(new Lesson(LocalTime.of(15, 30), LocalTime.of(16, 30), teachers.get(0), classrooms.get(0), groups));
             lessons.add(new Lesson(LocalTime.of(9, 0), LocalTime.of(10, 0), teachers.get(1), classrooms.get(1), groups.get(1)));

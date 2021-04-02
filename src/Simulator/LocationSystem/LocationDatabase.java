@@ -118,13 +118,13 @@ public class LocationDatabase
         //room7
         seats = collectSeats(62, 21);
         classRoomBehaviors.add(new ClassRoomBehavior(seats
-                , seats.get(0), new Point2D.Double(500, 1120)));
+                , seats.get(0), new Point2D.Double(500, 1110)));
 
 
         //room8
         seats = collectSeats(62, 38);
         classRoomBehaviors.add(new ClassRoomBehavior(seats
-                , seats.get(0), new Point2D.Double(600, 1120)));
+                , seats.get(0), new Point2D.Double(600, 1110)));
 
 
         return classRoomBehaviors;
