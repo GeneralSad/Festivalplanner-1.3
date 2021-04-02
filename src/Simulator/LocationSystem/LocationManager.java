@@ -23,7 +23,7 @@ public class LocationManager
         {
             for (int i = 0; i < classRoomBehaviors.size(); i++)
             {
-                if (student.getCurrentLocation().distance(classRoomBehaviors.get(i).getEntry()) < 30)
+                if (student.getCurrentLocation().distance(classRoomBehaviors.get(i).getEntry()) < 10)
                 {
                     classRoomBehaviors.get(i).ScriptedStudentStart(student);
                     return true;
