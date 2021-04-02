@@ -183,7 +183,7 @@ public class NPC
                 {
                     hasCollided = true;
                     // reverse the previously made movement, so the npc stays in place
-                    movementUpdate(-1 * deltaTime);
+                    movementUpdate(-0.999 * deltaTime);
 
                     // To prevent eternal standoffs
                     // if the rotation difference is 180 degrees, so directly opposite, then the npc positions are swapped
@@ -202,6 +202,12 @@ public class NPC
                     if (hitbox.intersects(npc.getHitbox()))
                     {
                         movementUpdate(-0.1 * deltaTime);
+                        if (wallCollisionCheck()) {
+                            // but if that gets this npc stuck in a wall instead push the other npc forward a bit
+                            // reset own position and push forward other npc
+                            movementUpdate(0.11 * deltaTime);
+                            npc.movementUpdate(0.1 * deltaTime);
+                        }
                     }
                 }
             }
@@ -218,12 +224,20 @@ public class NPC
      */
     public void wallCollisionUpdate(double deltaTime)
     {
+        if (wallCollisionCheck())
+        {
+            // if in a wall, revert the previous made movement
+            movementUpdateWithRotationCheck(-1.01 * deltaTime);
+        }
+    }
+
+    private boolean wallCollisionCheck() {
         TiledLayer walkableTiledLayer = Simulator.getTiledmap().getWalkableLayer();
         if (!walkableTiledLayer.isPositionValidTile(getCurrentLocation()))
         {
-            // if in a wall, revert the previous made movement
-            movementUpdateWithRotationCheck(-1.1 * deltaTime);
+            return true;
         }
+        return false;
     }
 
     /**
@@ -291,7 +305,7 @@ public class NPC
             // slowly rotate
             rotation += rotationModifier * deltaTime * rotationSpeed * rotationDirection;
 
-            if (rotation > Math.PI * 2)
+            if (rotation > Math.PI * 2 || rotation < - Math.PI * 2)
             {
                 rotation = 0;
             }
