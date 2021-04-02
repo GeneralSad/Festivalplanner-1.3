@@ -88,6 +88,8 @@ public class NPCFollower
             fxGraphics2D.drawString("Rotation: " + decimalFormat.format(npc.getRotation()), x, y + yOffset);
             yOffset += yJump;
             fxGraphics2D.drawString("Target rotation: " + decimalFormat.format(npc.getTargetRotation()), x, y + yOffset);
+            yOffset += yJump;
+            fxGraphics2D.drawString("Collided recently: " + npc.isCollidedRecently(), x, y + yOffset);
         }
 
         fxGraphics2D.setComposite(AlphaComposite.Clear);

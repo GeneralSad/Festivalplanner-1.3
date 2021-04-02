@@ -41,6 +41,8 @@ public class NPC
     private Pathfinding currentPathfinding;
     private boolean onTargetTile;
 
+    private boolean collidedRecently;
+
     //TODO Temporary for testing class behavior.
     private static double yComponent = 450;
     private static double xComponent = 1300;
@@ -64,6 +66,7 @@ public class NPC
         this.appearance = appearance;
         this.currentPathfinding = currentPathfinding;
         this.onTargetTile = onTargetTile;
+        collidedRecently = false;
     }
 
 
@@ -163,6 +166,7 @@ public class NPC
 
     private void npcCollisionUpdate(ArrayList<NPC> npcs, double deltaTime) {
         Rectangle2D hitbox = getHitbox();
+        collidedRecently = false;
         for (NPC npc : npcs)
         {
             // this npc and sitting npcs (at destination) should be ignored
@@ -173,6 +177,7 @@ public class NPC
 
                 if (hitbox.intersects(npcHitBox))
                 {
+                    collidedRecently = true;
                     // reverse the previously made movement, so the npc stays in place
                     movementUpdateWithRotationCheck(-deltaTime);
 
@@ -564,5 +569,10 @@ public class NPC
     public int getHeight()
     {
         return height;
+    }
+
+    public boolean isCollidedRecently()
+    {
+        return collidedRecently;
     }
 }
