@@ -4,13 +4,11 @@ import Simulator.Maploading.TiledLayer;
 import Simulator.Maploading.TiledMap;
 import Simulator.NPC.NPC;
 import Simulator.Simulator;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.jfree.fx.FXGraphics2D;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Set;
 
 public class Pathfinding
 {
@@ -63,27 +61,36 @@ public class Pathfinding
     /**
      * Initialise the list of all pathfinding tiles
      */
-    private void init() {
-        for (int row = 0; row < totalHeight; row++) {
+    private void init()
+    {
+        for (int row = 0; row < totalHeight; row++)
+        {
             ArrayList<PathfindingTile> columnList = new ArrayList<>();
-            for (int column = 0; column < totalWidth; column++) {
+            for (int column = 0; column < totalWidth; column++)
+            {
                 columnList.add(new PathfindingTile(row, column, tileWidth, tileHeight, true));
             }
             this.pathfindingtiles.add(columnList);
         }
     }
 
-    private void initWithTiledMap() {
+    private void initWithTiledMap()
+    {
         TiledLayer walkable = Simulator.getTiledmap().getWalkableLayer();
         int tiledMapHeight = Simulator.getTiledmap().getHeight();
 
-        for (int row = 0; row < totalHeight; row++) {
+        for (int row = 0; row < totalHeight; row++)
+        {
             ArrayList<PathfindingTile> columnList = new ArrayList<>();
-            for (int column = 0; column < totalWidth; column++) {
+            for (int column = 0; column < totalWidth; column++)
+            {
                 long gid = walkable.getData().get(row * tiledMapHeight + column);
-                if (gid != 0) {
+                if (gid != 0)
+                {
                     columnList.add(new PathfindingTile(row, column, tileWidth, tileHeight, true));
-                } else {
+                }
+                else
+                {
                     columnList.add(new PathfindingTile(row, column, tileWidth, tileHeight, false));
                 }
             }
@@ -94,14 +101,17 @@ public class Pathfinding
     /**
      * Set the target destination
      * Calculates the path necessary to go there from each tile on the map
+     *
      * @param x
      * @param y
      */
-    public void setDestination(int x, int y) {
-        int row = y / tileHeight;
-        int column = x / tileWidth;
+    public void setDestination(double x, double y)
+    {
+        int row = (int) (y / tileHeight);
+        int column = (int) (x / tileWidth);
         PathfindingTile tile = getTile(row, column);
-        if (tile != null) {
+        if (tile != null)
+        {
             destinationTile = tile;
             // set the exact destination, so the npc doesn't just stop at the edge of the tile
             exactDestination = new Point2D.Double(x, y);
@@ -110,7 +120,8 @@ public class Pathfinding
 
         // For manual changes to the pathfinding
         // The npc needs to know that a new destination was put in, so reset the old values
-        for (NPC npc : npcs) {
+        for (NPC npc : npcs)
+        {
             npc.resetDestination();
         }
     }
@@ -118,9 +129,11 @@ public class Pathfinding
     /**
      * Calculate the pathfinding to go to a destination tile from each other tile on the map
      * Gives each tile a direction to which an npc needs to move to reach the destination tile
+     *
      * @param destination
      */
-    private void calculatePaths(PathfindingTile destination) {
+    private void calculatePaths(PathfindingTile destination)
+    {
         HashSet<PathfindingTile> tilesToCheck = new HashSet<>();
         tilesToCheck.add(destination);
         destination.setDirection(Direction.NONE);
@@ -128,9 +141,11 @@ public class Pathfinding
         HashSet<PathfindingTile> tilesAlreadyChecked = new HashSet<>();
 
         // Keep on checking until there are no new tiles to check
-        while (!tilesToCheck.isEmpty()) {
+        while (!tilesToCheck.isEmpty())
+        {
             HashSet<PathfindingTile> newTilesToCheck = new HashSet<>();
-            for (PathfindingTile origin : tilesToCheck) {
+            for (PathfindingTile origin : tilesToCheck)
+            {
                 int fromRow = origin.getRow();
                 int fromColumn = origin.getColumn();
 
@@ -138,25 +153,29 @@ public class Pathfinding
                 // Then also add the tile to a set of new tiles to check
 
                 PathfindingTile left = getTile(fromRow, fromColumn - 1);
-                if (left != null && left.isWalkable() && !tilesAlreadyChecked.contains(left)) {
+                if (left != null && left.isWalkable() && !tilesAlreadyChecked.contains(left))
+                {
                     newTilesToCheck.add(left);
                     left.setDirection(Direction.RIGHT);
                 }
 
                 PathfindingTile right = getTile(fromRow, fromColumn + 1);
-                if (right != null && right.isWalkable() && !tilesAlreadyChecked.contains(right)) {
+                if (right != null && right.isWalkable() && !tilesAlreadyChecked.contains(right))
+                {
                     newTilesToCheck.add(right);
                     right.setDirection(Direction.LEFT);
                 }
 
                 PathfindingTile up = getTile(fromRow - 1, fromColumn);
-                if (up != null && up.isWalkable() && !tilesAlreadyChecked.contains(up)) {
+                if (up != null && up.isWalkable() && !tilesAlreadyChecked.contains(up))
+                {
                     newTilesToCheck.add(up);
                     up.setDirection(Direction.DOWN);
                 }
 
                 PathfindingTile down = getTile(fromRow + 1, fromColumn);
-                if (down != null && down.isWalkable() && !tilesAlreadyChecked.contains(down)) {
+                if (down != null && down.isWalkable() && !tilesAlreadyChecked.contains(down))
+                {
                     newTilesToCheck.add(down);
                     down.setDirection(Direction.UP);
                 }
@@ -171,12 +190,15 @@ public class Pathfinding
     /**
      * Get a tile on a certain row and column
      * If the tile isn't contained in the map bounds it returns null
+     *
      * @param row
      * @param column
      * @return
      */
-    public PathfindingTile getTile(int row, int column) {
-        if (row >= 0 && row < totalHeight && column >= 0 && column < totalWidth) {
+    public PathfindingTile getTile(int row, int column)
+    {
+        if (row >= 0 && row < totalHeight && column >= 0 && column < totalWidth)
+        {
             return this.pathfindingtiles.get(row).get(column);
         }
         return null;
@@ -197,9 +219,12 @@ public class Pathfinding
         return tileHeight;
     }
 
-    public void draw(FXGraphics2D fxGraphics2D, boolean debug) {
-        for (ArrayList<PathfindingTile> row : this.pathfindingtiles) {
-            for (PathfindingTile tile : row) {
+    public void draw(FXGraphics2D fxGraphics2D, boolean debug)
+    {
+        for (ArrayList<PathfindingTile> row : this.pathfindingtiles)
+        {
+            for (PathfindingTile tile : row)
+            {
                 tile.draw(fxGraphics2D, debug);
             }
         }

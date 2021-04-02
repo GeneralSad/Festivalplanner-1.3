@@ -31,7 +31,7 @@ public class PathfindingTile
      */
     public Point2D getMiddlePoint()
     {
-        return new Point2D.Double(column * width + width / 2, row * height + height / 2);
+        return new Point2D.Double(column * width + width / 2.0, row * height + height / 2.0);
     }
 
     public boolean isWalkable()

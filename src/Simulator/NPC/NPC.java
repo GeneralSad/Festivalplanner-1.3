@@ -1,5 +1,6 @@
 package Simulator.NPC;
 
+import Data.ClassroomEntryPoint;
 import Data.Person;
 import Simulator.Pathfinding.Direction;
 import Simulator.Pathfinding.Pathfinding;
@@ -43,6 +44,35 @@ public class NPC
     private static double xComponent = 1280;
 
 
+    public NPC(Person person, double x, double y, int width, int height, Point2D destination, double rotation, int rotationDirection, PathfindingTile currentTile, int speed, double targetRotation, int rotationSpeed, boolean atDestination, NPCSprites appearance, Pathfinding currentPathfinding, boolean onTargetTile)
+    {
+        this.person = person;
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.destination = destination;
+        this.rotation = rotation;
+        this.rotationDirection = rotationDirection;
+        this.currentTile = currentTile;
+        this.speed = speed;
+        this.targetRotation = targetRotation;
+        this.rotationSpeed = rotationSpeed;
+        this.atDestination = atDestination;
+        this.appearance = appearance;
+        this.currentPathfinding = currentPathfinding;
+        this.onTargetTile = onTargetTile;
+    }
+
+
+    @Override
+    public NPC clone()
+    {
+        return new NPC(person, x, y, width, height, destination, rotation, rotationDirection, currentTile, speed, targetRotation, rotationSpeed, atDestination, appearance, currentPathfinding, onTargetTile);
+    }
+
+
+
     public NPC(Person person, double x, double y, int width, int height, int rotation, int speed, int rotationSpeed, String npcAppearance)
     {
         this.person = person;
@@ -59,6 +89,7 @@ public class NPC
         this.atDestination = true;
         this.appearance = new NPCSprites(npcAppearance);
     }
+
 
     public NPC(Person person, double x, double y, int width, int height, String imageLocation)
     {
@@ -253,8 +284,8 @@ public class NPC
         setNewDestination(x, y);
 
         // determine the rotation angle and set it as the target rotation
-        double xDiff = x - (this.x + width / 2);
-        double yDiff = (this.y + height / 2) - y;
+        double xDiff = x - (this.x + width / 2.0);
+        double yDiff = (this.y + height / 2.0) - y;
         double angle = Math.atan2(yDiff, xDiff);
 
         if (angle < 0)
@@ -460,4 +491,29 @@ public class NPC
     {
         return currentPathfinding;
     }
+
+
+    public void setDestination(ClassroomEntryPoint classroomEntryPoint)
+    {
+        this.currentPathfinding.setDestination((int) classroomEntryPoint.x, (int) classroomEntryPoint.y);
+    }
+
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (obj instanceof NPC)
+        {
+            NPC otherNPC = (NPC) obj;
+            return this.person.equals(otherNPC.person);
+
+        }
+        else
+        {
+            return false;
+        }
+
+    }
+
+
 }
