@@ -40,7 +40,7 @@ public class GUI extends Application
     private String filePath = "src/Data/storedSchedule";
     private DataStorage dataStorage = new DataStorage();
     private Simulator simulator;
-    Label speedFactorLabel = new Label("");
+    private Label speedFactorLabel = new Label("");
 
 
     public static void main(String[] args)
@@ -331,9 +331,5 @@ public class GUI extends Application
         return Simulator.getTiledmap();
     }
 
-    public static TiledMap getWalkablemap()
-    {
-        return new TiledMap("/TiledMaps/MapFinal.json", true);
-    }
 
 }

@@ -171,7 +171,6 @@ public class Simulator
         {
             locationManager.scriptedStartedLesson(npc);
         }
-
     }
 
     public void draw(FXGraphics2D fxGraphics2D)
