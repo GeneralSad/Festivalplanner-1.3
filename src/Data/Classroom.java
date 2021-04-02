@@ -20,15 +20,24 @@ public class Classroom implements Serializable
     @Override
     public String toString()
     {
-        return classRooms.values()[classroom - 1].roomName;
+        return this.name;
     }
 
     private int classroom;
+    private String name;
 
     public Classroom(int classroom, ClassroomEntryPoint entry)
     {
         this.classroom = classroom;
         this.entry = entry;
+        this.name = "" + classroom;
+    }
+
+    public Classroom(int classroom, ClassroomEntryPoint entry, String name)
+    {
+        this.classroom = classroom;
+        this.entry = entry;
+        this.name = name;
     }
 
     public int getClassroom()
@@ -39,6 +48,16 @@ public class Classroom implements Serializable
     public void setClassroom(int classroom)
     {
         this.classroom = classroom;
+    }
+
+    public String getName()
+    {
+        return name;
+    }
+
+    public void setName(String name)
+    {
+        this.name = name;
     }
 
     public ClassroomEntryPoint getEntry()

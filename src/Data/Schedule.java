@@ -26,6 +26,7 @@ public class Schedule implements Serializable
     private ArrayList<Group> groupArrayList;
     private ObservableList<Group> groupObservableList;
     private ArrayList<Classroom> classroomArrayList;
+    private ObservableList<Classroom> classroomObservableList;
 
 
     private ArrayList<LocalTime> allStartingTimes;
@@ -44,6 +45,7 @@ public class Schedule implements Serializable
 
         this.teacherObservableList = FXCollections.observableList(teacherArrayList);
         this.groupObservableList = FXCollections.observableList(groupArrayList);
+        this.classroomObservableList = FXCollections.observableList(classroomArrayList);
 
 
         this.allStartingTimes = getLocalTimes();
@@ -67,6 +69,7 @@ public class Schedule implements Serializable
         this.lessonObservableList = scheduleTo.lessonObservableList;
         this.teacherObservableList = scheduleTo.teacherObservableList;
         this.groupObservableList = scheduleTo.groupObservableList;
+        this.classroomObservableList = scheduleTo.classroomObservableList;
 
         this.allStartingTimes = scheduleTo.allStartingTimes;
         this.allEndingTimes = scheduleTo.allEndingTimes;
@@ -358,6 +361,11 @@ public class Schedule implements Serializable
     public ObservableList<Group> getGroupObservableList()
     {
         return groupObservableList;
+    }
+
+    public ObservableList<Classroom> getClassroomObservableList()
+    {
+        return classroomObservableList;
     }
 
     public ArrayList<Classroom> getClassroomArrayList()

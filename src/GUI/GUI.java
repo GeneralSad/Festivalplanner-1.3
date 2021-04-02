@@ -64,7 +64,7 @@ public class GUI extends Application
         MainWindow mainWindow = new MainWindow(canvasContainer, this.schedule);
         canvasContainer.setCenter(mainWindow);
 
-        HBox bottomHBox = new HBox();
+        HBox bottomHBox = new HBox(10);
         Button wijzingen = new Button("Wijzigen");
         bottomHBox.getChildren().add(wijzingen);
         wijzingen.setOnAction(event ->
