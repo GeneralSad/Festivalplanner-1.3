@@ -160,6 +160,12 @@ public class Simulator
 
         }
 
+        if (!npcOnScreen.isEmpty() && lastSave.until(timeManager.getTime(), ChronoUnit.MINUTES) > 15)
+        {
+            saveNPCs();
+            lastSave = timeManager.getTime();
+        }
+
         // update all the npcs on screen, see if they are at the entrance of their target classroom, if so enter it
         for (NPC npc : npcOnScreen)
         {
