@@ -93,14 +93,13 @@ public class NPC
             if (currentPathfinding.getDestinationTile() != null && !onTargetTile)
             {
                 pathfindingUpdate(deltaTime);
-
-                // NPC collision
-//                collisionUpdate(npcs, deltaTime);
-
+                wallCollisionUpdate(deltaTime);
             } else {
                 rotationAndMovementUpdate(deltaTime);
             }
-            collisionUpdate(npcs, deltaTime);
+
+
+            npcCollisionUpdate(npcs, deltaTime);
 
 
             // Destination check
@@ -129,7 +128,7 @@ public class NPC
         }
     }
 
-    private void collisionUpdate(ArrayList<NPC> npcs, double deltaTime) {
+    private void npcCollisionUpdate(ArrayList<NPC> npcs, double deltaTime) {
         Rectangle2D hitbox = new Rectangle2D.Double(this.x, this.y, this.width, this.height);
         for (NPC npc : npcs)
         {
@@ -155,6 +154,19 @@ public class NPC
                     }
                 }
             }
+        }
+    }
+
+    /**
+     * Check if the npc is currently inside of a wall, aka not on a walkable tile
+     * if so return true
+     * @return
+     */
+    public void wallCollisionUpdate(double deltaTime) {
+        TiledLayer walkableTiledLayer = Simulator.getTiledmap().getWalkableLayer();
+        if (!walkableTiledLayer.isPositionValidTile(getCurrentLocation())) {
+            // if in a wall, revert the previous made movement
+            movementUpdateWithRotationCheck(-1.1 * deltaTime);
         }
     }
 
@@ -216,21 +228,18 @@ public class NPC
             double rotationModifier = 0.05;
 
             // slowly rotate
-            double oldRotation = rotation;
             rotation += rotationModifier * deltaTime * rotationSpeed * rotationDirection;
-            //System.out.println("Oldrotation: " + oldRotation + " new rotation: " + rotation + " target rotation: " + targetRotation);
 
             if (rotation > Math.PI * 2)
             {
                 rotation = 0;
             }
 
-            double epsilon = 0.1;
+            double epsilon = 0.4;
             if ((rotation + epsilon >= targetRotation && rotation - epsilon <= targetRotation) || rotation + Math.PI * 2 + epsilon >= targetRotation && rotation + Math.PI * 2 - epsilon <= targetRotation)
             {
                 // if the rotation is within a small margin of the target rotation just set the rotation to equal the targetrotation
                 // Otherwise it won't ever exactly become the same with modifying it with deltaTime
-                //System.out.println("Setting rotation to equal target rotation with rotation: " + rotation + " and targetrotation: " + targetRotation);
                 rotation = targetRotation;
             }
         }
