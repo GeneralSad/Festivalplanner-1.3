@@ -45,10 +45,15 @@ public class TimeManager
             nextChange = schedule.nextLesson(timeType.getTime());
         }
 
-
         return lessons;
 
 
+    }
+
+
+    public int getSpeedFactor()
+    {
+        return timeType.getSpeedFactor();
     }
 
     public boolean isChanged()
@@ -70,5 +75,23 @@ public class TimeManager
     {
         this.timeType = timeType;
     }
+
+    public void setSpeedFactor(int speedFactor)
+    {
+        LocalTime time = timeType.getTime();
+        if (speedFactor > 2)
+        {
+            timeType = new SpeedFactoredTime(time, speedFactor);
+        }
+        else if (speedFactor < -2)
+        {
+            timeType = new ReverseTime(new SpeedFactoredTime(time, speedFactor));
+        }
+        else
+        {
+            timeType = new NormalTime(time);
+        }
+    }
+
 
 }

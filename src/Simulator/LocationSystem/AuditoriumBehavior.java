@@ -1,18 +1,18 @@
 package Simulator.LocationSystem;
 
-import GUI.GUI;
 import Simulator.NPC.NPC;
 import Simulator.Pathfinding.Pathfinding;
+import Simulator.Simulator;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
-public class Auditorium
+public class AuditoriumBehavior
 {
     private ArrayList<Seat> seats;
     private Point2D entry;
 
-    public Auditorium(ArrayList<Seat> seats, Point2D entry)
+    public AuditoriumBehavior(ArrayList<Seat> seats, Point2D entry)
     {
         this.seats = seats;
         this.entry = entry;
@@ -20,7 +20,7 @@ public class Auditorium
 
     public void ScriptedStudentStart(NPC student){
         Point2D selectedSeat = claimEmptySeat(student);
-        Pathfinding pathfinding = new Pathfinding(GUI.getTiledmap());
+        Pathfinding pathfinding = new Pathfinding(Simulator.getTiledmap());
         student.setPathfinding(pathfinding);
         pathfinding.addNpc(student);
         pathfinding.setDestination((int)selectedSeat.getX(), (int)selectedSeat.getY());
@@ -29,7 +29,7 @@ public class Auditorium
 
     public void ScriptedStudentEnd(NPC student){
         leaveFilledSeat(student);
-        Pathfinding pathfinding = new Pathfinding(GUI.getTiledmap());
+        Pathfinding pathfinding = new Pathfinding(Simulator.getTiledmap());
         student.setPathfinding(pathfinding);
         pathfinding.addNpc(student);
         pathfinding.setDestination((int)entry.getX(), (int)entry.getY());
@@ -38,7 +38,7 @@ public class Auditorium
     private Point2D claimEmptySeat(NPC student) throws IllegalArgumentException{
         for (Seat s : seats)
         {
-            if (s.isEmpte()){
+            if (s.isEmpty()){
                 s.setStudent(student);
                 return s.getSeat();
             }

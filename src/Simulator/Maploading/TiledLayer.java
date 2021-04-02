@@ -3,20 +3,12 @@ package Simulator.Maploading;
 import org.jfree.fx.FXGraphics2D;
 
 import javax.json.JsonArray;
-import javax.json.JsonNumber;
 import javax.json.JsonObject;
-import javax.json.JsonValue;
-import javax.lang.model.element.NestingKind;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Area;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
-import java.lang.annotation.AnnotationFormatError;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 /**
  * Represents a layer of drawn tiles, possible to draw all the tiles using a draw() method
@@ -32,31 +24,18 @@ public class TiledLayer
     private static final long ROTATION_HORIZONTAL_AND_LEFT_ONCE = 0b001;
     private static final long ROTATION_HORIZONTAL_AND_LEFT_THRICE = 0b111;
 
-    // These attributes are for an infinite map which has tiledlayers with defined coordinates, for now they're not in use
-    //    private int x;
-    //    private int y;
-    //    private int width;
-    //    private int height;
     private ArrayList<Long> data;
     private boolean visible;
     private TiledMap tiledMap;
-    private boolean walkable;
-    private boolean seatable;
-    private boolean area;
 
-    private LinkedHashMap<AffineTransform, Double> transform = new LinkedHashMap<>();
+    private ArrayList<Tile> tilesInLayer;
 
     public TiledLayer(JsonObject jsonObject, TiledMap tiledMap)
     {
         this.tiledMap = tiledMap;
-        //        this.x = jsonObject.getInt("x");
-        //        this.y = jsonObject.getInt("y");
-        //        this.width = jsonObject.getInt("width");
-        //        this.height = jsonObject.getInt("height");
         this.visible = jsonObject.getBoolean("visible");
         this.data = new ArrayList<>();
-
-
+        this.tilesInLayer = new ArrayList<>();
 
         // Get all the different tile id's in order and store them in a list
         JsonArray jsonArray = jsonObject.getJsonArray("data");
@@ -66,38 +45,33 @@ public class TiledLayer
             this.data.add(jsonArray.getJsonNumber(i).longValue());
         }
 
+
+        // read custom properties
         JsonArray properties = jsonObject.getJsonArray("properties");
-
-        JsonObject areaObject = properties.getJsonObject(0);
-        this.area = areaObject.getBoolean("value");
-
-        JsonObject seatableObject = properties.getJsonObject(1);
-        this.seatable = seatableObject.getBoolean("value");
-
-        JsonObject walkableObject = properties.getJsonObject(2);
-        this.walkable = walkableObject.getBoolean("value");
-    }
-
-    /**
-     * Draw all the tiles in the layer
-     *
-     * @param fxGraphics2D
-     */
-
-    BufferedImage cache = null;
-
-    public void draw(FXGraphics2D fxGraphics2D)
-    {
-
-        if (cache == null)
+        // area
+        if (properties.getJsonObject(0).getBoolean("value"))
         {
-            cache = new BufferedImage(tiledMap.getWidth() * tiledMap.getTileWidth(), tiledMap.getHeight() * tiledMap.getTileHeight(), BufferedImage.TYPE_INT_ARGB);
+            tiledMap.setAreaLayer(this);
+        }
+        // seatable
+        if (properties.getJsonObject(1).getBoolean("value"))
+        {
+            tiledMap.setSeatableLayer(this);
+        }
+        // walkable
+        if (properties.getJsonObject(2).getBoolean("value"))
+        {
+            tiledMap.setWalkableLayer(this);
         }
 
-        Graphics2D cashGraphics = cache.createGraphics();
+        // initialise
+        init();
+    }
 
-
-        for (int i = 0; i < data.size(); i++)
+    private void init()
+    {
+        // intialise all valid tiles
+        for (int i = 0; i < this.data.size(); i++)
         {
             long gid = this.data.get(i);
             if (gid != 0)
@@ -115,7 +89,7 @@ public class TiledLayer
                 TiledSet tiledSet = null;
                 for (TiledSet tempTiledSet : this.tiledMap.getTiledSets())
                 {
-                    if (gid >= tempTiledSet.getFirstGID() && gid <= tempTiledSet.getLastGID())
+                    if (gid >= tempTiledSet.getFirstGID() && gid < tempTiledSet.getLastGID())
                     {
                         tiledSet = tempTiledSet;
                         break;
@@ -125,9 +99,7 @@ public class TiledLayer
                 if (tiledSet != null)
                 {
                     AffineTransform affineTransform = new AffineTransform();
-                    affineTransform.translate(this.tiledMap.getTileWidth() * (i % tiledMap.getWidth()), this.tiledMap.getTileHeight() * (i / tiledMap.getHeight()));
 
-                    double rotation = 0.0;
                     // if there is any rotation change the affinetransform accordingly
                     if (currentRotation != 0)
                     {
@@ -138,7 +110,7 @@ public class TiledLayer
                             // image is a bit up so compensate on the y
                             affineTransform.translate(0, this.tiledMap.getTileHeight());
                             affineTransform.rotate(Math.PI * -0.5);
-                            rotation = 90;
+
 
                         }
                         else if (currentRotation == ROTATION_LEFT_TWICE)
@@ -147,7 +119,6 @@ public class TiledLayer
                             // image is a bit up and to the left so compensate on the y and x
                             affineTransform.translate(this.tiledMap.getTileWidth(), this.tiledMap.getTileHeight());
                             affineTransform.rotate(Math.PI * -1);
-                            rotation = 180;
 
                         }
                         else if (currentRotation == ROTATION_LEFT_THRICE)
@@ -156,7 +127,6 @@ public class TiledLayer
                             // image is a bit to the left so compensate on the x
                             affineTransform.translate(this.tiledMap.getTileWidth(), 0);
                             affineTransform.rotate(Math.PI * -1.5);
-                            rotation = 270;
 
 
                         }
@@ -165,14 +135,12 @@ public class TiledLayer
                             // Scale the y axis to be reversed and compensate the translation for the reversed axis
                             affineTransform.scale(1, -1);
                             affineTransform.translate(0, -this.tiledMap.getTileHeight());
-                            rotation = 0;
                         }
                         else if (currentRotation == ROTATION_VERTICAL)
                         {
                             // Scale the x axis to be reversed and compensate the translation of the reversed axis
                             affineTransform.scale(-1, 1);
                             affineTransform.translate(-this.tiledMap.getTileWidth(), 0);
-                            rotation = 180;
 
                         }
                         else if (currentRotation == ROTATION_HORIZONTAL_AND_LEFT_ONCE)
@@ -193,54 +161,123 @@ public class TiledLayer
                         }
                     }
 
-                    //puts the affinetranform and the boolean data in an hashmap of afffinetransmos
-                    transform.put(affineTransform, rotation);
-
-                    if (visible)
+                    // Get the image and apply the affinetransform to it for rotations
+                    BufferedImage srcImage = tiledSet.getTileImage((int) (gid - tiledSet.getFirstGID()));
+                    if (srcImage != null)
                     {
-                        // -1 compensation because gid starts at 1 and arrays start at 0
-                        cashGraphics.drawImage(tiledSet.getTile((int) gid - tiledSet.getFirstGID()), affineTransform, null);
+                        BufferedImage tileImage = new BufferedImage(srcImage.getWidth(), srcImage.getHeight(), srcImage.getType());
+
+                        Graphics2D imageGraphics = tileImage.createGraphics();
+                        imageGraphics.drawRenderedImage(srcImage, affineTransform);
+
+                        // rotation for seats
+                        double rotation = 0.0;
+                        if ((gid - tiledSet.getFirstGID() == 896))
+                        {
+                            rotation = 0.0;
+                        }
+                        else if ((int) gid - tiledSet.getFirstGID() == 5)
+                        {
+                            rotation = 180.0;
+                        }
+                        else if ((int) gid - tiledSet.getFirstGID() == 4)
+                        {
+                            rotation = 90;
+                        }
+                        else if ((int) gid - tiledSet.getFirstGID() == 2)
+                        {
+                            rotation = 270;
+                        }
+
+                        int column = (i % tiledMap.getWidth());
+                        int row = (i / tiledMap.getHeight());
+                        Tile tile = new Tile(tileImage, this.tiledMap.getTileWidth() * column, this.tiledMap.getTileHeight() * row, row, column, gid, rotation);
+
+                        this.tilesInLayer.add(tile);
+                    }
+                    else
+                    {
+                        System.out.println("Reading from tiledset with image path: " + tiledSet.getImagePath() + " first gid: " + tiledSet.getFirstGID() + " last gid: " + tiledSet.getLastGID() + " returned null");
                     }
                 }
             }
         }
+    }
+
+    public void draw(FXGraphics2D fxGraphics2D)
+    {
         if (visible)
         {
-            fxGraphics2D.drawImage(cache, 0, 0, null);
-        }
-    }
-
-    public boolean containsMethodeBoolean(Point2D point2D){
-        for (Map.Entry<AffineTransform, Double> entry:transform.entrySet())
-        {
-            if (entry.getKey().getTranslateX() < point2D.getX() && entry.getKey().getTranslateX() + tiledMap.getTileWidth() > point2D.getX()
-                && entry.getKey().getTranslateY() < point2D.getY() && entry.getKey().getTranslateY() + tiledMap.getTileHeight() > point2D.getY()){
-
-                return true;
+            for (Tile tile : tilesInLayer)
+            {
+                tile.draw(fxGraphics2D);
             }
-
         }
-        return false;
     }
 
-    public LinkedHashMap<Point2D, Double> allMethodeBoolean(){
-        LinkedHashMap<Point2D, Double> temporary = new LinkedHashMap<>();
+    /**
+     * Returns true if the given point is within the layer and has a non zero tile gid
+     *
+     * @param point2D
+     * @return
+     */
+    public boolean isPositionValidTile(Point2D point2D)
+    {
+        int row = (int)point2D.getY() / this.tiledMap.getTileHeight();
+        int column = (int)point2D.getX() / this.tiledMap.getTileWidth();
+        boolean withinBounds = isPositionWithinBounds(row, column);
 
-        for (Map.Entry<AffineTransform, Double> entry:transform.entrySet())
+        // Don't allow multiplication by 0 when there is in fact a valid gid
+        if (row == 0 && column != 0) {
+            row = 1;
+        } else if (row != 0 && column == 0) {
+            column = 1;
+        }
+        boolean validTile = this.data.get(row * tiledMap.getWidth() + column) != 0;
+        return withinBounds && validTile;
+    }
+
+    /**
+     * Checks if a given row and column is within the layer or not
+     *
+     * @param row
+     * @param column
+     * @return
+     */
+    private boolean isPositionWithinBounds(int row, int column)
+    {
+        return (row >= 0 && row < tiledMap.getHeight()) && (column >= 0 && column < tiledMap.getWidth());
+    }
+
+    public ArrayList<Tile> getTilesInLayer()
+    {
+        return tilesInLayer;
+    }
+
+    public Tile getTile(Point2D location)
+    {
+        int row = (int) (location.getY() / tiledMap.getTileHeight());
+        int column = (int) (location.getX() / tiledMap.getTileWidth());
+        return getTile(row, column);
+    }
+
+    public Tile getTile(int row, int column)
+    {
+        if (isPositionWithinBounds(row, column))
         {
-            temporary.put(new Point2D.Double(entry.getKey().getTranslateX(), entry.getKey().getTranslateY()), entry.getValue());
-
+            for (Tile tile : tilesInLayer)
+            {
+                if (tile.getRow() == row && tile.getColumn() == column)
+                {
+                    return tile;
+                }
+            }
         }
-        return temporary;
+        return null;
     }
 
+    public ArrayList<Long> getData()
+    {
+        return data;
+    }
 }
-
-
-
-
-
-
-
-
-

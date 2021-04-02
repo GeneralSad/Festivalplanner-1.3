@@ -6,9 +6,7 @@ import javax.json.*;
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.Map;
 
 /**
  * Represents a full tiledmap with all the different tiledsets and tiledlayers
@@ -23,6 +21,9 @@ public class TiledMap
     private ArrayList<TiledLayer> tiledLayers;
     private ArrayList<TiledSet> tiledSets;
     private String jsonFileName;
+    private TiledLayer areaLayer;
+    private TiledLayer walkableLayer;
+    private TiledLayer seatableLayer;
 
     public TiledMap(String jsonFileName)
     {
@@ -134,34 +135,19 @@ public class TiledMap
      * @param point2D point that is checked
      * @return a boolean
      */
-    public boolean IsWalkableTile(Point2D point2D){
-        return tiledLayers.get(tiledLayers.size()-2).containsMethodeBoolean(point2D);
+    public boolean isWalkableTile(Point2D point2D){
+        return walkableLayer.isPositionValidTile(point2D);
     }
 
-    public boolean IsSitableTile(Point2D point2D){
-        return tiledLayers.get(tiledLayers.size()-1).containsMethodeBoolean(point2D);
+    public boolean isSitableTile(Point2D point2D){
+        return seatableLayer.isPositionValidTile(point2D);
     }
 
-    public boolean IsWalkableArea(Point2D point2D){
-        return tiledLayers.get(tiledLayers.size()-3).containsMethodeBoolean(point2D);
+    public boolean isPartOfArea(Point2D point2D){
+        return areaLayer.isPositionValidTile(point2D);
     }
 
 
-    /**
-     * these 3 methodes are parse all the tiles that hava specifick boolean and return those in a hasmap with theri point and orientation
-     * @return
-     */
-    public LinkedHashMap<Point2D, Double> getAllSitableTiles(){
-        return tiledLayers.get(tiledLayers.size()-1).allMethodeBoolean();
-    }
-
-    public LinkedHashMap<Point2D, Double> getAllWalkableTiles(){
-        return tiledLayers.get(tiledLayers.size()-3).allMethodeBoolean();
-    }
-
-    public LinkedHashMap<Point2D, Double> getAllAreaTiles(){
-        return tiledLayers.get(tiledLayers.size()-2).allMethodeBoolean();
-    }
 
     public TiledLayer getWalkableLayers() {
         return tiledLayers.get(tiledLayers.size()-3);
@@ -175,5 +161,35 @@ public class TiledMap
     public int getWidth()
     {
         return width;
+    }
+
+    public TiledLayer getAreaLayer()
+    {
+        return areaLayer;
+    }
+
+    public void setAreaLayer(TiledLayer areaLayer)
+    {
+        this.areaLayer = areaLayer;
+    }
+
+    public TiledLayer getWalkableLayer()
+    {
+        return walkableLayer;
+    }
+
+    public void setWalkableLayer(TiledLayer walkableLayer)
+    {
+        this.walkableLayer = walkableLayer;
+    }
+
+    public TiledLayer getSeatableLayer()
+    {
+        return seatableLayer;
+    }
+
+    public void setSeatableLayer(TiledLayer seatableLayer)
+    {
+        this.seatableLayer = seatableLayer;
     }
 }
