@@ -40,7 +40,7 @@ public class TimeManager
             }
         }
 
-        if (nextChange == null)
+        if (nextChange == null || schedule.nextLesson(timeType.getTime()).isBefore(nextChange))
         {
             nextChange = schedule.nextLesson(timeType.getTime());
         }

@@ -22,8 +22,6 @@ import javafx.stage.Stage;
 import org.jfree.fx.FXGraphics2D;
 
 import java.awt.*;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Point2D;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
@@ -134,12 +132,20 @@ public class GUI extends Application
             updateLabel();
         });
 
+
+        Button magic1 = new Button("magic1");
+        magic1.setOnAction(event -> simulator.saveNPCs());
+
+
+        Button magic2 = new Button("magic2");
+        magic2.setOnAction(event -> simulator.loadNPCs());
+
         // update the label so text is displayed at startup
         speedFactorLabel.setText("De simulatie speelt op normale snelheid");
 
         vBox.getChildren().addAll(speedFactorLabel, speedSettingsBox);
         speedFactorLabel.setFont(new Font("Arial", 16));
-        speedSettingsBox.getChildren().addAll(slowDownButton, speedUpButton);
+        speedSettingsBox.getChildren().addAll(slowDownButton, speedUpButton, magic1, magic2);
         speedSettingsBox.setAlignment(Pos.BOTTOM_LEFT);
         borderPane.setBottom(vBox);
 
@@ -194,45 +200,45 @@ public class GUI extends Application
         this.schedule = DataStorage.loadSchedule(this.filePath);
         if (this.schedule == null)
         {
-            // Manual schedule loading:
-//            System.out.println("Couldn't load a schedule");
-//            ArrayList<Teacher> teachers = new ArrayList<>();
-//            teachers.add(new Teacher("Etiënne", 30, "Hardware"));
-//            teachers.add(new Teacher("Johan", 36, "Graphics"));
-//            teachers.add(new Teacher("Maurice", -1, "Programmeren"));
-//            ArrayList<Group> groups = new ArrayList<>();
-//            Group c1 = new Group("C1");
-//            groups.add(c1);
-//            groups.add(new Group("C2"));
-//            groups.add(new Group("C3"));
-//            groups.add(new Group("C4"));
-//
-//
-//            ArrayList<Classroom> classrooms = new ArrayList<>();
-//            classrooms.add(new Classroom(1, new ClassroomEntryPoint(550, 550)));
-//            classrooms.add(new Classroom(2, new ClassroomEntryPoint(1000, 550)));
-//            classrooms.add(new Classroom(3, new ClassroomEntryPoint(500, 820)));
-//            classrooms.add(new Classroom(4, new ClassroomEntryPoint(600, 820)));
-//            classrooms.add(new Classroom(5, new ClassroomEntryPoint(950, 820)));
-//            classrooms.add(new Classroom(6, new ClassroomEntryPoint(1050, 820)));
-//            classrooms.add(new Classroom(7, new ClassroomEntryPoint(500, 1120)));
-//            classrooms.add(new Classroom(8, new ClassroomEntryPoint(600, 1120)));
-//            ArrayList<Lesson> lessons = new ArrayList<>();
-//            lessons.add(new Lesson(LocalTime.of(15, 30), LocalTime.of(16, 30), teachers.get(0), classrooms.get(0), groups));
-//            lessons.add(new Lesson(LocalTime.of(9, 0), LocalTime.of(10, 0), teachers.get(1), classrooms.get(1), groups.get(1)));
-//            lessons.add(new Lesson(LocalTime.of(10, 0), LocalTime.of(11, 0), teachers.get(2), classrooms.get(2), groups.get(0)));
-//            lessons.add(new Lesson(LocalTime.of(9, 0), LocalTime.of(11, 0), teachers.get(0), classrooms.get(3), groups.get(3)));
-//            lessons.add(new Lesson(LocalTime.of(12, 30), LocalTime.of(13, 30), teachers.get(1), classrooms.get(4), groups.get(2)));
-//            lessons.add(new Lesson(LocalTime.of(13, 30), LocalTime.of(14, 30), teachers.get(2), classrooms.get(3), groups.get(0)));
-//            lessons.add(new Lesson(LocalTime.of(16, 30), LocalTime.of(17, 30), teachers.get(0), classrooms.get(2), groups));
-//            lessons.add(new Lesson(LocalTime.of(11, 0), LocalTime.of(12, 0), teachers.get(0), classrooms.get(7), groups));
-//
-//            for (Group group : groups)
-//            {
-//                group.addStudent(new Student(group.getGroupName() + "test", 12, group));
-//            }
-//
-//            this.schedule = new Schedule(lessons, teachers, groups, classrooms);
+           //  Manual schedule loading:
+            System.out.println("Couldn't load a schedule");
+            ArrayList<Teacher> teachers = new ArrayList<>();
+            teachers.add(new Teacher("Etiënne", 30, "Hardware"));
+            teachers.add(new Teacher("Johan", 36, "Graphics"));
+            teachers.add(new Teacher("Maurice", -1, "Programmeren"));
+            ArrayList<Group> groups = new ArrayList<>();
+            Group c1 = new Group("C1");
+            groups.add(c1);
+            groups.add(new Group("C2"));
+            groups.add(new Group("C3"));
+            groups.add(new Group("C4"));
+
+
+            ArrayList<Classroom> classrooms = new ArrayList<>();
+            classrooms.add(new Classroom(1, new ClassroomEntryPoint(550, 550)));
+            classrooms.add(new Classroom(2, new ClassroomEntryPoint(1000, 550)));
+            classrooms.add(new Classroom(3, new ClassroomEntryPoint(500, 820)));
+            classrooms.add(new Classroom(4, new ClassroomEntryPoint(600, 820)));
+            classrooms.add(new Classroom(5, new ClassroomEntryPoint(950, 820)));
+            classrooms.add(new Classroom(6, new ClassroomEntryPoint(1050, 820)));
+            classrooms.add(new Classroom(7, new ClassroomEntryPoint(500, 1120)));
+            classrooms.add(new Classroom(8, new ClassroomEntryPoint(600, 1120)));
+            ArrayList<Lesson> lessons = new ArrayList<>();
+            lessons.add(new Lesson(LocalTime.of(15, 30), LocalTime.of(16, 30), teachers.get(0), classrooms.get(0), groups));
+            lessons.add(new Lesson(LocalTime.of(9, 0), LocalTime.of(10, 0), teachers.get(1), classrooms.get(1), groups.get(1)));
+            lessons.add(new Lesson(LocalTime.of(10, 0), LocalTime.of(11, 0), teachers.get(2), classrooms.get(2), groups.get(0)));
+            lessons.add(new Lesson(LocalTime.of(9, 0), LocalTime.of(11, 0), teachers.get(0), classrooms.get(3), groups.get(3)));
+            lessons.add(new Lesson(LocalTime.of(12, 30), LocalTime.of(13, 30), teachers.get(1), classrooms.get(4), groups.get(2)));
+            lessons.add(new Lesson(LocalTime.of(13, 30), LocalTime.of(14, 30), teachers.get(2), classrooms.get(3), groups.get(0)));
+            lessons.add(new Lesson(LocalTime.of(16, 30), LocalTime.of(17, 30), teachers.get(0), classrooms.get(2), groups));
+            lessons.add(new Lesson(LocalTime.of(11, 0), LocalTime.of(12, 0), teachers.get(0), classrooms.get(7), groups));
+
+            for (Group group : groups)
+            {
+                group.addStudent(new Student(group.getGroupName() + "test", 12, group));
+            }
+
+            this.schedule = new Schedule(lessons, teachers, groups, classrooms);
 
 
         }
