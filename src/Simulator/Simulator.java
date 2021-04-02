@@ -232,7 +232,7 @@ public class Simulator
 
     public void setSpeedfactor(int speedFactor)
     {
-        if (speedFactor >= -maxSpeedFactor && speedFactor <= maxSpeedFactor)
+        if (speedFactor > -1 && speedFactor <= maxSpeedFactor)
         {
             this.speedfactor = speedFactor;
         }
