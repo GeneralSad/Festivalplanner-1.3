@@ -1,8 +1,11 @@
 package Simulator.LocationSystem;
 
+import Data.Schedule;
+import Data.Teacher;
 import Simulator.NPC.NPC;
 import Simulator.Pathfinding.Pathfinding;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class LocationManager
@@ -17,7 +20,7 @@ public class LocationManager
         auditorium = locations.AudioriumData();
     }
 
-    public boolean scriptedStartedLesson(NPC student){
+    public boolean scriptedStartedStudentLesson(NPC student){
 
         if (student.isAtDestination())
         {
@@ -34,6 +37,30 @@ public class LocationManager
             //checks if standing at a auditorium
             if (student.getCurrentLocation().distance(auditorium.getEntry()) < 20){
                 auditorium.ScriptedStart(student);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean scriptedStartedTeacherLesson(NPC teacher){
+
+        if (teacher.isAtDestination())
+        {
+            //checks if it is standing at a classroom
+            for (int i = 0; i < classRoomBehaviors.size(); i++)
+            {
+                if (teacher.getCurrentLocation().distance(classRoomBehaviors.get(i).getEntry()) < 10)
+                {
+                    classRoomBehaviors.get(i).ScriptedTeacherStart(teacher);
+                    return true;
+                }
+            }
+
+            //checks if standing at a auditorium
+            if (teacher.getCurrentLocation().distance(auditorium.getEntry()) < 20){
+                auditorium.ScriptedStart(teacher);
                 return true;
             }
         }

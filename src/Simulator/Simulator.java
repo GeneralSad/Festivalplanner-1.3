@@ -1,6 +1,8 @@
 package Simulator;
 
 import Data.*;
+import Simulator.Controller.StudentController;
+import Simulator.Controller.TeacherController;
 import Simulator.LocationSystem.AuditoriumBehavior;
 import Simulator.LocationSystem.LocationDatabase;
 import Simulator.LocationSystem.LocationManager;
@@ -44,15 +46,17 @@ public class Simulator
     private LocationManager locationManager;
 
     private ArrayList<NPC> npcOnScreen = new ArrayList<>();
-    // private ArrayList<Student> studentsOnScreen = new ArrayList<>();
-    private ArrayList<Lesson> lessonsPassed = new ArrayList<>();
+
+    private StudentController studentController = new StudentController();
+    private TeacherController teacherController = new TeacherController();
+
     private LocalTime lastSave;
     private LocationDatabase base = new LocationDatabase();
 
     private double yComponent = 450;
     private double xComponent = 1300;
     private Camera camera;
-    private ArrayList<NPC> inAula = new ArrayList<>();
+
 
     public Simulator(Schedule schedule)
     {
@@ -77,105 +81,29 @@ public class Simulator
         npcManager.update((deltatime / 1e9) * deltaTimeMultiplier);
         timeManager.update(deltatime);
 
-        if (timeManager.isChanged() || speedfactor < 0)
-        {
+        if (timeManager.isChanged() || speedfactor < 0) {
             ArrayList<Lesson> lessons = timeManager.getCurrentLessons();
 
-            for (Lesson lesson : lessons)
-                if (!lessonsPassed.contains(lesson))
-                {
-                    ArrayList<Group> groups = lesson.getGroups();
-                    for (Group group : groups)
-                    {
-                        ArrayList<Student> students = group.getStudents();
-                        for (Student student : students)
-                        {
-                            if (npcOnScreen.contains(new NPC(student)))
-                            {
-                                System.out.println(student.getName() + ": Student word van huidige locatie naar nieuwe les verplaatst");
-                                for (NPC npc : npcOnScreen)
-                                {
-                                    if (npc.getPerson().equals(student))
-                                    {
-                                        inAula.remove(npc);
-                                        locationManager.scriptedEndLesson(npc);
-                                        npc.resetDestination();
-                                        npc.getCurrentPathfinding().setDestination((int) lesson.getClassroom().getEntry().getX(), (int) lesson.getClassroom().getEntry().getY());
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                System.out.println(student.getName() + ": de student komt de school binnen en gaat naar zijn les");
-                                NPC npc = new NPC(student);
-                                Pathfinding pathfinding = new Pathfinding(tiledmap/*GUI.getWalkablemap()*/);
-                                npc.setPathfinding(pathfinding);
-                                pathfinding.addNpc(npc);
-                                npcOnScreen.add(npc);
 
-                                if (pathfinding.getExactDestination() == null)
-                                {
-                                    pathfinding.setDestination((int) lesson.getClassroom().getEntry().getX(), (int) lesson.getClassroom().getEntry().getY());
-                                }
-                                npcManager.addNPC(npc);
-                            }
-                        }
-                    }
-                    //add lesson in list of passed ones
-                    lessonsPassed.add(lesson);
-                }
+            studentController.update(lessons, locationManager, npcManager);
+            teacherController.update(lessons, locationManager, npcManager);
 
-            //used list
-            ArrayList<NPC> used = new ArrayList<>();
+            npcOnScreen.clear();
 
-            //checks if npc is used else it is send to the auditorium
-            for (Lesson lesson : lessons) {
-                for (Group group : lesson.getGroups()){
-                    for (Person person : group.getStudents()){
-                        for (NPC npc : npcOnScreen){
-                            if (npc.getPerson() == person){
-                                used.add(npc);
-                            }
-                        }
-                    }
-                }
-            }
+            npcOnScreen.addAll(studentController.getNpcStudentsOnScreen());
+            npcOnScreen.addAll(teacherController.getNpcTeacherOnScreen());
 
 
-            //sends to auditorium
-            for (int i = 0; i < npcOnScreen.size(); i++)
-            {
-                boolean onscreen = true;
-                for (int j = 0; j < used.size(); j++)
-                {
-                    if (used.get(j) == npcOnScreen.get(i) || inAula.contains(npcOnScreen.get(i))
-                    )
-                    {
-                        onscreen = false;
-                    }
-                }
-
-                if (onscreen)
-                {
-                    locationManager.scriptedEndLesson(npcOnScreen.get(i));
-                    npcOnScreen.get(i).resetDestination();
-                    npcOnScreen.get(i).getCurrentPathfinding().setDestination((int) AuditoriumBehavior.entry.getX(), (int) AuditoriumBehavior.entry.getY());
-                    inAula.add(npcOnScreen.get(i));
-                }
-            }
 
         }
+
+        studentController.checkingFunction(locationManager);
+        teacherController.checkingFunction(locationManager);
 
         if (!npcOnScreen.isEmpty() && lastSave.until(timeManager.getTime(), ChronoUnit.MINUTES) > 15)
         {
             saveNPCs();
             lastSave = timeManager.getTime();
-        }
-
-        // update all the npcs on screen, see if they are at the entrance of their target classroom, if so enter it
-        for (NPC npc : npcOnScreen)
-        {
-            locationManager.scriptedStartedLesson(npc);
         }
 
         // if the camera is following an npc, update it so it adjusts to the new npc positions
@@ -187,13 +115,13 @@ public class Simulator
     public void draw(FXGraphics2D fxGraphics2D, double canvasWidth, double canvasHeight)
     {
         tiledmap.draw(fxGraphics2D);
-        npcManager.draw(fxGraphics2D, true);
+        npcManager.draw(fxGraphics2D, false);
 
         fxGraphics2D.setColor(Color.blue);
 
 
 
-        if (true)
+        if (false)
         {
             // draw seat numbers
             int number = 0;

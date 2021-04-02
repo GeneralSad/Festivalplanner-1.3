@@ -35,7 +35,9 @@ public class ClassRoomBehavior
 
     public void ScriptedTeacherStart(NPC teacher)
     {
-
+        teacher.appearance.setSitting(true, teacherSeat.getOrientation());
+        teacher.resetDestination();
+        teacher.getCurrentPathfinding().setDestination((int) teacherSeat.getSeat().getX(), (int) teacherSeat.getSeat().getY());
     }
 
     public Seat claimEmptySeat(NPC student) throws IllegalArgumentException
