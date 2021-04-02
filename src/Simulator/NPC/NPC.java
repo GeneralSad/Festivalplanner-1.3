@@ -152,7 +152,7 @@ public class NPC
      */
     private void destinationUpdate()
     {
-        Rectangle2D currentHitBox = new Rectangle2D.Double(this.x, this.y, this.width, this.height);
+        Rectangle2D currentHitBox = getHitbox();
         if (destination != null && currentHitBox.contains(destination))
         {
             atDestination = true;
@@ -160,14 +160,14 @@ public class NPC
     }
 
     private void npcCollisionUpdate(ArrayList<NPC> npcs, double deltaTime) {
-        Rectangle2D hitbox = new Rectangle2D.Double(this.x, this.y, this.width, this.height);
+        Rectangle2D hitbox = getHitbox();
         for (NPC npc : npcs)
         {
             // this npc and sitting npcs (at destination) should be ignored
             if (npc != this && !npc.isAtDestination())
             {
                 // find the other npc hitbox
-                Rectangle2D npcHitBox = new Rectangle2D.Double(npc.x, npc.y, npc.width, npc.height);
+                Rectangle2D npcHitBox = npc.getHitbox();
 
                 if (hitbox.intersects(npcHitBox))
                 {
@@ -530,5 +530,32 @@ public class NPC
 
     }
 
+    public Rectangle2D getHitbox() {
+        return new Rectangle2D.Double(this.x, this.y, this.width, this.height);
+    }
 
+    public Point2D getDestination()
+    {
+        return destination;
+    }
+
+    public double getRotation()
+    {
+        return rotation;
+    }
+
+    public double getTargetRotation()
+    {
+        return targetRotation;
+    }
+
+    public int getWidth()
+    {
+        return width;
+    }
+
+    public int getHeight()
+    {
+        return height;
+    }
 }

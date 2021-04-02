@@ -9,6 +9,7 @@ import Simulator.LocationSystem.LocationManager;
 import Simulator.Maploading.Tile;
 import Simulator.Maploading.TiledMap;
 import Simulator.NPC.NPC;
+import Simulator.NPC.NPCFollower;
 import Simulator.NPC.NPCManager;
 import Simulator.Pathfinding.Pathfinding;
 import Simulator.Time.NormalTime;
@@ -48,6 +49,7 @@ public class Simulator
     private ArrayList<Lesson> lessonsPassed = new ArrayList<>();
     private LocationDatabase base = new LocationDatabase();
 
+    private Camera camera;
 
     public Simulator(Schedule schedule)
     {
@@ -62,8 +64,6 @@ public class Simulator
 
     public void update(long deltatime)
     {
-
-
         double deltaTimeMultiplier = 1;
         if (speedfactor > 0)
         {
@@ -92,10 +92,9 @@ public class Simulator
                                 for (NPC npc : npcOnScreen)
                                 {
                                     if (npc.getPerson().equals(student))
-                                    if (npcOnScreen.get(k).getPerson().equals(s))
                                     {
-                                        npcOnScreen.get(k).resetDestination();
-                                        npcOnScreen.get(k).getCurrentPathfinding().setDestination((int) lesson.getClassroom().getEntry().getX(), (int) lesson.getClassroom().getEntry().getY());
+                                        npc.resetDestination();
+                                        npc.getCurrentPathfinding().setDestination((int) lesson.getClassroom().getEntry().getX(), (int) lesson.getClassroom().getEntry().getY());
                                     }
                                 }
                             }
@@ -128,72 +127,19 @@ public class Simulator
             }
         }
 
-
-        //
-        //            for (Lesson lesson : lessons)
-        //            {
-        //                for (Group group : lesson.getGroups())
-        //                {
-        //                    studentsWithLesson.addAll(group.getStudents());
-        //                }
-        //            }
-        //
-        //            for (Student student : studentsWithLesson)
-        //            {
-        //                if (studentsOnScreen.contains(student))
-        //                {
-        //                    System.out.println(student.getName() + ": Student word van huidige locatie naar nieuwe les verplaatst");
-        //                    for (int i = 0; i < npcOnScreen.size(); i++)
-        //                    {
-        //                        if (npcOnScreen.get(i).getPerson().equals(student)){
-        //                            npcOnScreen.get(i).resetDestination();
-        //                            npcOnScreen.get(i).getCurrentPathfinding().setDestination((int)student.getGroup().getClassroom().getEntry().getX(), (int)student.getGroup().getClassroom().getEntry().getY());
-        //                        }
-        //
-        //                    }
-        //                }
-        //                else
-        //                {
-        //                    System.out.println(student.getName() + ": de student komt de school binnen en gaat naar zijn les");
-        //                    NPC npc = new NPC(student);
-        //                    Pathfinding pathfinding = new Pathfinding(tiledmap/*GUI.getWalkablemap()*/);
-        //                    npc.setPathfinding(pathfinding);
-        //                    pathfinding.addNpc(npc);
-        //
-        //                    npcOnScreen.add(npc);
-        //
-        //                    if (pathfinding.getExactDestination() == null)
-        //                    {
-        //                        pathfinding.setDestination((int) student.getGroup().getClassroom().getEntry().getX(), (int) student.getGroup().getClassroom().getEntry().getY());
-        //                    }
-        //
-        //                    npcManager.addNPC(npc);
-        //                    studentsOnScreen.add(student);
-        //                }
-        //            }
-
-
-        //            ArrayList<Student> studentsOnScreenPlaceHolder = new ArrayList<>(studentsOnScreen);
-        //            for (Student student : studentsOnScreenPlaceHolder)
-        //            {
-        //                if (!studentsWithLesson.contains(student))
-        //                {
-        //                    System.out.println(student.getName() + ": wordt verwijderd");
-        //                    studentsOnScreen.remove(student);
-        //                }
-        //            }
-        //
-        //
-        //        }
-
         // update all the npcs on screen, see if they are at the entrance of their target classroom, if so enter it
         for (NPC npc : npcOnScreen)
         {
             locationManager.scriptedStartedLesson(npc, npc.getCurrentPathfinding());
         }
+
+        // if the camera is following an npc, update it so it adjusts to the new npc positions
+        if (camera.getNpcFollower().isFollowing()) {
+            camera.getNpcFollower().update();
+        }
     }
 
-    public void draw(FXGraphics2D fxGraphics2D)
+    public void draw(FXGraphics2D fxGraphics2D, double canvasWidth, double canvasHeight)
     {
         tiledmap.draw(fxGraphics2D);
         npcManager.draw(fxGraphics2D, true);
@@ -226,7 +172,9 @@ public class Simulator
             }
         }
 
-
+        if (camera.getNpcFollower().isFollowing()) {
+            camera.getNpcFollower().draw(fxGraphics2D);
+        }
     }
 
     public String getFormattedTime()
@@ -279,9 +227,38 @@ public class Simulator
 
     }
 
+    public NPC getNPCAtPosition(double x, double y) {
+        for (NPC npc : this.npcOnScreen) {
+            Rectangle2D hitbox = npc.getHitbox();
+            if (hitbox.contains(x, y)) {
+                return npc;
+            }
+        }
+        return null;
+    }
 
 
+    public void mouseClicked(double x, double y) {
+        NPCFollower npcFollower = camera.getNpcFollower();
+        NPC npc = getNPCAtPosition(x, y);
+        System.out.println("Clicking on: " + (x) + " " + (y));
+        if (npc != null) {
+            npcFollower.setNpc(npc);
+            npcFollower.setFollowing(true);
+            System.out.println("Following an npc");
+        } else {
+            npcFollower.setNpc(null);
+            npcFollower.setFollowing(false);
+        }
+    }
 
+    public Camera getCamera()
+    {
+        return camera;
+    }
 
-
+    public void setCamera(Camera camera)
+    {
+        this.camera = camera;
+    }
 }

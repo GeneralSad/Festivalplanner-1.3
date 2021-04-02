@@ -233,8 +233,15 @@ public class TiledLayer
         } else if (row != 0 && column == 0) {
             column = 1;
         }
-        boolean validTile = this.data.get(row * tiledMap.getWidth() + column) != 0;
+        boolean validTile = getData(row * tiledMap.getWidth() + column) != 0;
         return withinBounds && validTile;
+    }
+
+    private long getData(int index) {
+        if (index >= this.data.size()) {
+            return 0;
+        }
+        return this.data.get(index);
     }
 
     /**

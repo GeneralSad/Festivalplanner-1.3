@@ -2,6 +2,7 @@ package GUI;
 
 import Data.*;
 import Simulator.Maploading.TiledMap;
+import Simulator.NPC.NPC;
 import Simulator.Simulator;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -15,13 +16,17 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import org.jfree.fx.FXGraphics2D;
 
+import Simulator.Camera;
+
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
@@ -42,6 +47,8 @@ public class GUI extends Application
     private Simulator simulator;
     Label speedFactorLabel = new Label("");
 
+    private boolean followingNPC;
+    private NPC npcBeingFollowed;
 
     public static void main(String[] args)
     {
@@ -93,7 +100,7 @@ public class GUI extends Application
         Pane pane = new Pane();
         BorderPane borderPane = new BorderPane();
         Tab simulatorTab = new Tab("Simulator");
-        Canvas canvas = new Canvas(2048, 2048);
+        Canvas canvas = new Canvas(1920, 1048);
         GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
 
         pane.getChildren().add(canvas);
@@ -157,10 +164,11 @@ public class GUI extends Application
 
         Scene scene = new Scene(tabPane);
 
+        simulator.setCamera(new Camera(canvas.getWidth(), canvas.getHeight()));
 
         addMouseScrolling(canvas);
 
-        simulator = new Simulator(schedule);
+        addMouseClickDrag(canvas, simulator.getCamera());
         new AnimationTimer()
         {
             long last = -1;
@@ -175,20 +183,24 @@ public class GUI extends Application
 
                 graphicsContext.setImageSmoothing(false);
                 FXGraphics2D fxGraphics2D = new FXGraphics2D(graphicsContext);
+                fxGraphics2D.setTransform(new AffineTransform());
                 fxGraphics2D.setBackground(Color.GRAY);
 
                 fxGraphics2D.clearRect(0, 0, (int) canvas.getWidth(), (int) canvas.getHeight());
 
-                simulator.draw(fxGraphics2D);
+                fxGraphics2D.translate(simulator.getCamera().getX(), simulator.getCamera().getY());
+
+                simulator.draw(fxGraphics2D, canvas.getWidth(), canvas.getHeight());
                 long deltatime = (now - last);
                 simulator.update(deltatime);
 
                 timeLabel.setText(simulator.getFormattedTime());
-                addMouseClickDrag(canvas, fxGraphics2D);
+
                 last = now;
 
             }
         }.start();
+
         stage.setScene(scene);
         stage.setTitle("School simulatie");
         stage.setMaximized(true);
@@ -197,6 +209,7 @@ public class GUI extends Application
 
     private void initialise()
     {
+
         this.schedule = DataStorage.loadSchedule(this.filePath);
         if (this.schedule == null)
         {
@@ -246,6 +259,8 @@ public class GUI extends Application
         {
             System.out.println("properly loaded a schedule");
         }
+
+        simulator = new Simulator(schedule);
     }
 
     private void updateLabel()
@@ -278,40 +293,54 @@ public class GUI extends Application
                 node.setScaleY(node.getScaleY() * zoomFactor);
             }
 
+//            double zoomFactor = 1.05;
+//            double deltaY = event.getDeltaY();
+//            if (deltaY < 0)
+//            {
+//                zoomFactor = 2.0 - zoomFactor;
+//            }
+//
+//            Camera camera = simulator.getCamera();
+//            if (!(camera.getScaleY() * zoomFactor > 5) && !(camera.getScaleY() * zoomFactor < 1))
+//            {
+//                camera.setScaleX(camera.getScaleX() * zoomFactor);
+//                camera.setScaleY(camera.getScaleY() * zoomFactor);
+//            }
+
         });
     }
 
     private double lastX = -10000;
     private double lastY = -10000;
-    private double x = 0;
-    private double y = 0;
 
-    public void addMouseClickDrag(Node node, FXGraphics2D fxGraphics2D)
+    public void addMouseClickDrag(Node node, Camera camera)
     {
+        node.setOnMouseClicked(event -> {
+            double x = (-camera.getX()) + event.getX();
+            double y = (-camera.getY()) + event.getY();
+            simulator.mouseClicked(x, y);
+        });
+
         node.setOnMouseDragged((event) ->
         {
-
-            if (lastX == -10000 && lastY == -10000)
+            if (!camera.getNpcFollower().isFollowing())
             {
-                lastX = event.getX();
-                lastY = event.getY();
+                if (lastX == -10000 && lastY == -10000)
+                {
+                    lastX = event.getX();
+                    lastY = event.getY();
+                }
+
+                // if statement to limit dragging to certain areas of the map
+                if ((camera.getX() + (event.getX() - lastX)) > -1200 && (camera.getY() + (event.getY() - lastY)) > -1200 && (camera.getX() + (event.getX() - lastX)) < 1500 && (camera.getY() + (event.getY() - lastY)) < 550)
+                {
+
+                    camera.addToPosition(event.getX() - lastX, event.getY() - lastY);
+
+                    lastX = event.getX();
+                    lastY = event.getY();
+                }
             }
-
-            if ((x + (event.getX() - lastX)) > -1200 && (y + (event.getY() - lastY)) > -1200 && (x + (event.getX() - lastX)) < 1500 && (y + (event.getY() - lastY)) < 550)
-            {
-
-                fxGraphics2D.translate(event.getX() - lastX, event.getY() - lastY);
-
-                this.x += (event.getX() - lastX);
-                this.y += (event.getY() - lastY);
-
-                //System.out.println("X: " + (x + (event.getX() - lastX) + ", Y: " + (y + (event.getY() - lastY))));
-
-                lastX = event.getX();
-                lastY = event.getY();
-
-            }
-
         });
 
         node.setOnMouseReleased(event ->
