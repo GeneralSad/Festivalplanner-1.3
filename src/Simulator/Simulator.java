@@ -121,12 +121,12 @@ public class Simulator
                         Point2D fullAvailableLocation = getFullAvailability(currentLocations, availableLocations);
 
                         npc = new NPC(student, (int)fullAvailableLocation.getX(), (int)fullAvailableLocation.getY());
-                        System.out.println("X: " + (int)fullAvailableLocation.getX() + " Y: " + (int)fullAvailableLocation.getY());
+                        //System.out.println("X: " + (int)fullAvailableLocation.getX() + " Y: " + (int)fullAvailableLocation.getY());
 
                     } else {
                         //generateComponents();
                         npc = new NPC(student, (int)xComponent, (int)yComponent);
-                        System.out.println("X: " + xComponent + " Y: " + yComponent);
+                        //System.out.println("X: " + xComponent + " Y: " + yComponent);
 
                     }
 
