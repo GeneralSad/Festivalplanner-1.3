@@ -189,8 +189,7 @@ public class Simulator
 //
 //        }
 
-        //TODO De for loop hieronder is misschien niet goed
-        //TODO Check
+        // update all the npcs on screen, see if they are at the entrance of their target classroom, if so enter it
         for (NPC npc : npcOnScreen)
         {
             locationManager.scriptedStartedLesson(npc, npc.getCurrentPathfinding());

@@ -71,20 +71,37 @@ public class NPCTester extends Application
         npcManager = new NPCManager();
 
         pathfinding = new Pathfinding(32, 32, 128, 128);
+        pathfinding.setDestination(200, 600);
+        Pathfinding pathfinding2 = new Pathfinding(32, 32, 128, 128);
+        pathfinding2.setDestination(200, 100);
 
         for (int i = 0; i < 20; i++)
         {
             pathfinding.getTile(i, 10).setWalkable(false);
         }
 
-        for (int i = 0; i < 1; i++)
-        {
-            NPC npc = new NPC(new Person("Ewout", 0), 200, 100 - i * 100, 10, 10, "/NPC/NPC1 male.png");
-            npcManager.addNPC(npc);
-            //        npc.setTargetRotation(Math.PI * 1.5);
-//            npc.goToDestination(200, 200);
-            npc.setPathfinding(pathfinding);
-        }
+//        for (int i = 0; i < 4; i++)
+//        {
+//            NPC npc = new NPC(new Person("Ewout", 0), 200, 100 + i * 100, 10, 10, "/NPC/NPC1 male.png");
+//            npcManager.addNPC(npc);
+//            //        npc.setTargetRotation(Math.PI * 1.5);
+////            npc.goToDestination(200, 200);
+//            npc.setPathfinding(pathfinding);
+//        }
+
+        NPC npc1 = new NPC(new Person("Ewout", 0), 200, 200, 10, 10, "/NPC/NPC1 male.png");
+        npc1.setPathfinding(pathfinding);
+        NPC npc2 = new NPC(new Person("Ewout", 0), 200, 300, 10, 10, "/NPC/NPC1 male.png");
+        npc2.setPathfinding(pathfinding);
+        NPC npc3 = new NPC(new Person("Ewout", 0), 200, 400, 10, 10, "/NPC/NPC1 male.png");
+        npc3.setPathfinding(pathfinding2);
+        NPC npc4 = new NPC(new Person("Ewout", 0), 200, 500, 10, 10, "/NPC/NPC1 male.png");
+        npc4.setPathfinding(pathfinding2);
+
+        npcManager.addNPC(npc1);
+        npcManager.addNPC(npc2);
+        npcManager.addNPC(npc3);
+        npcManager.addNPC(npc4);
     }
 
     private void update(double deltaTime)

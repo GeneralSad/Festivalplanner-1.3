@@ -1,9 +1,11 @@
 package Simulator.NPC;
 
 import Data.Person;
+import Simulator.Maploading.TiledLayer;
 import Simulator.Pathfinding.Direction;
 import Simulator.Pathfinding.Pathfinding;
 import Simulator.Pathfinding.PathfindingTile;
+import Simulator.Simulator;
 import org.jfree.fx.FXGraphics2D;
 
 import java.awt.*;
@@ -24,7 +26,7 @@ public class NPC
     private Point2D destination;
     // rotation from 0 to 2 * Math.PI
     private double rotation;
-    // Rotation direction, 1 for left, -1 for right.
+    // Rotation direction, 1 for leftwards rotation, -1 for rightwards rotation.
     private int rotationDirection;
     private PathfindingTile currentTile;
 
@@ -67,7 +69,7 @@ public class NPC
     
     public NPC(Person person)
     {
-        this(person, xComponent(), yComponent(), 8, 16, randomSprite());
+        this(person, xComponent(), yComponent(), 8, 8, randomSprite());
     }
 
     public NPC(Person person, int x, int y)
@@ -91,12 +93,15 @@ public class NPC
             if (currentPathfinding.getDestinationTile() != null && !onTargetTile)
             {
                 pathfindingUpdate(deltaTime);
+
+                // NPC collision
+//                collisionUpdate(npcs, deltaTime);
+
             } else {
                 rotationAndMovementUpdate(deltaTime);
             }
-
-            // NPC collision
             collisionUpdate(npcs, deltaTime);
+
 
             // Destination check
             destinationUpdate();
@@ -132,22 +137,36 @@ public class NPC
     private void collisionUpdate(ArrayList<NPC> npcs, double deltaTime)
     {
         Rectangle2D hardCollisionBox = new Rectangle2D.Double(this.x, this.y, this.width, this.height);
-        if (collisionCheck(npcs, hardCollisionBox)) {
+        if (collisionCheck(npcs, hardCollisionBox, deltaTime)) {
             // Completely reset the made movement
-            movementUpdate(-deltaTime);
+
         }
     }
 
-    private boolean collisionCheck(ArrayList<NPC> npcs, Rectangle2D hitbox) {
+    private boolean collisionCheck(ArrayList<NPC> npcs, Rectangle2D hitbox, double deltaTime) {
         for (NPC npc : npcs)
         {
-            if (npc != this)
+            // this npc and sitting npcs (at destination) should be ignored
+            if (npc != this && !npc.isAtDestination())
             {
                 // find the other npc hitbox
                 Rectangle2D npcHitBox = new Rectangle2D.Double(npc.x, npc.y, npc.width, npc.height);
 
                 if (hitbox.intersects(npcHitBox))
                 {
+                    // reverse the previously made movement, so the npc stays in place
+                    movementUpdateWithRotationCheck(-deltaTime);
+
+                    // if the rotation difference is 180 degrees, so directly opposite, then the npc positions are swapped
+                    if (Math.abs(this.rotation - npc.rotation) == Math.PI) {
+                        double thisX = this.x;
+                        double thisY = this.y;
+                        this.x = npc.x;
+                        this.y = npc.y;
+                        npc.x = thisX;
+                        npc.y = thisY;
+                    }
+
                     return true;
                 }
             }
@@ -161,32 +180,36 @@ public class NPC
      *
      * @param deltaTime
      */
-    private void movementUpdate(double deltaTime)
+    private void movementUpdateWithRotationCheck(double deltaTime)
     {
         // only move if the rotation matches the target rotation
         if (rotation == targetRotation || rotation == targetRotation + Math.PI * 2)
         {
-            double distance = deltaTime * speed;
-
-            // Determine the x and y distance made with the rotation and adjust the position
-            double sin = Math.sin(rotation);
-            double cos = Math.cos(rotation);
-            double xDiff = (cos * distance);
-            double yDiff = (sin * distance);
-
-            // ignore negligible differences
-            if (xDiff < 0.00001 && xDiff > -0.00001)
-            {
-                xDiff = 0;
-            }
-            if (yDiff < 0.00001 && yDiff > -0.00001)
-            {
-                yDiff = 0;
-            }
-
-            x += xDiff;
-            y -= yDiff;
+            movementUpdate(deltaTime);
         }
+    }
+
+    private void movementUpdate(double deltaTime) {
+        double distance = deltaTime * speed;
+
+        // Determine the x and y distance made with the rotation and adjust the position
+        double sin = Math.sin(rotation);
+        double cos = Math.cos(rotation);
+        double xDiff = (cos * distance);
+        double yDiff = (sin * distance);
+
+        // ignore negligible differences
+        if (xDiff < 0.00001 && xDiff > -0.00001)
+        {
+            xDiff = 0;
+        }
+        if (yDiff < 0.00001 && yDiff > -0.00001)
+        {
+            yDiff = 0;
+        }
+
+        x += xDiff;
+        y -= yDiff;
     }
 
     /**
@@ -196,7 +219,7 @@ public class NPC
      */
     private void rotationAndMovementUpdate(double deltaTime) {
         rotationUpdate(deltaTime);
-        movementUpdate(deltaTime);
+        movementUpdateWithRotationCheck(deltaTime);
     }
 
     /**
