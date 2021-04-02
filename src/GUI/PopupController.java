@@ -33,10 +33,12 @@ public class PopupController extends Stage
         TabLesson tabLesson = new TabLesson(schedule);
         TabTeacher tabTeacher = new TabTeacher(schedule, tabLesson);
         TabClass tabClass = new TabClass(schedule, tabLesson);
+        TabClassroom tabClassroom = new TabClassroom(schedule);
 
         popups.add(tabLesson);
         popups.add(tabTeacher);
         popups.add(tabClass);
+        popups.add(tabClassroom);
 
 
         TabPane tabPane = new TabPane();

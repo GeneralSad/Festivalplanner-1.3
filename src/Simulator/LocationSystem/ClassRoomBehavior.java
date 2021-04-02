@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class ClassRoomBehavior
 {
-    private ArrayList<Seat> seats;
+    public ArrayList<Seat> seats;
     public Seat teacherSeat;
     private Point2D entry;
     private ArrayList<NPC> handeld = new ArrayList<>();

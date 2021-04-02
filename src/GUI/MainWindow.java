@@ -1,9 +1,6 @@
 package GUI;
 
-import Data.Classroom;
-import Data.Lesson;
-import Data.Schedule;
-import Data.Teacher;
+import Data.*;
 import javafx.animation.AnimationTimer;
 import javafx.scene.layout.Pane;
 import org.jfree.fx.FXGraphics2D;
@@ -52,8 +49,6 @@ public class MainWindow extends ResizableCanvas
 
         this.allStartingTimes = schedule.getAllStartingTimes();
         this.allEndingTimes = schedule.getAllEndingTimes();
-
-
 
         initialise();
     }
@@ -164,14 +159,21 @@ public class MainWindow extends ResizableCanvas
         }
 
         // Tekenen van de lessen
+        graphics2D.setFont(new Font(Font.DIALOG, Font.PLAIN, 20));
         for (Rectangle2D rectangle2D : this.lessonShapes.keySet()) {
             graphics2D.setColor(Color.GRAY);
             graphics2D.fill(rectangle2D);
             graphics2D.setColor(Color.BLACK);
-            Teacher teacher = this.lessonShapes.get(rectangle2D).getTeacher();
+            Lesson lesson = this.lessonShapes.get(rectangle2D);
+            Teacher teacher = lesson.getTeacher();
             graphics2D.drawString(teacher.getSubject(), (int)rectangle2D.getX(), (int)(rectangle2D.getY() + 20));
-            graphics2D.drawString(teacher.getName(), (int)rectangle2D.getX(), (int)(rectangle2D.getY() + 50));
-            graphics2D.drawString(this.lessonShapes.get(rectangle2D).getGroupNames(this.lessonShapes.get(rectangle2D).getGroups()), (int)rectangle2D.getX(), (int)(rectangle2D.getY() + 80));
+            graphics2D.drawString(teacher.getName(), (int)rectangle2D.getX(), (int)(rectangle2D.getY() + 40));
+            graphics2D.drawString(lesson.getGroupNames(this.lessonShapes.get(rectangle2D).getGroups()), (int)rectangle2D.getX(), (int)(rectangle2D.getY() + 60));
+            int studentCount = 0;
+            for (Group group : lesson.getGroups()) {
+                studentCount += group.getStudents().size();
+            }
+            graphics2D.drawString("Aantal studenten: " + studentCount, (int)rectangle2D.getX(), (int)rectangle2D.getY() + 80);
         }
 
 

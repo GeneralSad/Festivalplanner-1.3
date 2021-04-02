@@ -7,6 +7,7 @@ import Simulator.LocationSystem.LocationManager;
 import Simulator.Maploading.Tile;
 import Simulator.Maploading.TiledMap;
 import Simulator.NPC.NPC;
+import Simulator.NPC.NPCFollower;
 import Simulator.NPC.NPCManager;
 import Simulator.Pathfinding.Pathfinding;
 import Simulator.Time.NormalTime;
@@ -50,6 +51,7 @@ public class Simulator
 
     private double yComponent = 450;
     private double xComponent = 1300;
+    private Camera camera;
 
     public Simulator(Schedule schedule)
     {
@@ -171,9 +173,14 @@ public class Simulator
         {
             locationManager.scriptedStartedLesson(npc);
         }
+
+        // if the camera is following an npc, update it so it adjusts to the new npc positions
+        if (camera.getNpcFollower().isFollowing()) {
+            camera.getNpcFollower().update();
+        }
     }
 
-    public void draw(FXGraphics2D fxGraphics2D)
+    public void draw(FXGraphics2D fxGraphics2D, double canvasWidth, double canvasHeight)
     {
         tiledmap.draw(fxGraphics2D);
         npcManager.draw(fxGraphics2D, true);
@@ -210,7 +217,9 @@ public class Simulator
             }
         }
 
-
+        if (camera.getNpcFollower().isFollowing()) {
+            camera.getNpcFollower().draw(fxGraphics2D);
+        }
     }
 
     public void generateComponents() {
@@ -333,5 +342,38 @@ public class Simulator
 
     }
 
+    public NPC getNPCAtPosition(double x, double y) {
+        for (NPC npc : this.npcOnScreen) {
+            Rectangle2D hitbox = npc.getHitbox();
+            if (hitbox.contains(x, y)) {
+                return npc;
+            }
+        }
+        return null;
+    }
 
+
+    public void mouseClicked(double x, double y) {
+        NPCFollower npcFollower = camera.getNpcFollower();
+        NPC npc = getNPCAtPosition(x, y);
+        System.out.println("Clicking on: " + (x) + " " + (y));
+        if (npc != null) {
+            npcFollower.setNpc(npc);
+            npcFollower.setFollowing(true);
+            System.out.println("Following an npc");
+        } else {
+            npcFollower.setNpc(null);
+            npcFollower.setFollowing(false);
+        }
+    }
+
+    public Camera getCamera()
+    {
+        return camera;
+    }
+
+    public void setCamera(Camera camera)
+    {
+        this.camera = camera;
+    }
 }
