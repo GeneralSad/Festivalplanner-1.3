@@ -77,7 +77,6 @@ public class NPC
     }
 
 
-
     public NPC(Person person, double x, double y, int width, int height, int rotation, int speed, int rotationSpeed, String npcAppearance)
     {
         this.person = person;
@@ -100,7 +99,7 @@ public class NPC
     {
         this(person, x, y, width, height, 0, 10, 20, imageLocation);
     }
-    
+
     public NPC(Person person)
     {
         //Math.floor(Math.random() * (max - min + 1)) + min;
@@ -130,7 +129,9 @@ public class NPC
             {
                 pathfindingUpdate(deltaTime);
                 wallCollisionUpdate(deltaTime);
-            } else {
+            }
+            else
+            {
                 rotationAndMovementUpdate(deltaTime);
             }
 
@@ -148,7 +149,8 @@ public class NPC
         }
     }
 
-    public void update(double deltaTime, ArrayList<NPC> npcs) {
+    public void update(double deltaTime, ArrayList<NPC> npcs)
+    {
         update(deltaTime, npcs, true);
     }
 
@@ -164,25 +166,29 @@ public class NPC
         }
     }
 
-    private void npcCollisionUpdate(ArrayList<NPC> npcs, double deltaTime) {
+    private void npcCollisionUpdate(ArrayList<NPC> npcs, double deltaTime)
+    {
         Rectangle2D hitbox = getHitbox();
-        collidedRecently = false;
+        boolean hasCollided = false;
         for (NPC npc : npcs)
         {
             // this npc and sitting npcs (at destination) should be ignored
-            if (npc != this && !npc.isAtDestination())
+            if (npc != this/* && !npc.isAtDestination()*/)
             {
                 // find the other npc hitbox
-                Rectangle2D npcHitBox = npc.getHitbox();
+                // first the big hitbox (personal space) is used
+                Rectangle2D npcHitBox = npc.getBigHitbox();
 
                 if (hitbox.intersects(npcHitBox))
                 {
-                    collidedRecently = true;
+                    hasCollided = true;
                     // reverse the previously made movement, so the npc stays in place
-                    movementUpdateWithRotationCheck(-deltaTime);
+                    movementUpdate(-1 * deltaTime);
 
+                    // To prevent eternal standoffs
                     // if the rotation difference is 180 degrees, so directly opposite, then the npc positions are swapped
-                    if (Math.abs(this.rotation - npc.rotation) == Math.PI) {
+                    if (Math.abs(this.rotation - npc.rotation) == Math.PI)
+                    {
                         double thisX = this.x;
                         double thisY = this.y;
                         this.x = npc.x;
@@ -190,19 +196,31 @@ public class NPC
                         npc.x = thisX;
                         npc.y = thisY;
                     }
+
+                    // if this npc is reaching inside of the other npc then step back a bit in addition to stopping the movement made
+                    // or if after the previous stepback the npc is still inside of another npcs personal space then also step back a bit
+                    if (hitbox.intersects(npc.getHitbox()))
+                    {
+                        movementUpdate(-0.1 * deltaTime);
+                    }
                 }
             }
         }
+        collidedRecently = hasCollided;
     }
+
 
     /**
      * Check if the npc is currently inside of a wall, aka not on a walkable tile
      * if so return true
+     *
      * @return
      */
-    public void wallCollisionUpdate(double deltaTime) {
+    public void wallCollisionUpdate(double deltaTime)
+    {
         TiledLayer walkableTiledLayer = Simulator.getTiledmap().getWalkableLayer();
-        if (!walkableTiledLayer.isPositionValidTile(getCurrentLocation())) {
+        if (!walkableTiledLayer.isPositionValidTile(getCurrentLocation()))
+        {
             // if in a wall, revert the previous made movement
             movementUpdateWithRotationCheck(-1.1 * deltaTime);
         }
@@ -223,7 +241,8 @@ public class NPC
         }
     }
 
-    private void movementUpdate(double deltaTime) {
+    private void movementUpdate(double deltaTime)
+    {
         double distance = deltaTime * speed;
 
         // Determine the x and y distance made with the rotation and adjust the position
@@ -249,18 +268,22 @@ public class NPC
     /**
      * Update both rotation and movement
      * Seperated because collision should revert movement, but not rotation
+     *
      * @param deltaTime
      */
-    private void rotationAndMovementUpdate(double deltaTime) {
+    private void rotationAndMovementUpdate(double deltaTime)
+    {
         rotationUpdate(deltaTime);
         movementUpdateWithRotationCheck(deltaTime);
     }
 
     /**
      * Update purely rotation
+     *
      * @param deltaTime
      */
-    private void rotationUpdate(double deltaTime) {
+    private void rotationUpdate(double deltaTime)
+    {
         if (!(rotation == targetRotation || rotation == targetRotation + Math.PI * 2))
         {
             double rotationModifier = 0.05;
@@ -286,6 +309,7 @@ public class NPC
 
     /**
      * Sets a new exact x,y destination
+     *
      * @param x
      * @param y
      */
@@ -298,6 +322,7 @@ public class NPC
     /**
      * Go to an exact x,y destination
      * Determines the required angle to get to that destination and sets that as the targetRotation
+     *
      * @param x
      * @param y
      */
@@ -322,6 +347,7 @@ public class NPC
     /**
      * Draw the npc hitbox and sprite
      * Only draw the hitbox if the debug parameter is true
+     *
      * @param fxGraphics2D
      * @param debug
      */
@@ -329,17 +355,24 @@ public class NPC
     {
         //draws the sprite
         this.appearance.draw(fxGraphics2D, this.atDestination, this.x, this.y, this.person.getName());
+    }
 
-        if (debug) {
-            // draw the hitbox and exact destination
-            fxGraphics2D.draw(new Rectangle2D.Double(x, y, width, height));
+    /**
+     * Draw the hitbox of the npc
+     * @param fxGraphics2D
+     */
+    public void debugDraw(FXGraphics2D fxGraphics2D)
+    {
+        fxGraphics2D.draw(getHitbox());
+        fxGraphics2D.setColor(Color.BLUE);
+        fxGraphics2D.draw(getBigHitbox());
+        fxGraphics2D.setColor(Color.BLACK);
 
-            if (destination != null)
-            {
-                fxGraphics2D.setColor(Color.RED);
-                fxGraphics2D.draw(new Ellipse2D.Double(destination.getX(), destination.getY(), 1, 1));
-                fxGraphics2D.setColor(Color.BLACK);
-            }
+        if (destination != null)
+        {
+            fxGraphics2D.setColor(Color.RED);
+            fxGraphics2D.draw(new Ellipse2D.Double(destination.getX(), destination.getY(), 1, 1));
+            fxGraphics2D.setColor(Color.BLACK);
         }
     }
 
@@ -351,7 +384,8 @@ public class NPC
     /**
      * Set it so the NPC is not at any destination and doesn't have any destination stored
      */
-    public void resetDestination() {
+    public void resetDestination()
+    {
         atDestination = false;
         destination = null;
         onTargetTile = false;
@@ -360,6 +394,7 @@ public class NPC
 
     /**
      * Set the pathfinding to a new pathfinding object
+     *
      * @param pathfinding
      */
     public void setPathfinding(Pathfinding pathfinding)
@@ -370,7 +405,8 @@ public class NPC
         }
         this.currentPathfinding = pathfinding;
         this.currentPathfinding.addNpc(this);
-        if (pathfinding.getDestinationTile() != null) {
+        if (pathfinding.getDestinationTile() != null)
+        {
             resetDestination();
         }
     }
@@ -379,6 +415,7 @@ public class NPC
      * Update the pathfinding check
      * looks in what direction the npc has to move according to what tile on the pathfinding field it is on
      * if the npc is in the destination tile it then starts to move to the exact point on the tile it needs to go to
+     *
      * @param deltaTime
      */
     private void pathfindingUpdate(double deltaTime)
@@ -386,7 +423,8 @@ public class NPC
         PathfindingTile newTile = currentPathfinding.getTile((int) (y / currentPathfinding.getTileHeight()), (int) (x / currentPathfinding.getTileWidth()));
         if (newTile != null)
         {
-            if (newTile == this.currentTile) {
+            if (newTile == this.currentTile)
+            {
                 // if still on the same time only move
                 rotationAndMovementUpdate(deltaTime);
             }
@@ -433,25 +471,29 @@ public class NPC
         return atDestination;
     }
 
-    public Point2D getCurrentLocation(){
+    public Point2D getCurrentLocation()
+    {
         return new Point2D.Double(this.x, this.y);
     }
 
-    public static String randomSprite(){
+    public static String randomSprite()
+    {
         ArrayList<String> imagePaths = new ArrayList<>();
         imagePaths.add("/NPC/NPC1 male.png");
         imagePaths.add("/NPC/NPC2 male.png");
         imagePaths.add("/NPC/NPC3 female.png");
         imagePaths.add("/NPC/NPC4 female.png");
 
-        return imagePaths.get((int)(Math.random()*4));
+        return imagePaths.get((int) (Math.random() * 4));
     }
 
 
-    public void generateComponents() {
+    public void generateComponents()
+    {
 
         xComponent += 16;
-        if (xComponent > 1575) {
+        if (xComponent > 1575)
+        {
             xComponent = 1310;
             yComponent += 16;
         }
@@ -459,21 +501,25 @@ public class NPC
     }
 
     //TODO temporary for testing
-    public static int yComponent(){
-        if (yComponent > 750){
+    public static int yComponent()
+    {
+        if (yComponent > 750)
+        {
             yComponent = 450;
         }
-        return (int)yComponent;
+        return (int) yComponent;
     }
 
     //TODO temporary for testing
-    public static int xComponent(){
-        return (int)xComponent;
+    public static int xComponent()
+    {
+        return (int) xComponent;
     }
 
     /**
      * Set the targetrotation to a given angle
      * Also determines the rotation direction (leftwards or rightwards) to rotate in, always takes the rotation direction that has to rotate the least
+     *
      * @param angle
      */
     public void setTargetRotation(double angle)
@@ -542,8 +588,13 @@ public class NPC
 
     }
 
-    public Rectangle2D getHitbox() {
+    public Rectangle2D getHitbox()
+    {
         return new Rectangle2D.Double(this.x, this.y, this.width, this.height);
+    }
+
+    public Rectangle2D getBigHitbox() {
+        return new Rectangle2D.Double(this.x - this.width / 2, this.y - this.height / 2, this.width * 2, this.height * 2);
     }
 
     public Point2D getDestination()

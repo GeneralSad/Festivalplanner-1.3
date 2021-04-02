@@ -111,5 +111,12 @@ public class NPCManager
         for (NPC npc : this.npcs) {
             npc.draw(fxGraphics2D, debug);
         }
+        if (debug)
+        {
+            for (NPC npc : this.npcs)
+            {
+                npc.debugDraw(fxGraphics2D);
+            }
+        }
     }
 }
