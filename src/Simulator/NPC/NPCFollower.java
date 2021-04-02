@@ -63,7 +63,7 @@ public class NPCFollower
             DecimalFormat decimalFormat = new DecimalFormat("#.000");
             fxGraphics2D.drawString("Selected npc information:", x, y + yOffset);
             yOffset += yJump;
-            fxGraphics2D.drawString("Person: " + npc.getPerson(), x, y + yOffset);
+            fxGraphics2D.drawString("Person name: " + npc.getPerson() + " Age: " + npc.getPerson().getAge(), x, y + yOffset);
             yOffset += yJump;
             fxGraphics2D.drawString("Width and Height: " + npc.getWidth() + " " + npc.getHeight(), x, y + yOffset);
             yOffset += yJump;
@@ -77,6 +77,13 @@ public class NPCFollower
             }
             yOffset += yJump;
             fxGraphics2D.drawString("At destination?: " + npc.isAtDestination(), x, y + yOffset);
+            yOffset += yJump;
+            if (npc.getCurrentPathfinding() != null && npc.getCurrentPathfinding().getDestinationTile() != null)
+            {
+                fxGraphics2D.drawString("Pathfinding destination tile column and row: " + npc.getCurrentPathfinding().getDestinationTile().getColumn() + " " + npc.getCurrentPathfinding().getDestinationTile().getRow(), x, y + yOffset);
+            } else {
+                fxGraphics2D.drawString("Pathfinding has no destination tile", x, y + yOffset);
+            }
             yOffset += yJump;
             fxGraphics2D.drawString("Rotation: " + decimalFormat.format(npc.getRotation()), x, y + yOffset);
             yOffset += yJump;
