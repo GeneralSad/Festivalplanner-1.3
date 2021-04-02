@@ -38,21 +38,6 @@ public class ClassRoomBehavior
 
     }
 
-    public void ScriptedStudentEnd(NPC student)
-    {
-        student.appearance.setSitting(false, leaveFilledSeat(student).getOrientation());
-
-        Pathfinding pathfinding = new Pathfinding(GUI.getTiledmap());
-        student.setPathfinding(pathfinding);
-        pathfinding.addNpc(student);
-        pathfinding.setDestination((int) entry.getX(), (int) entry.getY());
-    }
-
-    public void ScriptedTeacherEnd(NPC teacher)
-    {
-
-    }
-
     public Seat claimEmptySeat(NPC student) throws IllegalArgumentException
     {
         Seat seat = getFurthestSeat(student.getCurrentLocation());
@@ -67,7 +52,7 @@ public class ClassRoomBehavior
         Seat furthest = null;
         double furthestDistanceSoFar = 0;
         for (Seat s : seats) {
-            if (s.isEmpty()) {
+            if (s.isEmpty() && s != teacherSeat) {
                 double distance = from.distance(s.getSeat());
                 if (distance > furthestDistanceSoFar) {
                     furthestDistanceSoFar = distance;
@@ -78,17 +63,18 @@ public class ClassRoomBehavior
         return furthest;
     }
 
-    public Seat leaveFilledSeat(NPC student)
+    public void leaveFilledSeat(NPC student)
     {
+
         for (Seat s : seats)
         {
             if (s.getStudent() == student)
             {
+                handeld.remove(student);
                 s.setStudent(null);
-                return s;
+                return;
             }
         }
-        throw new IllegalArgumentException("Student not seated!");
     }
 
     public Point2D getEntry()

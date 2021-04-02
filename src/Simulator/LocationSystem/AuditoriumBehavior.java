@@ -10,7 +10,8 @@ import java.util.ArrayList;
 public class AuditoriumBehavior
 {
     private ArrayList<Seat> seats;
-    private Point2D entry;
+    public static Point2D entry;
+    private ArrayList<NPC> handeld = new ArrayList<>();
 
     public AuditoriumBehavior(ArrayList<Seat> seats, Point2D entry)
     {
@@ -18,42 +19,58 @@ public class AuditoriumBehavior
         this.entry = entry;
     }
 
-    public void ScriptedStudentStart(NPC student){
-        Point2D selectedSeat = claimEmptySeat(student);
-        Pathfinding pathfinding = new Pathfinding(Simulator.getTiledmap());
-        student.setPathfinding(pathfinding);
-        pathfinding.addNpc(student);
-        pathfinding.setDestination((int)selectedSeat.getX(), (int)selectedSeat.getY());
-
-    }
-
-    public void ScriptedStudentEnd(NPC student){
-        leaveFilledSeat(student);
-        Pathfinding pathfinding = new Pathfinding(Simulator.getTiledmap());
-        student.setPathfinding(pathfinding);
-        pathfinding.addNpc(student);
-        pathfinding.setDestination((int)entry.getX(), (int)entry.getY());
-    }
-
-    private Point2D claimEmptySeat(NPC student) throws IllegalArgumentException{
-        for (Seat s : seats)
+    public void ScriptedStart(NPC person)
+    {
+        if (!handeld.contains(person))
         {
-            if (s.isEmpty()){
-                s.setStudent(student);
-                return s.getSeat();
+            Seat selectedSeat = claimEmptySeat(person);
+            person.appearance.setSitting(true, selectedSeat.getOrientation());
+            person.resetDestination();
+            person.getCurrentPathfinding().setDestination((int) selectedSeat.getSeat().getX(), (int) selectedSeat.getSeat().getY());
+            handeld.add(person);
+        }
+    }
+
+    public Seat claimEmptySeat(NPC person) throws IllegalArgumentException
+    {
+        Seat seat = getFurthestSeat(person.getCurrentLocation());
+        if (seat != null) {
+            seat.setStudent(person);
+            return seat;
+        }
+        throw new IllegalArgumentException("Not enough seats! Total seats is: " + seats.size());
+    }
+
+    public Seat getFurthestSeat(Point2D from) {
+        Seat furthest = null;
+        double furthestDistanceSoFar = 0;
+        for (Seat s : seats) {
+            if (s.isEmpty()) {
+                double distance = from.distance(s.getSeat());
+                if (distance > furthestDistanceSoFar) {
+                    furthestDistanceSoFar = distance;
+                    furthest = s;
+                }
             }
         }
-        throw new IllegalArgumentException("Not enough seats!");
+        return furthest;
     }
 
-    private void leaveFilledSeat(NPC student) throws IllegalArgumentException{
+    public void leaveFilledSeat(NPC person)
+    {
         for (Seat s : seats)
         {
-            if (s.getStudent() == student){
+            if (s.getStudent() == person)
+            {
+                handeld.remove(person);
                 s.setStudent(null);
                 return;
             }
         }
-        throw new IllegalArgumentException("Student not seated!");
+    }
+
+    public Point2D getEntry()
+    {
+        return entry;
     }
 }

@@ -75,7 +75,8 @@ public class LocationDatabase
      * subjected to change with a area funtion that checks a area and reads all the seats.
      * @return
      */
-    public ArrayList<ClassRoomBehavior> ClassRoomStudentData(){
+    public ArrayList<ClassRoomBehavior> ClassRoomData()
+    {
         //return type
         ArrayList<ClassRoomBehavior> classRoomBehaviors = new ArrayList<>();
 
@@ -83,51 +84,50 @@ public class LocationDatabase
 
         //room1
         ArrayList<Seat> seats = collectSeats(24, 32);
-        classRoomBehaviors.add(new ClassRoomBehavior(seats
-                , seats.get(12), new Point2D.Double(550, 550)));
+        classRoomBehaviors.add(new ClassRoomBehavior(seats, seats.get(12), new Point2D.Double(550, 550)));
 
         //room2
         seats = collectSeats(24, 52);
-        classRoomBehaviors.add(new ClassRoomBehavior(seats
-                , seats.get(12), new Point2D.Double(1000, 550)));
+        classRoomBehaviors.add(new ClassRoomBehavior(seats, seats.get(12), new Point2D.Double(1000, 550)));
 
         //room3
         seats = collectSeats(45, 21);
-        classRoomBehaviors.add(new ClassRoomBehavior(seats
-                , seats.get(0), new Point2D.Double(500, 820)));
+        classRoomBehaviors.add(new ClassRoomBehavior(seats, seats.get(0), new Point2D.Double(500, 820)));
 
 
         //room4
         seats = collectSeats(45, 38);
-        classRoomBehaviors.add(new ClassRoomBehavior(seats
-                , seats.get(0), new Point2D.Double(600, 820)));
+        classRoomBehaviors.add(new ClassRoomBehavior(seats, seats.get(0), new Point2D.Double(600, 820)));
 
 
         //room5
         seats = collectSeats(45, 49);
-        classRoomBehaviors.add(new ClassRoomBehavior(seats
-                , seats.get(0), new Point2D.Double(950, 820)));
+        classRoomBehaviors.add(new ClassRoomBehavior(seats, seats.get(0), new Point2D.Double(950, 820)));
 
 
         //room6
         seats = collectSeats(45, 66);
-        classRoomBehaviors.add(new ClassRoomBehavior(seats
-                , seats.get(0), new Point2D.Double(1050, 820)));
+        classRoomBehaviors.add(new ClassRoomBehavior(seats, seats.get(0), new Point2D.Double(1050, 820)));
 
 
         //room7
         seats = collectSeats(62, 21);
-        classRoomBehaviors.add(new ClassRoomBehavior(seats
-                , seats.get(0), new Point2D.Double(500, 1110)));
+        classRoomBehaviors.add(new ClassRoomBehavior(seats, seats.get(0), new Point2D.Double(500, 1110)));
 
 
         //room8
         seats = collectSeats(62, 38);
-        classRoomBehaviors.add(new ClassRoomBehavior(seats
-                , seats.get(0), new Point2D.Double(600, 1110)));
+        classRoomBehaviors.add(new ClassRoomBehavior(seats, seats.get(0), new Point2D.Double(600, 1110)));
 
 
         return classRoomBehaviors;
+    }
+
+    public AuditoriumBehavior AudioriumData(){
+        ArrayList<Seat> seats = collectSeats(62, 49);
+        AuditoriumBehavior auditoriumBehavior = new AuditoriumBehavior(seats, new Point2D.Double(1000, 980));
+
+        return auditoriumBehavior;
     }
 
 
