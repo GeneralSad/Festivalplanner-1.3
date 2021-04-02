@@ -52,6 +52,7 @@ public class Simulator
     private double yComponent = 450;
     private double xComponent = 1300;
     private Camera camera;
+    private ArrayList<NPC> inAula = new ArrayList<>();
 
     public Simulator(Schedule schedule)
     {
@@ -96,6 +97,7 @@ public class Simulator
                                 {
                                     if (npc.getPerson().equals(student))
                                     {
+                                        inAula.remove(npc);
                                         locationManager.scriptedEndLesson(npc);
                                         npc.resetDestination();
                                         npc.getCurrentPathfinding().setDestination((int) lesson.getClassroom().getEntry().getX(), (int) lesson.getClassroom().getEntry().getY());
@@ -146,7 +148,8 @@ public class Simulator
                 boolean onscreen = true;
                 for (int j = 0; j < used.size(); j++)
                 {
-                    if (used.get(j) == npcOnScreen.get(i))
+                    if (used.get(j) == npcOnScreen.get(i) || inAula.contains(npcOnScreen.get(i))
+                    )
                     {
                         onscreen = false;
                     }
@@ -157,6 +160,7 @@ public class Simulator
                     locationManager.scriptedEndLesson(npcOnScreen.get(i));
                     npcOnScreen.get(i).resetDestination();
                     npcOnScreen.get(i).getCurrentPathfinding().setDestination((int) AuditoriumBehavior.entry.getX(), (int) AuditoriumBehavior.entry.getY());
+                    inAula.add(npcOnScreen.get(i));
                 }
             }
 
