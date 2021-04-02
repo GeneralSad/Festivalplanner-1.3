@@ -4,6 +4,7 @@ import Data.Group;
 import Data.Lesson;
 import Data.Schedule;
 import Data.Student;
+import Simulator.LocationSystem.LocationDatabase;
 import Simulator.LocationSystem.LocationManager;
 import Simulator.Maploading.Tile;
 import Simulator.Maploading.TiledMap;
@@ -16,6 +17,7 @@ import org.jfree.fx.FXGraphics2D;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -31,6 +33,7 @@ import java.util.Set;
  * Deze klasse is de basis voor de simulator
  */
 
+
 public class Simulator
 {
     private NPCManager npcManager = new NPCManager();
@@ -43,6 +46,7 @@ public class Simulator
     private ArrayList<NPC> npcOnScreen = new ArrayList<>();
     // private ArrayList<Student> studentsOnScreen = new ArrayList<>();
     private ArrayList<Lesson> lessonsPassed = new ArrayList<>();
+    private LocationDatabase base = new LocationDatabase();
 
 
     public Simulator(Schedule schedule)
@@ -88,12 +92,10 @@ public class Simulator
                                 for (NPC npc : npcOnScreen)
                                 {
                                     if (npc.getPerson().equals(student))
+                                    if (npcOnScreen.get(k).getPerson().equals(s))
                                     {
-                                        npc.resetDestination();
-
-                                        npc.setDestination(lesson.getClassroom().getEntry());
-
-                                        //npc.getCurrentPathfinding().setDestination((int) lesson.getClassroom().getEntry().getX(), (int) lesson.getClassroom().getEntry().getY());
+                                        npcOnScreen.get(k).resetDestination();
+                                        npcOnScreen.get(k).getCurrentPathfinding().setDestination((int) lesson.getClassroom().getEntry().getX(), (int) lesson.getClassroom().getEntry().getY());
                                     }
                                 }
                             }
@@ -195,7 +197,7 @@ public class Simulator
     public void draw(FXGraphics2D fxGraphics2D)
     {
         tiledmap.draw(fxGraphics2D);
-        npcManager.draw(fxGraphics2D, false);
+        npcManager.draw(fxGraphics2D, true);
 
         fxGraphics2D.setColor(Color.blue);
 
@@ -216,7 +218,16 @@ public class Simulator
                 Point2D test = npc.getCurrentPathfinding().getDestinationTile().getMiddlePoint();
                 fxGraphics2D.fill(new Rectangle.Double(test.getX() - 5, test.getY() - 5, 10, 10));
             }
+
+            for (int i = 0; i < base.ClassRoomStudentData().size(); i++)
+            {
+                fxGraphics2D.setColor(Color.red);
+                Point2D point2D = base.ClassRoomStudentData().get(i).getEntry();
+                fxGraphics2D.fill(new Rectangle2D.Double(point2D.getX()-5, point2D.getY()-5, 10, 10));
+            }
         }
+
+
     }
 
     public String getFormattedTime()
