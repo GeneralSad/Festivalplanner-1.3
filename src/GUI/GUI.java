@@ -133,19 +133,19 @@ public class GUI extends Application
         });
 
 
-        Button magic1 = new Button("magic1");
-        magic1.setOnAction(event -> simulator.saveNPCs());
-
-
-        Button magic2 = new Button("magic2");
-        magic2.setOnAction(event -> simulator.loadNPCs());
+        Button magic2 = new Button("Kwartier terug");
+        magic2.setOnAction(event ->
+        {
+            simulator.loadNPCs();
+            updateLabel();
+        });
 
         // update the label so text is displayed at startup
         speedFactorLabel.setText("De simulatie speelt op normale snelheid");
 
         vBox.getChildren().addAll(speedFactorLabel, speedSettingsBox);
         speedFactorLabel.setFont(new Font("Arial", 16));
-        speedSettingsBox.getChildren().addAll(slowDownButton, speedUpButton, magic1, magic2);
+        speedSettingsBox.getChildren().addAll(slowDownButton, speedUpButton, magic2);
         speedSettingsBox.setAlignment(Pos.BOTTOM_LEFT);
         borderPane.setBottom(vBox);
 

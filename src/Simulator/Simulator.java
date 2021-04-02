@@ -18,6 +18,7 @@ import java.awt.*;
 import java.awt.geom.Point2D;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -43,12 +44,15 @@ public class Simulator
     private ArrayList<NPC> npcOnScreen = new ArrayList<>();
     // private ArrayList<Student> studentsOnScreen = new ArrayList<>();
     private ArrayList<Lesson> lessonsPassed = new ArrayList<>();
+    private LocalTime lastSave;
 
 
     public Simulator(Schedule schedule)
     {
         timeManager = new TimeManager(schedule, new NormalTime(LocalTime.of(9, 0, 0)));
         locationManager = new LocationManager();
+        lastSave = LocalTime.of(8, 0, 0);
+
     }
 
     public static TiledMap getTiledmap()
@@ -58,8 +62,6 @@ public class Simulator
 
     public void update(long deltatime)
     {
-
-
         double deltaTimeMultiplier = 1;
         if (speedfactor > 0)
         {
@@ -124,6 +126,7 @@ public class Simulator
 
 
             }
+
         }
 
 
@@ -186,6 +189,14 @@ public class Simulator
 
         //TODO De for loop hieronder is misschien niet goed
         //TODO Check
+
+        if (!npcOnScreen.isEmpty() && lastSave.until(timeManager.getTime(), ChronoUnit.MINUTES) > 15)
+        {
+            saveNPCs();
+            lastSave = timeManager.getTime();
+        }
+
+
         for (NPC npc : npcOnScreen)
         {
             locationManager.scriptedStartedLesson(npc, npc.getCurrentPathfinding());
@@ -244,14 +255,23 @@ public class Simulator
 
     public void loadNPCs()
     {
-        Set<LocalTime> localTimes = timeNPCManagerMap.keySet();
-        ArrayList<LocalTime> localTimeArrayList = new ArrayList<>(localTimes);
-        LocalTime localTime = localTimeArrayList.get(localTimeArrayList.size() - 1);
-        NPCManager npcManager = timeNPCManagerMap.get(localTime);
-        this.npcManager = npcManager;
-        this.timeManager.setTimeType(new NormalTime(localTime));
-        npcOnScreen.clear();
-        npcOnScreen.addAll(npcManager.getNpcs());
+        if (!timeNPCManagerMap.isEmpty())
+        {
+            Set<LocalTime> localTimes = timeNPCManagerMap.keySet();
+            ArrayList<LocalTime> localTimeArrayList = new ArrayList<>(localTimes);
+            LocalTime localTime = localTimeArrayList.get(localTimeArrayList.size() - 1);
+            if (timeNPCManagerMap.containsKey(localTime))
+            {
+                NPCManager npcManager = timeNPCManagerMap.get(localTime);
+                this.npcManager = npcManager;
+                this.timeManager.setTimeType(new NormalTime(localTime));
+                setSpeedfactor(0);
+                npcOnScreen.clear();
+                npcOnScreen.addAll(npcManager.getNpcs());
+                timeNPCManagerMap.remove(localTime);
+                lastSave = localTime;
+            }
+        }
     }
 
 
@@ -266,12 +286,9 @@ public class Simulator
 
         timeNPCManagerMap.put(timeManager.getTime(), newNpcManager);
 
+        System.out.println("npcs saved");
 
     }
-
-
-
-
 
 
 }
