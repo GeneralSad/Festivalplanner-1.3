@@ -38,17 +38,21 @@ import java.util.Set;
 
 public class Simulator
 {
+
+    //time managers stuff
     private NPCManager npcManager = new NPCManager();
     private TimeManager timeManager;
     private static TiledMap tiledmap = new TiledMap("/TiledMaps/MapFinal.json");
     private int speedfactor = 1;
 
-    private LocationManager locationManager;
 
+    //chache
     private ArrayList<NPC> npcOnScreen = new ArrayList<>();
 
+    //controllers
     private StudentController studentController = new StudentController();
     private TeacherController teacherController = new TeacherController();
+    private LocationManager locationManager = new LocationManager();
 
     private LocalTime lastSave;
     private LocationDatabase base = new LocationDatabase();
@@ -61,7 +65,6 @@ public class Simulator
     public Simulator(Schedule schedule)
     {
         timeManager = new TimeManager(schedule, new NormalTime(LocalTime.of(9, 0, 0)));
-        locationManager = new LocationManager();
         lastSave = LocalTime.of(8, 0, 0);
 
     }
@@ -71,8 +74,13 @@ public class Simulator
         return tiledmap;
     }
 
+    /**
+     * updates the canvas of the simulation and it assest and time managment.
+     * @param deltatime is the time it took to draw the prevouis frame.
+     */
     public void update(long deltatime)
     {
+        //time goodness
         double deltaTimeMultiplier = 1;
         if (speedfactor > 0)
         {
@@ -81,25 +89,29 @@ public class Simulator
         npcManager.update((deltatime / 1e9) * deltaTimeMultiplier);
         timeManager.update(deltatime);
 
+        //if the time is changed the location will be updated
         if (timeManager.isChanged() || speedfactor < 0) {
             ArrayList<Lesson> lessons = timeManager.getCurrentLessons();
 
-
+            //updates the students and teachers controls
             studentController.update(lessons, locationManager, npcManager);
             teacherController.update(lessons, locationManager, npcManager);
 
+            //clears the cache
             npcOnScreen.clear();
 
+            //loads the cache that is needed for other parts of this class
             npcOnScreen.addAll(studentController.getNpcStudentsOnScreen());
             npcOnScreen.addAll(teacherController.getNpcTeacherOnScreen());
-
-
-
         }
 
+        //checks if it is at the entrance of a classroom or autrium if that is true then
+        //it will collect a seat
         studentController.checkingFunction(locationManager);
         teacherController.checkingFunction(locationManager);
 
+
+        //save a backup of the npc for going backward
         if (!npcOnScreen.isEmpty() && lastSave.until(timeManager.getTime(), ChronoUnit.MINUTES) > 15)
         {
             saveNPCs();
@@ -112,17 +124,20 @@ public class Simulator
         }
     }
 
+    /**
+     * draws the simulation with debug options
+     * @param fxGraphics2D is the graphichs that draws everthing
+     */
     public void draw(FXGraphics2D fxGraphics2D, double canvasWidth, double canvasHeight)
     {
         tiledmap.draw(fxGraphics2D);
         npcManager.draw(fxGraphics2D, false);
 
-        fxGraphics2D.setColor(Color.blue);
 
-
-
+        //debug for all the part in the simulator that have something to do with the seats and locations
         if (false)
         {
+            fxGraphics2D.setColor(Color.blue);
             // draw seat numbers
             int number = 0;
             for (Tile tile : getTiledmap().getSeatableLayer().getTilesInLayer())
@@ -164,18 +179,6 @@ public class Simulator
 
     }
 
-    //TODO temporary for testing
-    public int yComponent(){
-        if (yComponent > 750){
-            yComponent = 450;
-        }
-        return (int)yComponent;
-    }
-
-    //TODO temporary for testing
-    public int xComponent(){
-        return (int)xComponent;
-    }
 
     public Point2D getAvailability(Point2D location) {
 
