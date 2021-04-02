@@ -93,6 +93,11 @@ public class NPCManager
         return null;
     }
 
+    public ArrayList<NPC> getNpcs()
+    {
+        return npcs;
+    }
+
     public void update(double deltaTime)
     {
         for (NPC npc : this.npcs)

@@ -67,6 +67,7 @@ public class NPC
     
     public NPC(Person person)
     {
+        //Math.floor(Math.random() * (max - min + 1)) + min;
         this(person, xComponent(), yComponent(), 8, 16, randomSprite());
     }
 

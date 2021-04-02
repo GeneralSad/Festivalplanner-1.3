@@ -41,6 +41,8 @@ public class Simulator
     private ArrayList<NPC> npcOnScreen = new ArrayList<>();
     private int maxSpeedFactor = 100;
 
+    private double yComponent = 450;
+    private double xComponent = 1300;
 
     public Simulator(Schedule schedule)
     {
@@ -57,6 +59,17 @@ public class Simulator
     public void update(long deltatime)
     {
 
+
+        //Deze pointers zijn voor de goede waarden bepalen van de hoeken van het spawnveld
+/*        NPC pointer = new NPC(new Student("C1", 1, new Group("1")), 1310, 750);
+        NPC pointer1 = new NPC(new Student("C2", 1, new Group("1")), 1575, 750);
+        NPC pointer2 = new NPC(new Student("C3", 1, new Group("1")), 1575, 450);
+        NPC pointer3 = new NPC(new Student("C4", 1, new Group("1")), 1310, 450);
+
+        npcManager.addNPC(pointer);
+        npcManager.addNPC(pointer1);
+        npcManager.addNPC(pointer2);
+        npcManager.addNPC(pointer3);*/
 
         double deltaTimeMultiplier = 1;
         if (speedfactor > 0)
@@ -91,7 +104,32 @@ public class Simulator
                 else
                 {
                     //System.out.println(student.getName() + ": de student komt de school binnen en gaat naar zijn les");
-                    NPC npc = new NPC(student);
+
+                    ArrayList<Point2D> currentLocations = new ArrayList<>();
+                    ArrayList<Point2D> availableLocations = new ArrayList<>();
+                    NPC npc;
+
+                    if (!npcManager.getNpcs().isEmpty()) {
+
+                        for (NPC existingNPC : npcManager.getNpcs()) {
+                            Point2D location = existingNPC.getCurrentLocation();
+                            currentLocations.add(location);
+                            //generateComponents();
+                            availableLocations.add(getAvailability(location));
+                        }
+
+                        Point2D fullAvailableLocation = getFullAvailability(currentLocations, availableLocations);
+
+                        npc = new NPC(student, (int)fullAvailableLocation.getX(), (int)fullAvailableLocation.getY());
+                        System.out.println("X: " + (int)fullAvailableLocation.getX() + " Y: " + (int)fullAvailableLocation.getY());
+
+                    } else {
+                        //generateComponents();
+                        npc = new NPC(student, (int)xComponent, (int)yComponent);
+                        System.out.println("X: " + xComponent + " Y: " + yComponent);
+
+                    }
+
                     Pathfinding pathfinding = new Pathfinding(tiledmap/*GUI.getWalkablemap()*/);
                     npc.setPathfinding(pathfinding);
                     pathfinding.addNpc(npc);
@@ -154,6 +192,66 @@ public class Simulator
                 fxGraphics2D.fill(new Rectangle.Double(test.getX() - 5, test.getY() - 5, 10, 10));
             }
         }
+    }
+
+    public void generateComponents() {
+
+        xComponent += 16;
+        if (xComponent > 1575) {
+            xComponent = 1310;
+            yComponent += 16;
+        }
+
+    }
+
+    //TODO temporary for testing
+    public int yComponent(){
+        if (yComponent > 750){
+            yComponent = 450;
+        }
+        return (int)yComponent;
+    }
+
+    //TODO temporary for testing
+    public int xComponent(){
+        return (int)xComponent;
+    }
+
+    public Point2D getAvailability(Point2D location) {
+
+        generateComponents();
+        if (location.distance(new Point2D.Double(xComponent, yComponent)) > 16) {
+            return new Point2D.Double(xComponent, yComponent);
+        } else {
+            return getAvailability(location);
+        }
+
+    }
+
+    private ArrayList<Point2D> fullAvailableLocations = new ArrayList<>();
+
+    public Point2D getFullAvailability(ArrayList<Point2D> currentLocations, ArrayList<Point2D> availableLocations ) {
+
+        if (!fullAvailableLocations.isEmpty()) {
+            fullAvailableLocations.remove(0);
+        }
+
+        for (Point2D location : availableLocations){
+
+            for (Point2D currentLocation : currentLocations) {
+
+                if (currentLocation.distance(location) > 16 && !fullAvailableLocations.contains(location)) {
+
+                    fullAvailableLocations.add(location);
+
+                }
+
+            }
+
+        }
+
+        return fullAvailableLocations.get(0);
+
     }
 
     public String getFormattedTime()
