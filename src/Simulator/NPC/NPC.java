@@ -44,6 +44,35 @@ public class NPC
     private static double xComponent = 1280;
 
 
+    public NPC(Person person, double x, double y, int width, int height, Point2D destination, double rotation, int rotationDirection, PathfindingTile currentTile, int speed, double targetRotation, int rotationSpeed, boolean atDestination, NPCSprites appearance, Pathfinding currentPathfinding, boolean onTargetTile)
+    {
+        this.person = person;
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.destination = destination;
+        this.rotation = rotation;
+        this.rotationDirection = rotationDirection;
+        this.currentTile = currentTile;
+        this.speed = speed;
+        this.targetRotation = targetRotation;
+        this.rotationSpeed = rotationSpeed;
+        this.atDestination = atDestination;
+        this.appearance = appearance;
+        this.currentPathfinding = currentPathfinding;
+        this.onTargetTile = onTargetTile;
+    }
+
+
+    @Override
+    public NPC clone()
+    {
+        return new NPC(person, x, y, width, height, destination, rotation, rotationDirection, currentTile, speed, targetRotation, rotationSpeed, atDestination, appearance, currentPathfinding, onTargetTile);
+    }
+
+
+
     public NPC(Person person, double x, double y, int width, int height, int rotation, int speed, int rotationSpeed, String npcAppearance)
     {
         this.person = person;
@@ -60,6 +89,7 @@ public class NPC
         this.atDestination = true;
         this.appearance = new NPCSprites(npcAppearance);
     }
+
 
     public NPC(Person person, double x, double y, int width, int height, String imageLocation)
     {
@@ -483,4 +513,6 @@ public class NPC
         }
 
     }
+
+
 }

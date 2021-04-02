@@ -33,6 +33,12 @@ public class NPCManager
         }
     }
 
+
+    public ArrayList<NPC> getNpcs()
+    {
+        return npcs;
+    }
+
     public void addNPC(NPC npc)
     {
         if (!this.npcs.contains(npc) && getNPCFromPerson(npc.getPerson()) == null) {

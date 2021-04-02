@@ -19,6 +19,9 @@ import java.awt.geom.Point2D;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
 
 //TODO making time go backward can be done by saving npc data every ~15 min and allowing to go backwards to the saved points
 
@@ -32,12 +35,10 @@ public class Simulator
 {
     private NPCManager npcManager = new NPCManager();
     private TimeManager timeManager;
-    private Schedule schedule;
     private static TiledMap tiledmap = new TiledMap("/TiledMaps/MapFinal.json");
     private int speedfactor = 1;
 
     private LocationManager locationManager;
-    private int maxSpeedFactor = 100;
 
     private ArrayList<NPC> npcOnScreen = new ArrayList<>();
     // private ArrayList<Student> studentsOnScreen = new ArrayList<>();
@@ -47,7 +48,6 @@ public class Simulator
     public Simulator(Schedule schedule)
     {
         timeManager = new TimeManager(schedule, new NormalTime(LocalTime.of(9, 0, 0)));
-        this.schedule = schedule;
         locationManager = new LocationManager();
     }
 
@@ -230,12 +230,48 @@ public class Simulator
         return timeManager.getSpeedFactor();
     }
 
+    private Map<LocalTime, NPCManager> timeNPCManagerMap = new LinkedHashMap<>();
+
     public void setSpeedfactor(int speedFactor)
     {
+        int maxSpeedFactor = 100;
         if (speedFactor > -1 && speedFactor <= maxSpeedFactor)
         {
             this.speedfactor = speedFactor;
         }
         timeManager.setSpeedFactor(this.speedfactor);
     }
+
+    public void loadNPCs()
+    {
+        Set<LocalTime> localTimes = timeNPCManagerMap.keySet();
+        ArrayList<LocalTime> localTimeArrayList = new ArrayList<>(localTimes);
+        LocalTime localTime = localTimeArrayList.get(localTimeArrayList.size() - 1);
+        NPCManager npcManager = timeNPCManagerMap.get(localTime);
+        this.npcManager = npcManager;
+        this.timeManager.setTimeType(new NormalTime(localTime));
+        npcOnScreen.clear();
+        npcOnScreen.addAll(npcManager.getNpcs());
+    }
+
+
+    public void saveNPCs()
+    {
+        NPCManager newNpcManager = new NPCManager();
+
+        for (NPC npc : this.npcManager.getNpcs())
+        {
+            newNpcManager.addNPC(npc.clone());
+        }
+
+        timeNPCManagerMap.put(timeManager.getTime(), newNpcManager);
+
+
+    }
+
+
+
+
+
+
 }

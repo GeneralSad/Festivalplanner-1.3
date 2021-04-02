@@ -22,8 +22,6 @@ import javafx.stage.Stage;
 import org.jfree.fx.FXGraphics2D;
 
 import java.awt.*;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Point2D;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
@@ -134,12 +132,20 @@ public class GUI extends Application
             updateLabel();
         });
 
+
+        Button magic1 = new Button("magic1");
+        magic1.setOnAction(event -> simulator.saveNPCs());
+
+
+        Button magic2 = new Button("magic2");
+        magic2.setOnAction(event -> simulator.loadNPCs());
+
         // update the label so text is displayed at startup
         speedFactorLabel.setText("De simulatie speelt op normale snelheid");
 
         vBox.getChildren().addAll(speedFactorLabel, speedSettingsBox);
         speedFactorLabel.setFont(new Font("Arial", 16));
-        speedSettingsBox.getChildren().addAll(slowDownButton, speedUpButton);
+        speedSettingsBox.getChildren().addAll(slowDownButton, speedUpButton, magic1, magic2);
         speedSettingsBox.setAlignment(Pos.BOTTOM_LEFT);
         borderPane.setBottom(vBox);
 
