@@ -42,7 +42,7 @@ import java.util.Comparator;
 
         protected TabClassroom(Schedule schedule)
         {
-            super.setPopUpName("Lessen");
+            super.setPopUpName("Lokalen");
             this.schedule = schedule;
             this.selectedClassroom = null;
 
@@ -69,13 +69,13 @@ import java.util.Comparator;
 
             Label nameClassroom = new Label("Naam klaslokaal");
             TextField classroomName = new TextField();
-            classroomName.setPromptText("Naam Les");
+            classroomName.setPromptText("Naam lokaal");
 //            classroomName.getParent().requestFocus();
 
             classroomData.getChildren().addAll(nameClassroom, classroomName);
 
 
-            Button editSelected = new Button("Wijzig les");
+            Button editSelected = new Button("Wijzig lokaal naam");
             editSelected.setOnAction(event ->
             {
                 if (this.selectedClassroom != null)
