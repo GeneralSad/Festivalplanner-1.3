@@ -3,7 +3,6 @@ package Simulator;
 import Data.*;
 import Simulator.Controller.StudentController;
 import Simulator.Controller.TeacherController;
-import Simulator.LocationSystem.AuditoriumBehavior;
 import Simulator.LocationSystem.LocationDatabase;
 import Simulator.LocationSystem.LocationManager;
 import Simulator.Maploading.Tile;
@@ -11,7 +10,6 @@ import Simulator.Maploading.TiledMap;
 import Simulator.NPC.NPC;
 import Simulator.NPC.NPCFollower;
 import Simulator.NPC.NPCManager;
-import Simulator.Pathfinding.Pathfinding;
 import Simulator.Time.NormalTime;
 import Simulator.Time.TimeManager;
 import org.jfree.fx.FXGraphics2D;
@@ -82,6 +80,10 @@ public class Simulator
      */
     public void update(long deltatime)
     {
+        //checks if despawining is needed
+        studentController.studentDespawining(npcManager);
+        teacherController.teacherDespawining(npcManager);
+
         //time goodness
         double deltaTimeMultiplier = 1;
         if (speedfactor > 0)
@@ -111,6 +113,7 @@ public class Simulator
         //it will collect a seat
         studentController.checkingFunction(locationManager);
         teacherController.checkingFunction(locationManager);
+
 
 
         //save a backup of the npc for going backward

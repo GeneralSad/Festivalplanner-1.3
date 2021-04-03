@@ -210,7 +210,7 @@ public class GUI extends Application
     private void initialise()
     {
 
-        //this.schedule = DataStorage.loadSchedule(this.filePath);
+        this.schedule = DataStorage.loadSchedule(this.filePath);
         if (this.schedule == null)
         {
            //  Manual schedule loading:
@@ -349,7 +349,7 @@ public class GUI extends Application
             lastX = -10000;
             lastY = -10000;
 
-            //System.out.println("X: " + event.getX() + "Y: " +  event.getY());
+            System.out.println("X: " + event.getX() + "Y: " +  event.getY());
 
         });
 
