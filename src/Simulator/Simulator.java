@@ -14,6 +14,9 @@ import Simulator.Time.NormalTime;
 import Simulator.Time.TimeManager;
 import org.jfree.fx.FXGraphics2D;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
@@ -59,6 +62,7 @@ public class Simulator
     private double yComponent = 450;
     private double xComponent = 1300;
     private Camera camera;
+    private Clip clip;
 
 
     public Simulator(Schedule schedule)
@@ -66,7 +70,16 @@ public class Simulator
         this.schedule = schedule;
         timeManager = new TimeManager(schedule, new NormalTime(LocalTime.of(9, 0, 0)));
         lastSave = LocalTime.of(8, 0, 0);
-
+        //plays the music
+        try{
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(this.getClass().getResource("/Music/ring sound.wav"));
+            clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            clip.start();
+            audioInputStream.close();
+        }
+        catch(Exception e)
+        { e.printStackTrace();}
     }
 
     public static TiledMap getTiledmap()
@@ -95,6 +108,11 @@ public class Simulator
 
         //if the time is changed the location will be updated
         if (timeManager.isChanged() || speedfactor < 0) {
+
+            clip.setFramePosition(0);
+            clip.start();
+
+
             ArrayList<Lesson> lessons = timeManager.getCurrentLessons();
 
             //updates the students and teachers controls
@@ -136,11 +154,11 @@ public class Simulator
     public void draw(FXGraphics2D fxGraphics2D, double canvasWidth, double canvasHeight)
     {
         tiledmap.draw(fxGraphics2D);
-        npcManager.draw(fxGraphics2D, true);
+        npcManager.draw(fxGraphics2D, false);
 
 
         //debug for all the part in the simulator that have something to do with the seats and locations
-        if (true)
+        if (false)
         {
             fxGraphics2D.setColor(Color.blue);
             // draw seat numbers
