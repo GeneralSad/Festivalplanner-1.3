@@ -18,6 +18,38 @@ public class StudentController {
     private TiledMap tiledmap = new TiledMap("/TiledMaps/MapFinal.json");
 
     public void update(ArrayList<Lesson> lessons, LocationManager locationManager, NPCManager npcManager, Schedule schedule){
+
+        ArrayList<Lesson> lessonsAllday = schedule.getLessonArrayList();
+
+        for (NPC npc: npcStudentsOnScreen) {
+
+            boolean stillLesson = true;
+            for (Lesson lesson :lessonsAllday) {
+                for (Group group : lesson.getGroups()) {
+                    for (Student student : group.getStudents()) {
+                        if (student == npc.getPerson()) {
+                            if (lessonsPassed.contains(lesson) && !lessons.contains(lesson)) {
+
+                            } else {
+                                stillLesson = false;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (stillLesson){
+                for (int i = 0; i < npcStudentsOnScreen.size(); i++) {
+                    if (npc == npcStudentsOnScreen.get(i)){
+                        System.out.println(npc.getPerson().getName() + "Is going to be removed");
+                        npcManager.removeNPC(npc);
+                        npcStudentsOnScreen.remove(i);
+                    }
+                }
+                break;
+            }
+        }
+
         for (Lesson lesson : lessons)
             if (!lessonsPassed.contains(lesson))
             {
