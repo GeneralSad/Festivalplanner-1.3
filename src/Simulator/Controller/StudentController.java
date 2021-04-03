@@ -1,9 +1,6 @@
 package Simulator.Controller;
 
-import Data.Group;
-import Data.Lesson;
-import Data.Person;
-import Data.Student;
+import Data.*;
 import Simulator.LocationSystem.AuditoriumBehavior;
 import Simulator.LocationSystem.LocationManager;
 import Simulator.Maploading.TiledMap;
@@ -20,7 +17,7 @@ public class StudentController {
     private ArrayList<Lesson> lessonsPassed = new ArrayList<>();
     private TiledMap tiledmap = new TiledMap("/TiledMaps/MapFinal.json");
 
-    public void update(ArrayList<Lesson> lessons, LocationManager locationManager, NPCManager npcManager){
+    public void update(ArrayList<Lesson> lessons, LocationManager locationManager, NPCManager npcManager, Schedule schedule){
         for (Lesson lesson : lessons)
             if (!lessonsPassed.contains(lesson))
             {
@@ -38,7 +35,11 @@ public class StudentController {
                             {
                                 if (npc.getPerson().equals(student))
                                 {
-                                    inAula.remove(npc);
+                                    for (int i = 0; i < inAula.size(); i++) {
+                                        if (inAula.get(i).getPerson() == student){
+                                            inAula.remove(i);
+                                        }
+                                    }
                                     locationManager.scriptedEndLesson(npc);
                                     npc.resetDestination();
                                     npc.getCurrentPathfinding().setDestination((int) lesson.getClassroom().getEntry().getX(), (int) lesson.getClassroom().getEntry().getY());
@@ -52,6 +53,7 @@ public class StudentController {
                             Pathfinding pathfinding = new Pathfinding(tiledmap/*GUI.getWalkablemap()*/);
                             npc.setPathfinding(pathfinding);
                             pathfinding.addNpc(npc);
+                            npc.setCollisionEnabler(true);
                             npcStudentsOnScreen.add(npc);
 
                             if (pathfinding.getExactDestination() == null)
@@ -89,9 +91,13 @@ public class StudentController {
             boolean onscreen = true;
             for (int j = 0; j < used.size(); j++)
             {
-                if (used.get(j) == npcStudentsOnScreen.get(i) || inAula.contains(npcStudentsOnScreen.get(i))
-                )
+                if (used.get(j) == npcStudentsOnScreen.get(i))
                 {
+                    onscreen = false;
+                }
+            }
+            for (int j = 0; j < inAula.size(); j++) {
+                if (inAula.get(j) == npcStudentsOnScreen.get(i)){
                     onscreen = false;
                 }
             }
@@ -120,4 +126,6 @@ public class StudentController {
     public ArrayList<NPC> getNpcStudentsOnScreen() {
         return npcStudentsOnScreen;
     }
+
+
 }

@@ -1,6 +1,7 @@
 package Simulator.Controller;
 
 import Data.Lesson;
+import Data.Schedule;
 import Simulator.LocationSystem.AuditoriumBehavior;
 import Simulator.LocationSystem.LocationManager;
 import Simulator.Maploading.TiledMap;
@@ -18,17 +19,55 @@ public class TeacherController {
     private ArrayList<Lesson> lessonsPassed = new ArrayList<>();
     private TiledMap tiledmap = new TiledMap("/TiledMaps/MapFinal.json");
 
-    public void update(ArrayList<Lesson> lessons, LocationManager locationManager, NPCManager npcManager){
+    public void update(ArrayList<Lesson> lessons, LocationManager locationManager, NPCManager npcManager, Schedule schedule){
+
+
+        ArrayList<Lesson> lessonsAllday = schedule.getLessonArrayList();
+
+        for (NPC npc: npcTeacherOnScreen) {
+
+            boolean stillLesson = true;
+            for (Lesson lesson :lessonsAllday) {
+                if (lesson.getTeacher() == npc.getPerson()) {
+                    if (lessonsPassed.contains(lesson) && !lessons.contains(lesson)){
+
+                    } else {
+                        stillLesson = false;
+                    }
+                }
+            }
+
+            if (stillLesson){
+                for (int i = 0; i < npcTeacherOnScreen.size(); i++) {
+                    if (npc == npcTeacherOnScreen.get(i)){
+                        System.out.println(npc.getPerson().getName() + "Is going to be removed");
+                        npcManager.removeNPC(npc);
+                        npcTeacherOnScreen.remove(i);
+                    }
+                }
+                break;
+            }
+        }
+
+
+
+
+
+
         for (Lesson lesson : lessons)
             if (!lessonsPassed.contains(lesson)) {
                 if (npcTeacherOnScreen.contains(new NPC(lesson.getTeacher())))
                 {
-                    System.out.println(lesson.getTeacher().getName() + ": Student word van huidige locatie naar nieuwe les verplaatst");
+                    System.out.println(lesson.getTeacher().getName() + ": Teacher word van huidige locatie naar nieuwe les verplaatst");
                     for (NPC npc : npcTeacherOnScreen)
                     {
                         if (npc.getPerson().equals(lesson.getTeacher()))
                         {
-                            inAula.remove(npc);
+                            for (int i = 0; i < inAula.size(); i++) {
+                                if (lesson.getTeacher() == inAula.get(i).getPerson()){
+                                    inAula.remove(i);
+                                }
+                            }
                             locationManager.scriptedEndLesson(npc);
                             npc.resetDestination();
                             npc.getCurrentPathfinding().setDestination((int) lesson.getClassroom().getEntry().getX(), (int) lesson.getClassroom().getEntry().getY());
@@ -37,8 +76,9 @@ public class TeacherController {
                 }
                 else
                 {
-                    System.out.println(lesson.getTeacher().getName() + ": de student komt de school binnen en gaat naar zijn les");
+                    System.out.println(lesson.getTeacher().getName() + ": de Teacher komt de school binnen en gaat naar zijn les");
                     NPC npc = new NPC(lesson.getTeacher());
+                    npc.setCollisionEnabler(true);
                     Pathfinding pathfinding = new Pathfinding(tiledmap/*GUI.getWalkablemap()*/);
                     npc.setPathfinding(pathfinding);
                     pathfinding.addNpc(npc);
@@ -70,9 +110,13 @@ public class TeacherController {
             boolean onscreen = true;
             for (int j = 0; j < used.size(); j++)
             {
-                if (used.get(j) == npcTeacherOnScreen.get(i) || inAula.contains(npcTeacherOnScreen.get(i))
-                )
+                if (used.get(j) == npcTeacherOnScreen.get(i))
                 {
+                    onscreen = false;
+                }
+            }
+            for (int j = 0; j < inAula.size(); j++) {
+                if (inAula.get(j) == npcTeacherOnScreen.get(i)){
                     onscreen = false;
                 }
             }
@@ -85,6 +129,8 @@ public class TeacherController {
                 inAula.add(npcTeacherOnScreen.get(i));
             }
         }
+
+
     }
 
     public void checkingFunction(LocationManager locationManager){

@@ -210,7 +210,7 @@ public class GUI extends Application
     private void initialise()
     {
 
-        this.schedule = DataStorage.loadSchedule(this.filePath);
+        //this.schedule = DataStorage.loadSchedule(this.filePath);
         if (this.schedule == null)
         {
            //  Manual schedule loading:

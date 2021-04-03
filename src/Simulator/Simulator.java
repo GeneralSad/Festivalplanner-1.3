@@ -56,6 +56,7 @@ public class Simulator
 
     private LocalTime lastSave;
     private LocationDatabase base = new LocationDatabase();
+    private Schedule schedule;
 
     private double yComponent = 450;
     private double xComponent = 1300;
@@ -64,6 +65,7 @@ public class Simulator
 
     public Simulator(Schedule schedule)
     {
+        this.schedule = schedule;
         timeManager = new TimeManager(schedule, new NormalTime(LocalTime.of(9, 0, 0)));
         lastSave = LocalTime.of(8, 0, 0);
 
@@ -94,8 +96,8 @@ public class Simulator
             ArrayList<Lesson> lessons = timeManager.getCurrentLessons();
 
             //updates the students and teachers controls
-            studentController.update(lessons, locationManager, npcManager);
-            teacherController.update(lessons, locationManager, npcManager);
+            studentController.update(lessons, locationManager, npcManager, schedule);
+            teacherController.update(lessons, locationManager, npcManager, schedule);
 
             //clears the cache
             npcOnScreen.clear();
