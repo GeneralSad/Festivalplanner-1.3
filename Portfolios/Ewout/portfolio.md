@@ -81,10 +81,20 @@ ook heb ik er voor gezorgd dat als je klas vult met leerlingen dat je geen dubbe
 
 bug gefixed dat 10 uur werd geskipped, kwam omdat er niet naar veranderingen werden gekeken tijd een les.
 
+het viel me op dat dezen les gebeurde tijdens een andere les. dus dat is waar ik begon met kijken, en toen 
+zag ik dat de check voor wanneer de volgende actie was niet kloptie want die pakte alle lessen van het huidige tijdstip en keer naar het eerst volgende eindtijd of begin tijd welk ook eerder was, maar in 
+deze lijst zaten dus nog niet de lessen die nog moeste beginnen, hierdoor werden deze niet megenomen, dit heb ik gefixed door de tijd die gecontrolleerd word uittebreiden dus er word gecheckt vanaf de begintijd van de huidige les tot de eindtijd.
+
+
 #javaFX in het bedrijfsleven
 
+javaFX is een java libary die we hebben gebruikt tijdens deze periode, deze libary word niet alleen maar gebruikt op scholen en tijdens het leren van java
+maar word waarschijnlijk ook gebruikt in het bedrijfleven, dit word onderzocht op verschillende manieren. Ten eerste word javaFX wel echt gebruikt, ten Tweede waarom word het dan gebruikt, en als laatste hoe wordt het dan gebruikt
 
-javaFX is niet alleen iets wat wij leren gebruiken op school, het word namelijk ook gebruikt in het bedrijfsleven. 
+##Gebruik van javaFX
+ van een persoon zelf thuis met een raspberry pi tot een bedrijf zo groot als nasa gebruikt javaFX, bij nasa werd javaFX namelijk gebruikt
+ voor het NASA James Webb Space Telescope Flight Dynamics Ground System. (Borges, 2017)
+
 
 ##CrossPlatform
 javaFX is CrossPlatform.
@@ -107,6 +117,13 @@ bij thin word java en javaFX alleen maar gebruikt om de data te tonen, vaak word
 bij thick, word er ook gebruikt van api calls, ook heeft de applicatie ook de meer mogelijkheden dan alleen het tonen de data, het kan het ook wijzingen verwijderen en toevoegen.
 
 
+##conclusie
+
+ja, JavaFX wordt echt gebruikt in het bedrijfs leven, bedrijven zo groot als nasa gebruiken het.
+het wordt vooral gebruikt omdat het crossPlatform is, dus geen nieuwe code voor een ander platform.
+de manier waarop JavaFX gebruikt is meestal als front-end van een server of DataBase.
+het is dus wel duidelijk dat javaFX is door een hele breede groep mensen word gebruikt, waaronder dus ook het bedrijfsleven.
+
 
 
 
@@ -114,10 +131,36 @@ bij thick, word er ook gebruikt van api calls, ook heeft de applicatie ook de me
 # Json in Applicaties
 
 
+##GTA V
+Hoe weet ik dat, nou GTA V was laatst in het nieuws doordat een fan een manier had gevonden om de laadtijden van GTA Online te versnellen.
 
+De GTA 5-fan plaatste zijn bevindingen online nadat hij erin was geslaagd de laadtijden met ongeveer 70% te versnellen.  De korte versie is dat hij een CPU-bottleneck met één thread gevonden heeft tijdens het opstarten van GTA Online. De komt omdat GTA V moeite heeft om een 10 MB JSON-bestand te ontleden, aangezien de JSON-parser slecht gemaakt was. 
+(t0st,2021)
+
+## Rest Api
+
+Rest Api's zijn een van de meeste gebruikte api's van het web heel veel andere applicatie's maken daardan weer gebruik van. 
+bijvoorbeeld spotify kan dan op je mobiel zien wat er op de pc word afgspeeld door middel van deze api. Maar api's worden overal gebruikt.
+
+hier uitleg over hoe Rest te werk gaat.
+
+Wanneer een clientverzoek wordt gedaan via een REST API. Stuurt dit eerst de huidige status naar het eindpunt. Deze informatie wordt geleverd in een van de verschillende formaten via HTTP: JSON (Javascript Object Notation), HTML, XLT, Python, PHP of platte tekst. JSON is de meest populaire programmeertaal om te gebruiken.
+(Redhat, z.d.)
+
+#Intelij
+
+Intelij is een applicatie waarmee je java kan programmeren, en waar ook deze markdown in is geschreven, maar voor hoe deze applicatie eruit ziet
+kan je een thema gebruiken, de omschrijving van deze thema's staan een json file
+![Screenshot thema intelij structuur.](theme_components.png)
 
 
 # bron vermelding
 Sad state of cross platform GUI frameworks. (2020, 16 maart). RoyalSloth. https://blog.royalsloth.eu/posts/sad-state-of-cross-platform-gui-frameworks/#javafx
 
 oracle. (2013, 1 maart). Why, Where, and How JavaFX Makes Sense. https://www.oracle.com/technical-resources/articles/java/casa.html
+
+T. (2021, 28 februari). How I cut GTA Online loading times by 70%. Nee. 
+
+Redhat. (z.d.). What is a REST API? https://www.redhat.com/en/topics/api/what-is-a-rest-api
+
+Borges, B. (2017, 26 juli). Podcast: From Raspberry Pis to Deep Space JavaFX. oracle. https://blogs.oracle.com/developers/podcast-from-raspberry-pies-to-deep-space-javafx
