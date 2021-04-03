@@ -13,9 +13,8 @@ import javafx.scene.layout.VBox;
 
 /**
  * Auteurs:
- *
+ * <p>
  * Deze klasse is voor om de tab class goed te weergeven
- *
  */
 
 public class TabClass extends PopUpTab
@@ -71,8 +70,6 @@ public class TabClass extends PopUpTab
 
         Button deleteClass = new Button("Verwijder klas");
 
-        deleteClass.setOnAction(event -> schedule.removeGroup(listViewClass.getSelectionModel().getSelectedItem()));
-
         VBox leftVboxStudent = new VBox();
         leftVboxStudent.getChildren().addAll(selectedClass, listViewStudent, deleteClass);
         leftVboxStudent.setSpacing(spacingDistance);
@@ -92,6 +89,11 @@ public class TabClass extends PopUpTab
         studentData.setEditable(false);
         listViewStudent.setPrefWidth(250);
 
+        deleteClass.setOnAction(event -> {
+            studentData.clear();
+            schedule.removeGroup(listViewClass.getSelectionModel().getSelectedItem());
+        });
+
         listViewStudent.setOnMousePressed(event ->
         {
             if (listViewStudent.getSelectionModel().getSelectedItem() != null)
@@ -104,6 +106,9 @@ public class TabClass extends PopUpTab
 
         deleteStudent.setOnAction(event ->
         {
+
+            studentData.clear();
+
             Group group = listViewClass.getSelectionModel().getSelectedItem();
 
             //listViewStudent.getItems().clear();
@@ -127,10 +132,12 @@ public class TabClass extends PopUpTab
 
         Label newName = new Label("Naam");
         TextField inputName = new TextField();
+        inputName.setPromptText("Naam");
         inputName.setMaxWidth(200);
 
         Label newAge = new Label("Leeftijd");
         TextField inputAge = new TextField();
+        inputAge.setPromptText("Leeftijd");
         inputAge.setMaxWidth(200);
 
         Button submitStudent = new Button("Voeg student toe");
@@ -140,8 +147,37 @@ public class TabClass extends PopUpTab
 
             if (listViewClass.getSelectionModel().getSelectedItem() == null)
             {
-                ErrorWindow errorWindow = new ErrorWindow("Error");
-                errorWindow.ErrorStage("Selecteer een klas.");
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Er is iets fout gegaan");
+                alert.setContentText("Er is geen klas geselecteerd.");
+
+                alert.showAndWait();
+            }
+            else if (inputName.getText().isEmpty() && inputAge.getText().isEmpty())
+            {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Er is iets fout gegaan");
+                alert.setContentText("Er is geen naam en leeftijd ingevoerd.");
+                alert.showAndWait();
+            }
+            else if (inputName.getText().isEmpty())
+            {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Er is iets fout gegaan");
+                alert.setContentText("Er is geen naam ingevoerd.");
+                alert.showAndWait();
+            }
+            else if (inputAge.getText().isEmpty())
+            {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Er is iets fout gegaan");
+                alert.setContentText("Er is geen leeftijd ingevoerd.");
+                alert.showAndWait();
+
             }
             else
             {
@@ -173,6 +209,7 @@ public class TabClass extends PopUpTab
 
         Label newClass = new Label("Naam");
         TextField inputClass = new TextField();
+        inputClass.setPromptText("Naam");
         inputName.setMaxWidth(200);
 
 
@@ -180,18 +217,31 @@ public class TabClass extends PopUpTab
 
         submitClass.setOnAction(event ->
         {
-            try
-            {
-                schedule.addGroup(new Group(inputClass.getText()));
-            }
-            catch (IllegalArgumentException e)
+
+            if (inputClass.getText().isEmpty())
             {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setHeaderText("Er is iets fout gegaan");
-                alert.setContentText(e.getMessage());
+                alert.setContentText("De klas heeft geen naam");
                 alert.showAndWait();
             }
+            else
+            {
+                try
+                {
+                    schedule.addGroup(new Group(inputClass.getText()));
+                }
+                catch (IllegalArgumentException e)
+                {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText("Er is iets fout gegaan");
+                    alert.setContentText(e.getMessage());
+                    alert.showAndWait();
+                }
+            }
+
         });
 
         VBox addersClass = new VBox();
