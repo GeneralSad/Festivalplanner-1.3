@@ -36,6 +36,7 @@ public class LocationManager
 
             //checks if standing at a auditorium
             if (student.getCurrentLocation().distance(auditorium.getEntry()) < 20){
+                student.setCollisionEnabler(false);
                 auditorium.ScriptedStart(student);
                 return true;
             }
@@ -60,6 +61,7 @@ public class LocationManager
 
             //checks if standing at a auditorium
             if (teacher.getCurrentLocation().distance(auditorium.getEntry()) < 20){
+                teacher.setCollisionEnabler(false);
                 auditorium.ScriptedStart(teacher);
                 return true;
             }
@@ -72,7 +74,8 @@ public class LocationManager
         //removes the student when leaving from classroom
         for (int i = 0; i < classRoomBehaviors.size(); i++)
         {
-                classRoomBehaviors.get(i).leaveFilledSeat(student);
+            student.setCollisionEnabler(true);
+            classRoomBehaviors.get(i).leaveFilledSeat(student);
         }
 
         //does the same but then for auditorium

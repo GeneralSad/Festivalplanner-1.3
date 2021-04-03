@@ -131,11 +131,11 @@ public class Simulator
     public void draw(FXGraphics2D fxGraphics2D, double canvasWidth, double canvasHeight)
     {
         tiledmap.draw(fxGraphics2D);
-        npcManager.draw(fxGraphics2D, false);
+        npcManager.draw(fxGraphics2D, true);
 
 
         //debug for all the part in the simulator that have something to do with the seats and locations
-        if (false)
+        if (true)
         {
             fxGraphics2D.setColor(Color.blue);
             // draw seat numbers

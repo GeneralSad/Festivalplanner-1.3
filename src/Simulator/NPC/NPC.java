@@ -42,6 +42,7 @@ public class NPC
     private boolean onTargetTile;
 
     private boolean collidedRecently;
+    private boolean collisionEnabler;
 
     //TODO Temporary for testing class behavior.
     private static double yComponent = 450;
@@ -135,9 +136,9 @@ public class NPC
                 rotationAndMovementUpdate(deltaTime);
             }
 
-
-            npcCollisionUpdate(npcs, deltaTime);
-
+            if (collisionEnabler) {
+                npcCollisionUpdate(npcs, deltaTime);
+            }
 
             // Destination check
             destinationUpdate();
@@ -173,7 +174,7 @@ public class NPC
         for (NPC npc : npcs)
         {
             // this npc and sitting npcs (at destination) should be ignored
-            if (npc != this/* && !npc.isAtDestination()*/)
+            if (npc != this  && !npc.isAtDestination())
             {
                 // find the other npc hitbox
                 // first the big hitbox (personal space) is used
@@ -639,5 +640,10 @@ public class NPC
     public boolean isCollidedRecently()
     {
         return collidedRecently;
+    }
+
+
+    public void setCollisionEnabler(boolean collisionEnabler) {
+        this.collisionEnabler = collisionEnabler;
     }
 }
