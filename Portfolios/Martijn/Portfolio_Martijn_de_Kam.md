@@ -241,11 +241,11 @@ In deze week zijn er geen nieuwe dingen die bijkomen aan het project.
 Het is alleen verbeteringen maken op wat al is gemaakt en losse onderdelen samenvoegen.
 
 Omdat we op het laatste stuk van het project zitten hebben we gezegd dat het erg belangrijk is om doelgericht te gaan testen op alle gëeisde functionaliteiten.
-Daarom hebben we besloten dat een persoon (ik) een dag na het werk van de rest van de groep alles ga testen op de requirements en nodige aanpassingen ga maken op dingen die niet goed werken.
+Daarom hebben we besloten dat een persoon (ik) een dag na het werk van de rest van de groep alles gaat testen op de requirements en nodige aanpassingen gaat maken op dingen die niet goed werken.
 
 Voor dit testen gebruik ik de lijst met requirements die in de periodewijzer staat.
 Ik ga elke individuele requirement na, kijk of het voldoet aan de eisen en mocht dat niet zijn of niet volledig dan noteer ik waarom niet.
-Dan na de hele lijst na te gaan ga ik de tekortkomingspunten na een voor een en ga die proberen op te lossen.
+Dan na de hele lijst na te gaan ga ik de tekortkomingspunten een voor een na en ga die proberen op te lossen.
 
 ### bugs fixen
 
@@ -280,57 +280,98 @@ Ten slotte methodes om te kijken of een bepaald x en y punt op een tile valt die
 
 Met ook een paar aanpassingen aan de methode die de zitplaatsen bepaald om deze veranderingen op te nemen lukt het nu wel om de zitplaatsen te bepalen, waardoor er geen Exception meer wordt gethrowed en de npcs in de simulatie te zien zijn.
 
+Verder ben ik deze week begonnen met werken aan de onderlinge npc collision, hier waren wat problemen in met wanneer twee npcs in direct tegengestelde richtingen naar elkaar toe lopen.
+Dit heb ik echter niet afgekregen in deze week en ben ik in de volgende week mee verder gegaan.
 
+## Week 8
+
+Dit is de laatste week van het project, aan het einde moet alles worden ingeleverd.
+
+We zijn hier verder gegaan met de laatste bugfixes en missende functionaliteiten.
+
+Ik heb hier een aantal kleine bugs opgelost en wat functionaliteiten toegevoegd.
+Hierbij zijn twee punten die niet heel erg simpel waren en waar ik ook even voor moest kijken.
+Namelijk de npc collision verbeteren en het mogelijk maken om een npc te volgen na erop te klikken.
+
+Met het volgen van een npc na erop te klikken heb ik wat moeite gehad met de translate en scale waarmee het mogelijk is om op andere punten van de simulatie te kijken die al eerder waren geïmplementeerd.
+Dit was direct op de canvas zelf gedaan eerst, maar om ook een npc te volgen leek het mij overzichterlijker om een Camera klasse aan te maken die de nodige translatie bijhoudt en die telkens toepast voor het tekenen van de simulatie.
+Dit overzetten van de code ging goed. Eerst heb ik gezorg dat het mogelijk is om met de muis te slepen in de simulatie om van beeld te veranderen.
+Daarna heb ik een NPCFollower toegevoegd die een NPC volgt en de camera instelt om die npc op het midden van het scherm te houden, waarbij elke verandering in positie wordt meegenomen.
+Hiermee was het mogelijk om een npc te volgen met de camera.
+
+Bij de npc wordt er ook informatie over de npc laten zien rechtsboven in het scherm, hierbij heb ik ervoor gezorgt dat deze positie altijd relatief aan de camera positie rechtsboven blijft en niet vast blijft zitten op een vaste plek na het slepen van het scherm.
+Met het bewegen van de npc blijft deze informatie dus altijd op de vaste plek rechtsboven, maar meet het inzoemen valt het buiten beeld.
+Ik heb gekeken of het mogelijk is om hier ook rekening mee te houden, maar na het kijken naar de code waarmee inzoemen mogelijk is ben ik tot de beslissing gekomen dat uitzoeken hoe dat goed samen kan werken niet de nodige tijd waard is.
+De informatie alleen uitgezoemd zien is prima en het is beter om de tijd verder te besteden aan andere functionaliteiten.
+
+Naast het volgen van npcs heb ik ook problemen gehad met de npc collision verbeteren.
+
+Ik heb hier meerdere kleine aanpassingen en tweaks aan geprobeerd te maken, maar er waren telkens wat kleine problemen dat npcs bleven haken, dat ze buiten de muren vielen of dat er weer een ander probleem op kwam.
+Uiteindelijk heb ik besloten om het hele collision systeem te herschrijven naar een methode die meer vergelijkbaar is aan wat ik heb gebruikt voor de 2DGraphics eindopdracht met de particle flow.
+Het essentiële verschil hierbij is dat het oude systeem veel meer werkt met de positie direct verplaatsen en dat wil ik veranderen naar een systeem dat de snelheid aanpast die dan daarna de positie aanpast.
+Hiermee wil ik problemen oplossen dat npcs in muren belanden omdat ze te ver met een gefixte afstand worden weggeduwt en dat npcs niet in elkaar vast komen te zitten en er niet meer uit kunnen naast drastische bewegingen maken. 
 
 
 # Reflectie op stelling over bedrijfsleven
 
-## Stellingen
+## Inleiding
 
-Voor dit onderdeel geef ik mijn eigen reflectie op een van de volgende twee stellingen
+"In het bedrijfsleven wordt steeds meer in software gesimuleerd"
 
-“In het bedrijfsleven wordt gebruik gemaakt van JavaFX”
+In dit korte verslag zal worden onderzocht of deze stelling accuraat is of niet aan de hand van online onderzoek op het onderwerp.
 
-“In het bedrijfsleven wordt steeds meer in software gesimuleerd”
+De gevonden informatie zal eerst in de kern van dit verslag worden weergegeven en daarna zal in de conclusie een conclusie worden gegeven op hoe accuraat de stelling is.
 
-Uit deze twee stellingen ga ik in op de tweede stelling, over software simulatie in het bedrijfsleven.
+Verder wordt er naar een aantal bronnen verwezen in de kern.
+Dit wordt gedaan door een cijfer tussen haakjes achter een stuk tekst te plaatsen, bijvoorbeeld (1).
+Deze bronnen worden in de bronnenlijst onderaan dit verslag benoemd met daarbij ook de cijfers.
 
-Ik kies voor deze stelling over de andere omdat software simulatie een heel breed onderwerp is met vele interessante applicaties, waarbij mij het leuk lijkt om een kort onderzoek naar te doen voor deze reflectie. 
-Terwijl het gebrik van JavaFX me juist veel gelimiteerder in gebruik lijkt en minder interessant om naar te kijken.
+## Kern
 
-## Software simulatie gebruik en voortgang afgelopen jaren
+Software simulatie is een breedgrijpend vakgebied.
+Het wordt in vele verschillende vormen gebruikt, van trainingen voor doctoren (1), tot brandontruiming simulaties (2) tot simulaties om fabrieksefficiëntie te verhogen (3).
 
-In de afgelopen jaren is simulatie software met sprongen verder gekomen.
-Basis simulaties zijn al langer mogelijk geweest, waarbij je op een computer scherm de simulatie kan zien afspelen.
-Maar wat in de laatste jaren steeds beter wordt en meer wordt gebruikt is virtual reality.
+In de laatste paar decennia zijn computers in sprongen verbeterd.
+Alle verschillende onderdelen van de hardware hebben grote sprongen vooruit geboekd, processoren zijn beter geworden er is meer werk geheugen beschikbaar en er is ook meer vast geheugen waarop programma's kunnen worden opgeslagen.
+Bij deze vooruitgangen in de hardware zijn er ook meer dingen mogelijk geworden rondom de software.
+Simulatie software kan steeds geavanceerder worden gemaakt, er kan met meer detail, meer precisie en met een steeds accurater beeld naar de werkelijkheid worden gesimuleerd.
 
-Simulaties die gebruik maken van virtual reality geven een groot voordeel boven de traditionele simulaties die alleen op een scherm werden laten zien.
-Het is mogelijk om in de simulatie te stappen, dingen van alle ooghoeken te bekijken, diepte en afstanden goed te zien en vaak is het ook mogelijk om interactie te hebben met de omgeving binnen de simulatie.
-Een aantal jaar geleden was dit nog het allernieuwste van het allernieuwste, maar tegenwoordig krijg je advertenties waarbij bijvoorbeeld wordt laten zien dat het mogelijk is om doormiddel van virtual reality een nieuwbouw project te zien zoals het zou zijn wanneer het af is en er ook echt in te kunnen bewegen.
+Samen met de vooruitgang in de capaciteiten van de simulatie software is er ook een steeds grotere vraag ernaar gekomen vanuit het bedrijfsleven.
+Steeds meer bedrijven vanuit allerlei verschillende sectoren zijn de afgelopen jaren simulatie software gaan gebruiken.
+Het marktaandeel van simulatie software is daarom in de jaren 2010-2020 blijven groeien (4).
 
-Wat ook bijvoorbeeld te zien is, is dat virtuel reality simulaties worden gebruikt voor trainingen. 
-Bedrijven en overheidinstaties gebruiken vritual reality simulaties om gevaarlijke en niet vaak voorkomende scenarios te simuleren voor het trainen van personeel.
-Dit gebeurt bijvoorbeeld met artsen die operaties van te voren oefenen in virtual reality, militairen die aanvaardingen met vijandige kunnen uitspelen of personeel die een noodsituatie, zoals brand op een boorplatform, kunnen simuleren en oefenen.
-Dit zijn allemaal gebruiken die pas in de afgelopen jaren mogelijk zijn.
-Met de jaren worden de technieken achter deze simulaties alleen meer geavanceerder.
-Er kan steeds preciezer en meer worden gesimuleerd en bedrijven gebruiken het ook steeds meer omdat het steeds meer een echte situatie kan simuleren.
+Maar blijft deze trend ook doorgaan in de toekomst, of vlakt het hierbij af?
 
-Naast virtual reality zijn er ook andere doeleinden voor simulatie software.
-Een veel voorkomend gebruik van simulaties is bijvoorbeeld de efficiëntie van bedrijfsprocessen proberen te verhogen, door knelpunten in het proces te identificeren en oplossingen te simuleren.
-Naast Efficiëntie is het ook mogelijk om simulaties te gebruiken om veiligheid te waarborgen. 
-Denk daarbij bijvoorbeeld aan brandoefeningen, deze worden nu fysiek gedaan, maar als toevoeging daarop is het mogelijk om de ontruiming van een gebouw te simuleren in verschillende situaties om te kijken of er toch nog verbeterpunten zijn in een vlotte ontruiming.
+Hierbij is de vraag of de technologie achter software simulatie blijft groeien, net zoals in voorgaande jaren.
+Maar daarbij ook of er verwacht wordt dat de markt daarbij ook blijft groeien.
+Immers is alleen een groei in capaciteiten in de technologie niet altijd alles zeggend over de groei in daadwerkelijke vraag naar de producten.
 
-## In het bedrijfsleven wordt steeds meer in software gesimuleerd
+Voor de marktgroei zijn de voorspellingen positief.
+Verschillende bronnen (5), (6), (7) verwachten een groei van tussen de 9 en 13% op een jaarlijkse basis.
+Hiermee wordt verwacht dat binnen 10 jaar de markt zal zijn verdubbeld.
 
-Ik denk dat er in bedrijfsleven inderdaad steeds meer wordt gesimuleerd.
+Verder zijn de verwachtingen rondom de technologische vooruitgang ook positief (8).
+In de komende jaren zal simulatie software mogelijkheden bieden voor geavanceerder, gedetailleerdere en realistischere simulaties.
 
-Zoals ik hiervoor had beschreven wordt simulatie software steeds meer gebruikt en ook op nieuwe manieren in voornamelijk virtual reality.
-Ik denk dat deze relatief nieuwe technologie nog veel ruimte heeft om te groeien in capaciteiten en ook vraag.
-In de laatste jaren wordt er al steeds meer gebruik van gemaakt voor hele kritische doeleinden in de zorg en veiligheid, dit zal alleen maar toenemen naarmate de technologie geavanceerder wordt.
-Verder wordt algemene software simulatie ook nog steeds veel gebruikt voor bijvoorbeeld het verhogen van de efficiëntie van bedrijfsprocessen.
-Dit gebeurt ook steeds meer door de jaren heen en zal ook toenemen of minimaal hetzelfde blijven qua gebruik in de toekomst met hoe actief relevant de simulaties zijn.
+## Conclusie
 
-Dus er wordt in het bedrijfsleven steeds meer gesimuleerd en dit zal in de toekomst nog meer toenemen naarmate de technologiën geavanceerder worden.
+In de afgelopen jaren is simulatie software gegroeid in technologische vaardigheden en ook in de vraag ernaar en daarbij het martkaandeel dat het heeft.
+
+Verder zijn de verwachtingen voor de komende jaren dat simulatie software geavanceerder zal worden en dat verder de markt verder zal groeien door meer vraag naar deze software.
+
+Dus het onderzoek uit dit verslag bevestigd de stelling "In het bedrijfsleven wordt steeds meer in software gesimuleerd". 
+Er wordt inderdaad steeds meer gesimuleerd en dit zal ook blijven groeien in de komende jaren.
+
+## Bronnenlijst
+
+1. https://www.ssih.org/About-SSH/About-Simulation
+2. https://www.brandveilig.com/nieuws/ontruimingen-verbeteren-met-simulatiemodel-41277
+3. https://www.researchgate.net/publication/335681354_A_Simulation_Model_for_Productivity_Efficiency_Improvement_Using_Pro-Model_Case_Study_of_Pip_Factory
+4. https://www.techsciresearch.com/report/global-simulation-analysis-software-market-by-product-type-finite-element-analysis-computational-fluid-dynamics-etc-by-end-use-industry-automotive-aerospace-defense-etc-by-region-competition-forecast-and-opportunities/970.html
+5. https://www.mordorintelligence.com/industry-reports/simulation-software-market
+6. https://www.marketsandmarkets.com/Market-Reports/simulation-software-market-263646018.html
+7. https://www.alliedmarketresearch.com/simulation-and-analysis-software-market
+8. https://www2.deloitte.com/content/dam/Deloitte/cz/Documents/technology/DI_TechTrends2020.pdf
 
 # Applicaties die Json gebruiken
 Hier formuleer ik een lijst van applicaties die gebruik maken van Json bestanden.
@@ -343,16 +384,22 @@ Json wordt gebruikt voor onder andere de configuratie, voor het parsen van de op
 
 Dit is te zien op de github pagina van Proglet.
 
+Bron: https://github.com/Proglet/Proglet
+
 - Visual studio code
 
 Json wordt gebruikt voor de user en workspace instellingen van visual studio code.
 
 Het is mogelijk om de settings als Json formaat te kopiëren, verder is het ook mogelijk om naar de bestandslocatie te gaan waar de settings zijn opgeslagen om daar het Json bestand direct te openen.
 
+Bron: https://code.visualstudio.com/docs/getstarted/settings
+
 - Tiled
 
 Hier hebben we gebruik van gemaakt met de proftaak. 
 De gemaakte onderdelen in het programma kunnen worden opgeslagen als een json bestand en een json bestand kan ook worden geïmporteerd zodat je weer aanpassingen kan maken via Tiled.
+
+Bron: https://doc.mapeditor.org/en/stable/reference/json-map-format/
 
 - Website RIVM
 
@@ -360,6 +407,8 @@ Bij het bekijken van de data van het RIVM is het mogelijk om de website te inspe
 Hierbij kan je dan zien dat er data vanuit Json bestanden wordt uitgelezen en ook weer op de website te zien is.
 
 Dit heb ik nu toevallig bij deze website gezien, maar dit zal ook wel bij meer andere websites gebruikt worden.
+
+Bron: https://data.rivm.nl/covid-19/
 
 - Minecraft
 
@@ -371,3 +420,4 @@ De gebruiken van Json bij minecraft zijn onder andere:
 - Profiel data van de launcher opslaan en terug inladen.
 - Achievements, loot tables, crafting recipes en nog andere dingen in te laden van bepaalde resource packs (kan verschillende resource packs gebruiken).
  
+Bron: https://minecraft.fandom.com/wiki/JSON
