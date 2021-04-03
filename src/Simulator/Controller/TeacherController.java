@@ -47,6 +47,7 @@ public class TeacherController {
 
                     npcManager.addNPC(npc);
                 }
+                lessonsPassed.add(lesson);
             }
 
 
