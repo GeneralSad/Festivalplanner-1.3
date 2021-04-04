@@ -3,13 +3,10 @@ package Data;
 import java.awt.geom.Point2D;
 import java.io.Serializable;
 
-//TODO change name of classroom
-
 /**
  * Auteurs: Leon
- *
+ * <p>
  * Deze code zorgt ervoor dat een klaslokaal aangemaakt kan worden en de nodige functies heeft die later nodig zijn
- *
  */
 
 

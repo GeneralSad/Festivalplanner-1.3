@@ -6,9 +6,8 @@ import java.util.List;
 
 /**
  * Auteurs: Ewout
- *
+ * <p>
  * Deze code zorgt ervoor dat de inhoud van een schedule later opgeslagen kan worden en de nodige functies heeft die later nodig zijn
- *
  */
 
 public class DataObject implements Serializable

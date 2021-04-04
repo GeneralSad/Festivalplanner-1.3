@@ -46,8 +46,6 @@ public class TimeManager
         }
 
         return lessons;
-
-
     }
 
 
@@ -58,7 +56,18 @@ public class TimeManager
 
     public boolean isChanged()
     {
+
         return timeType.getTime().isAfter(nextChange);
+    }
+
+    public LocalTime getNextChange()
+    {
+        return nextChange;
+    }
+
+    public void setNextChange(LocalTime nextChange)
+    {
+        this.nextChange = nextChange;
     }
 
     public LocalTime getTime()

@@ -1,6 +1,4 @@
-package Simulator;
-
-import Simulator.NPC.NPCFollower;
+package Simulator.CameraSystem;
 
 public class Camera
 {
@@ -9,12 +7,14 @@ public class Camera
     private double totalWidth;
     private double totalHeight;
     private NPCFollower npcFollower;
+    private TileFollower tileFollower;
 
     public Camera(double totalWidth, double totalHeight)
     {
         this.totalWidth = totalWidth;
         this.totalHeight = totalHeight;
         this.npcFollower = new NPCFollower(this);
+        this.tileFollower = new TileFollower(this);
     }
 
     public double getX()
@@ -42,12 +42,14 @@ public class Camera
         return npcFollower;
     }
 
-    public void addToPosition(double x, double y) {
+    public void addToPosition(double x, double y)
+    {
         this.x += x;
         this.y += y;
     }
 
-    public double getRelativeWidth() {
+    public double getRelativeWidth()
+    {
         return totalWidth - x;
     }
 
@@ -59,5 +61,10 @@ public class Camera
     public double getTotalHeight()
     {
         return totalHeight;
+    }
+
+    public TileFollower getTileFollower()
+    {
+        return tileFollower;
     }
 }

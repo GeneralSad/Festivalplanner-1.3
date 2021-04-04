@@ -34,20 +34,25 @@ public class AuditoriumBehavior
     public Seat claimEmptySeat(NPC person) throws IllegalArgumentException
     {
         Seat seat = getFurthestSeat(person.getCurrentLocation());
-        if (seat != null) {
+        if (seat != null)
+        {
             seat.setStudent(person);
             return seat;
         }
         throw new IllegalArgumentException("Not enough seats! Total seats is: " + seats.size());
     }
 
-    public Seat getFurthestSeat(Point2D from) {
+    public Seat getFurthestSeat(Point2D from)
+    {
         Seat furthest = null;
         double furthestDistanceSoFar = 0;
-        for (Seat s : seats) {
-            if (s.isEmpty()) {
+        for (Seat s : seats)
+        {
+            if (s.isEmpty())
+            {
                 double distance = from.distance(s.getSeat());
-                if (distance > furthestDistanceSoFar) {
+                if (distance > furthestDistanceSoFar)
+                {
                     furthestDistanceSoFar = distance;
                     furthest = s;
                 }

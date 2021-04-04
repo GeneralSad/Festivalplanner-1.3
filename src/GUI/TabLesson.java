@@ -17,17 +17,16 @@ import java.util.Comparator;
 
 /**
  * Auteurs:
- *
+ * <p>
  * Deze klasse is voor om de tab lesson goed te weergeven
- *
  */
 
 public class TabLesson extends PopUpTab
 {
-    //distance
+    //afstand
     private int spacingDistance = 10;
 
-    //components
+    //componenten
     private ListView<Lesson> listView = new ListView<>();
     private ArrayList<Group> selectedGroups = new ArrayList<>();
     private ComboBox<Teacher> teacherSelect = new ComboBox<>();
@@ -56,7 +55,7 @@ public class TabLesson extends PopUpTab
     protected BorderPane getPane()
     {
 
-        //left side of the menu lesson
+        //linkerkant van het lesmenu
         Label currentLesson = new Label("Bestaande Lessen");
         listView.setPrefWidth(500);
 
@@ -64,7 +63,7 @@ public class TabLesson extends PopUpTab
         VBox leftVbox = PopupController.awesomeVBox(currentLesson, listView);
 
 
-        //middle side of menu lesson
+        //midden van het lesmenu
         Label selectedLesson = new Label("Geselecteerde les");
         FlowPane lessonData = new FlowPane();
         lessonData.setOrientation(Orientation.VERTICAL);
@@ -132,7 +131,7 @@ public class TabLesson extends PopUpTab
 
         deleteSelected.setOnAction(event -> schedule.removeLesson(this.selectedLesson));
 
-        //listens to your selectoin on the menu
+        //Luistert naar de selectie op het menu
         listView.getSelectionModel().selectedItemProperty().addListener(event ->
         {
             Lesson lesson = listView.getSelectionModel().getSelectedItem();
@@ -153,7 +152,7 @@ public class TabLesson extends PopUpTab
         VBox middleVbox = PopupController.awesomeVBox(selectedLesson, lessonData, deleteSelected, editSelected);
         middleVbox.setMinWidth(500);
 
-        //right side of menu lesson
+        //rechter kant van het lesmenu
         Label newLesson = new Label("Nieuwe les");
 
         Label startLesson = new Label("Begintijd");
@@ -180,8 +179,15 @@ public class TabLesson extends PopUpTab
         {
             try
             {
-                this.schedule.addLesson(new Lesson(startTimeSelect.getValue(), endTimeSelect.getValue(), teacherSelect.getValue(), locationSelect.getValue(), this.selectedGroups));
-
+                if (teacherSelect.getValue() != null && locationSelect.getValue() != null && this.selectedGroups.size() != 0)
+                {
+                    this.schedule.addLesson(new Lesson(startTimeSelect.getValue(), endTimeSelect.getValue(), teacherSelect.getValue(), locationSelect.getValue(), this.selectedGroups));
+                }
+                else
+                {
+                    // niet alles was ingevuld
+                    throw new NullPointerException();
+                }
             }
             catch (NullPointerException e)
             {

@@ -5,19 +5,15 @@ import Data.Teacher;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 
 /**
  * Auteurs:
- *
+ * <p>
  * Deze klasse is voor om de tab teacher goed te weergeven
- *
  */
 
 public class TabTeacher extends PopUpTab
@@ -43,7 +39,7 @@ public class TabTeacher extends PopUpTab
         BorderPane mainPane = new BorderPane();
 
 
-        //left side of the menu teacher
+        //linkerkant van het lerarenmenu
         Label currentTeacher = new Label("Bestaande Docenten");
         ListView<Teacher> listView = new ListView<>();
         listView.setItems(schedule.getTeacherObservableList());
@@ -60,17 +56,20 @@ public class TabTeacher extends PopUpTab
         VBox selectedNameVBox = new VBox();
         Label selectedTeacherName = new Label("Naam: ");
         TextField selectedNameField = new TextField();
+        selectedNameField.setPromptText("Naam");
         selectedNameVBox.getChildren().addAll(selectedTeacherName, selectedNameField);
 
         VBox selectedAgeVBox = new VBox();
         Label selectedTeacherAge = new Label("Leeftijd: ");
         TextField selectedAgeField = new TextField();
+        selectedAgeField.setPromptText("Leeftijd");
         selectedAgeVBox.getChildren().addAll(selectedTeacherAge, selectedAgeField);
 
 
         VBox selectedSubjectVBox = new VBox();
         Label selectedTeacherSubject = new Label("Vakgebied: ");
         TextField selectedSubjectField = new TextField();
+        selectedSubjectField.setPromptText("Vakgebied");
         selectedSubjectVBox.getChildren().addAll(selectedTeacherSubject, selectedSubjectField);
 
         selectedFlowpane.getChildren().addAll(selectedNameVBox, selectedAgeVBox, selectedSubjectVBox);
@@ -98,7 +97,71 @@ public class TabTeacher extends PopUpTab
         Button editSelected = new Button("Wijzig Docent");
         editSelected.setOnAction(event ->
         {
-            if (this.selectedTeacher != null)
+            if (selectedNameField.getText().isEmpty() && selectedSubjectField.getText().isEmpty() && selectedAgeField.getText().isEmpty())
+            {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Er is iets fout gegaan");
+                alert.setContentText("Er zijn geen velden ingevoerd.");
+                alert.showAndWait();
+            }
+            else if (selectedNameField.getText().isEmpty() && selectedSubjectField.getText().isEmpty())
+            {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Er is iets fout gegaan");
+                alert.setContentText("Er is geen naam en vakgebied ingevoerd.");
+                alert.showAndWait();
+            }
+            else if (selectedNameField.getText().isEmpty() && selectedAgeField.getText().isEmpty())
+            {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Er is iets fout gegaan");
+                alert.setContentText("Er is geen naam en leeftijd ingevoerd.");
+                alert.showAndWait();
+            }
+            else if (selectedSubjectField.getText().isEmpty() && selectedAgeField.getText().isEmpty())
+            {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Er is iets fout gegaan");
+                alert.setContentText("Er is geen vakgebied en leeftijd ingevoerd.");
+                alert.showAndWait();
+            }
+            else if (selectedSubjectField.getText().isEmpty())
+            {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Er is iets fout gegaan");
+                alert.setContentText("Er is geen vakgebied ingevoerd.");
+                alert.showAndWait();
+            }
+            else if (selectedNameField.getText().isEmpty())
+            {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Er is iets fout gegaan");
+                alert.setContentText("Er is geen naam ingevoerd.");
+                alert.showAndWait();
+            }
+            else if (selectedAgeField.getText().isEmpty())
+            {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Er is iets fout gegaan");
+                alert.setContentText("Er is geen leeftijd ingevoerd.");
+                alert.showAndWait();
+            }
+            else if (Integer.parseInt(selectedAgeField.getText()) <= 0)
+            {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Er is iets fout gegaan");
+                alert.setContentText("Voer een geldige leeftijd in");
+                alert.showAndWait();
+            }
+            else if (this.selectedTeacher != null)
             {
                 this.selectedTeacher.setName(selectedNameField.getText());
                 this.selectedTeacher.setAge(Integer.parseInt(selectedAgeField.getText()));
@@ -123,17 +186,20 @@ public class TabTeacher extends PopUpTab
         VBox nameVBox = new VBox();
         Label teacherName = new Label("Naam: ");
         TextField nameField = new TextField();
+        nameField.setPromptText("Naam");
         nameVBox.getChildren().addAll(teacherName, nameField);
 
         VBox ageVBox = new VBox();
         Label teacherAge = new Label("Leeftijd: ");
         TextField ageField = new TextField();
+        ageField.setPromptText("Leeftijd");
         ageVBox.getChildren().addAll(teacherAge, ageField);
 
 
         VBox subjectVBox = new VBox();
         Label teacherSubject = new Label("Vakgebied: ");
         TextField subjectField = new TextField();
+        subjectField.setPromptText("Vakgebied");
         subjectVBox.getChildren().addAll(teacherSubject, subjectField);
 
 
@@ -142,10 +208,69 @@ public class TabTeacher extends PopUpTab
         addTeacherButton.setOnAction(event ->
         {
 
-            if (Integer.parseInt(ageField.getText()) <= 0)
+            if (nameField.getText().isEmpty() && subjectField.getText().isEmpty() && ageField.getText().isEmpty())
             {
-                ErrorWindow errorWindow = new ErrorWindow("Error");
-                errorWindow.ErrorStage("Voer een geldige leeftijd in.");
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Er is iets fout gegaan");
+                alert.setContentText("Er zijn geen velden ingevoerd.");
+                alert.showAndWait();
+            }
+            else if (nameField.getText().isEmpty() && subjectField.getText().isEmpty())
+            {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Er is iets fout gegaan");
+                alert.setContentText("Er is geen naam en vakgebied ingevoerd.");
+                alert.showAndWait();
+            }
+            else if (nameField.getText().isEmpty() && ageField.getText().isEmpty())
+            {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Er is iets fout gegaan");
+                alert.setContentText("Er is geen naam en leeftijd ingevoerd.");
+                alert.showAndWait();
+            }
+            else if (subjectField.getText().isEmpty() && ageField.getText().isEmpty())
+            {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Er is iets fout gegaan");
+                alert.setContentText("Er is geen vakgebied en leeftijd ingevoerd.");
+                alert.showAndWait();
+            }
+            else if (subjectField.getText().isEmpty())
+            {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Er is iets fout gegaan");
+                alert.setContentText("Er is geen vakgebied ingevoerd.");
+                alert.showAndWait();
+            }
+            else if (nameField.getText().isEmpty())
+            {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Er is iets fout gegaan");
+                alert.setContentText("Er is geen naam ingevoerd.");
+                alert.showAndWait();
+            }
+            else if (ageField.getText().isEmpty())
+            {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Er is iets fout gegaan");
+                alert.setContentText("Er is geen leeftijd ingevoerd.");
+                alert.showAndWait();
+            }
+            else if (Integer.parseInt(ageField.getText()) <= 0)
+            {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Er is iets fout gegaan");
+                alert.setContentText("Voer een geldige leeftijd in");
+                alert.showAndWait();
             }
             else
             {

@@ -33,7 +33,7 @@ class ClassRoomBehaviorTest
         //Classroom
         ArrayList<Seat> studentSeats = new ArrayList<>();
         Seat teacherSeat = new Seat(null, null, 0);
-        ClassRoomBehavior classroom = new ClassRoomBehavior(studentSeats, teacherSeat, null);
+        ClassRoomBehavior classroom = new ClassRoomBehavior(studentSeats, teacherSeat, null, 0, null);
 
         //npc
         ArrayList<NPC> npcs = new ArrayList<>();
@@ -88,7 +88,7 @@ class ClassRoomBehaviorTest
         }
         //making lists
         Seat teacherSeat = new Seat(null, null, 0);
-        ClassRoomBehavior classroom = new ClassRoomBehavior(studentSeats, teacherSeat, null);
+        ClassRoomBehavior classroom = new ClassRoomBehavior(studentSeats, teacherSeat, null, 0, null);
 
         //__________________________________________________________________
         //Act
@@ -135,7 +135,7 @@ class ClassRoomBehaviorTest
         }
         //making lists
         Seat teacherSeat = new Seat(null, null, 0);
-        ClassRoomBehavior classroom = new ClassRoomBehavior(studentSeats, teacherSeat, null);
+        ClassRoomBehavior classroom = new ClassRoomBehavior(studentSeats, teacherSeat, null, 0, null);
         //filling seat
         for (int i = 0; i < npcs.size(); i++)
         {
@@ -183,7 +183,7 @@ class ClassRoomBehaviorTest
         //Classroom
         ArrayList<Seat> studentSeats = new ArrayList<>();
         Seat teacherSeat = new Seat(null, null, 0);
-        ClassRoomBehavior classroom = new ClassRoomBehavior(studentSeats, teacherSeat, null);
+        ClassRoomBehavior classroom = new ClassRoomBehavior(studentSeats, teacherSeat, null, 0, null);
 
         //npc
         ArrayList<NPC> npcs = new ArrayList<>();

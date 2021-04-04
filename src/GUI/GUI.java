@@ -16,14 +16,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import org.jfree.fx.FXGraphics2D;
 
-import Simulator.Camera;
+import Simulator.CameraSystem.Camera;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -39,13 +39,14 @@ import java.util.ArrayList;
  */
 
 
-public class GUI extends Application
-{
+public class GUI extends Application {
     private Schedule schedule;
     private String filePath = "src/Data/storedSchedule";
     private DataStorage dataStorage = new DataStorage();
     private Simulator simulator;
     private Label speedFactorLabel = new Label("");
+    private Canvas canvas = new Canvas(1920, 1048);
+    private FXGraphics2D fxGraphics2D;
 
     private boolean followingNPC;
     private NPC npcBeingFollowed;
@@ -56,8 +57,7 @@ public class GUI extends Application
     }
 
     @Override
-    public void start(Stage stage)
-    {
+    public void start(Stage stage) {
         // probeer een schedule te laden
         initialise();
 
@@ -70,7 +70,7 @@ public class GUI extends Application
         canvasContainer.setCenter(mainWindow);
 
         HBox bottomHBox = new HBox(10);
-        Button wijzingen = new Button("Wijzigen");
+        Button wijzingen = new Button("Rooster Wijzigen");
         bottomHBox.getChildren().add(wijzingen);
         wijzingen.setOnAction(event ->
         {
@@ -78,29 +78,15 @@ public class GUI extends Application
         });
 
 
-        Button saveScheduleButton = new Button("Opslaan");
+
+
+        Button saveScheduleButton = new Button("Rooster Opslaan");
         saveScheduleButton.setOnAction(event -> dataStorage.saveSchedule(this.filePath, this.schedule));
-
-
-        Button reloadSchedule = new Button("Herladen");
-        reloadSchedule.setOnAction(event -> {
-            Schedule loaded = DataStorage.loadSchedule(filePath);
-            if (loaded != null) {
-                System.out.println("Setting new schedule");
-                this.schedule.setScheduleTo(loaded);
-            } else {
-                System.out.println("Loaded was null");
-            }
-        });
-
         bottomHBox.getChildren().add(saveScheduleButton);
-        bottomHBox.getChildren().add(reloadSchedule);
-        canvasContainer.setBottom(bottomHBox);
 
         Pane pane = new Pane();
         BorderPane borderPane = new BorderPane();
         Tab simulatorTab = new Tab("Simulator");
-        Canvas canvas = new Canvas(1920, 1048);
         GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
 
         pane.getChildren().add(canvas);
@@ -147,12 +133,18 @@ public class GUI extends Application
             updateLabel();
         });
 
-        // update the label so text is displayed at startup
+        Button ramp = new Button("Ramp");
+        ramp.setOnAction(event ->
+        {
+            simulator.disaster();
+        });
+
+        //Update het labal zodat de tekst wordt laten zien bij het opstarten
         speedFactorLabel.setText("De simulatie speelt op normale snelheid");
 
         vBox.getChildren().addAll(speedFactorLabel, speedSettingsBox);
         speedFactorLabel.setFont(new Font("Arial", 16));
-        speedSettingsBox.getChildren().addAll(slowDownButton, speedUpButton, magic2);
+        speedSettingsBox.getChildren().addAll(slowDownButton, speedUpButton, magic2, ramp);
         speedSettingsBox.setAlignment(Pos.BOTTOM_LEFT);
         borderPane.setBottom(vBox);
 
@@ -169,24 +161,22 @@ public class GUI extends Application
         addMouseScrolling(canvas);
 
         addMouseClickDrag(canvas, simulator.getCamera());
-        new AnimationTimer()
-        {
+        new AnimationTimer() {
             long last = -1;
 
             @Override
-            public void handle(long now)
-            {
-                if (last == -1)
-                {
+            public void handle(long now) {
+                if (last == -1) {
                     last = now;
                 }
 
                 graphicsContext.setImageSmoothing(false);
-                FXGraphics2D fxGraphics2D = new FXGraphics2D(graphicsContext);
+                fxGraphics2D = new FXGraphics2D(graphicsContext);
                 fxGraphics2D.setTransform(new AffineTransform());
                 fxGraphics2D.setBackground(Color.GRAY);
 
                 fxGraphics2D.clearRect(0, 0, (int) canvas.getWidth(), (int) canvas.getHeight());
+
 
                 fxGraphics2D.translate(simulator.getCamera().getX(), simulator.getCamera().getY());
 
@@ -194,12 +184,56 @@ public class GUI extends Application
                 long deltatime = (now - last);
                 simulator.update(deltatime);
 
+
                 timeLabel.setText(simulator.getFormattedTime());
+
 
                 last = now;
 
             }
         }.start();
+
+
+
+        Button reloadSchedule = new Button("Rooster Reset");
+        reloadSchedule.setOnAction(event ->
+        {
+            Schedule loaded = DataStorage.loadSchedule(filePath);
+            if (loaded != null)
+            {
+                System.out.println("Setting new schedule");
+                this.schedule.setScheduleTo(loaded);
+            }
+            else
+            {
+                System.out.println("Loaded was null");
+            }
+        });
+
+        Button reloadSim = new Button("Simulatie Herladen");
+        reloadSim.setOnAction(event -> {
+            if (this.schedule != null) {
+                System.out.println("Setting new Simulation");
+
+
+                //setting settings for new simulation!
+                canvas = new Canvas(1920, 1048);
+                Camera camera = this.simulator.getCamera();
+                this.simulator = new Simulator(this.schedule);
+                canvas = new Canvas(1920, 1048);
+                simulator.setCamera(camera);
+                fxGraphics2D.setTransform(new AffineTransform());
+
+
+
+            } else {
+                System.out.println("Loaded was null");
+            }
+        });
+
+        bottomHBox.getChildren().add(reloadSchedule);
+        bottomHBox.getChildren().add(reloadSim);
+        canvasContainer.setBottom(bottomHBox);
 
         stage.setScene(scene);
         stage.setTitle("School simulatie");
@@ -207,13 +241,11 @@ public class GUI extends Application
         stage.show();
     }
 
-    private void initialise()
-    {
+    private void initialise() {
 
         this.schedule = DataStorage.loadSchedule(this.filePath);
-        if (this.schedule == null)
-        {
-           //  Manual schedule loading:
+        if (this.schedule == null) {
+            //  Manual schedule loading:
             System.out.println("Couldn't load a schedule");
             ArrayList<Teacher> teachers = new ArrayList<>();
             teachers.add(new Teacher("Etiënne", 30, "Hardware"));
@@ -246,66 +278,42 @@ public class GUI extends Application
             lessons.add(new Lesson(LocalTime.of(16, 30), LocalTime.of(17, 30), teachers.get(0), classrooms.get(2), groups));
             lessons.add(new Lesson(LocalTime.of(11, 0), LocalTime.of(12, 0), teachers.get(0), classrooms.get(7), groups));
 
-            for (Group group : groups)
-            {
+            for (Group group : groups) {
                 group.addStudent(new Student(group.getGroupName() + "test", 12, group));
             }
 
             this.schedule = new Schedule(lessons, teachers, groups, classrooms);
 
 
-        }
-        else
-        {
+        } else {
             System.out.println("properly loaded a schedule");
         }
 
         simulator = new Simulator(schedule);
     }
 
-    private void updateLabel()
-    {
+    private void updateLabel() {
         int speedfactor = simulator.getSpeedfactor();
-        if (speedfactor == 0)
-        {
+        if (speedfactor == 0) {
             speedFactorLabel.setText("De simulatie speelt op normale snelheid");
-        }
-        else
-        {
+        } else {
             speedFactorLabel.setText("De simulatie word " + speedfactor + " keer sneller afgespeeld");
         }
     }
 
-    public void addMouseScrolling(Node node)
-    {
+    public void addMouseScrolling(Node node) {
         node.setOnScroll((ScrollEvent event) ->
         {
             double zoomFactor = 1.05;
             double deltaY = event.getDeltaY();
-            if (deltaY < 0)
-            {
+            if (deltaY < 0) {
                 zoomFactor = 2.0 - zoomFactor;
             }
 
-            if (!(node.getScaleY() * zoomFactor > 5) && !(node.getScaleY() * zoomFactor < 1))
-            {
+            if (!(node.getScaleY() * zoomFactor > 5) && !(node.getScaleY() * zoomFactor < 1)) {
                 node.setScaleX(node.getScaleX() * zoomFactor);
                 node.setScaleY(node.getScaleY() * zoomFactor);
             }
-
-//            double zoomFactor = 1.05;
-//            double deltaY = event.getDeltaY();
-//            if (deltaY < 0)
-//            {
-//                zoomFactor = 2.0 - zoomFactor;
-//            }
-//
-//            Camera camera = simulator.getCamera();
-//            if (!(camera.getScaleY() * zoomFactor > 5) && !(camera.getScaleY() * zoomFactor < 1))
-//            {
-//                camera.setScaleX(camera.getScaleX() * zoomFactor);
-//                camera.setScaleY(camera.getScaleY() * zoomFactor);
-//            }
 
         });
     }
@@ -313,27 +321,28 @@ public class GUI extends Application
     private double lastX = -10000;
     private double lastY = -10000;
 
-    public void addMouseClickDrag(Node node, Camera camera)
-    {
-        node.setOnMouseClicked(event -> {
+    public void addMouseClickDrag(Node node, Camera camera) {
+        node.setOnMouseClicked(event ->
+        {
             double x = (-camera.getX()) + event.getX();
             double y = (-camera.getY()) + event.getY();
             simulator.mouseClicked(x, y);
+
+            if (event.getButton().equals(MouseButton.MIDDLE)) {
+                NPC.collisionEnabled = !NPC.collisionEnabled;
+            }
         });
 
         node.setOnMouseDragged((event) ->
         {
-            if (!camera.getNpcFollower().isFollowing())
-            {
-                if (lastX == -10000 && lastY == -10000)
-                {
+            if (!camera.getNpcFollower().isFollowing()) {
+                if (lastX == -10000 && lastY == -10000) {
                     lastX = event.getX();
                     lastY = event.getY();
                 }
 
-                // if statement to limit dragging to certain areas of the map
-                if ((camera.getX() + (event.getX() - lastX)) > -1200 && (camera.getY() + (event.getY() - lastY)) > -1200 && (camera.getX() + (event.getX() - lastX)) < 1500 && (camera.getY() + (event.getY() - lastY)) < 550)
-                {
+                //if statement om het slepen te limiteren naar bepaalde gebieden op de map
+                if ((camera.getX() + (event.getX() - lastX)) > -1200 && (camera.getY() + (event.getY() - lastY)) > -1200 && (camera.getX() + (event.getX() - lastX)) < 1500 && (camera.getY() + (event.getY() - lastY)) < 550) {
 
                     camera.addToPosition(event.getX() - lastX, event.getY() - lastY);
 
@@ -349,14 +358,13 @@ public class GUI extends Application
             lastX = -10000;
             lastY = -10000;
 
-            //System.out.println("X: " + event.getX() + "Y: " +  event.getY());
+            //            System.out.println("X: " + event.getX() + "Y: " +  event.getY());
 
         });
 
     }
 
-    public static TiledMap getTiledmap()
-    {
+    public static TiledMap getTiledmap() {
         return Simulator.getTiledmap();
     }
 

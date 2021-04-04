@@ -14,9 +14,8 @@ import java.util.HashMap;
 
 /**
  * Auteurs:
- *
+ * <p>
  * Deze code zorgt ervoor dat de mainwindow goed wordt ingericht met alle delen op de goede plaats
- *
  */
 
 public class MainWindow extends ResizableCanvas
@@ -60,11 +59,12 @@ public class MainWindow extends ResizableCanvas
         amountOfTimeStamps = allEndingTimes.size();
 
 
-
         super.setOnMouseClicked(event ->
         {
-            for (Rectangle2D rectangle2D : this.lessonShapes.keySet()) {
-                if (rectangle2D.contains(event.getX(), event.getY())) {
+            for (Rectangle2D rectangle2D : this.lessonShapes.keySet())
+            {
+                if (rectangle2D.contains(event.getX(), event.getY()))
+                {
                     Lesson lesson = this.lessonShapes.get(rectangle2D);
                     System.out.println(lesson);
 
@@ -73,12 +73,15 @@ public class MainWindow extends ResizableCanvas
 
         });
 
-        new AnimationTimer() {
+        new AnimationTimer()
+        {
             long last = -1;
 
             @Override
-            public void handle(long now) {
-                if (last == -1) {
+            public void handle(long now)
+            {
+                if (last == -1)
+                {
                     last = now;
                 }
                 update();
@@ -105,7 +108,7 @@ public class MainWindow extends ResizableCanvas
             }
             else
             {
-//                System.out.println("classroomindex: " + classroomIndex + " startingTime index: " + lesson.getFormatBeginTime() + " " + startingTimeIndex);
+                //                System.out.println("classroomindex: " + classroomIndex + " startingTime index: " + lesson.getFormatBeginTime() + " " + startingTimeIndex);
             }
         }
 
@@ -115,7 +118,7 @@ public class MainWindow extends ResizableCanvas
     private void draw(FXGraphics2D graphics2D)
     {
         graphics2D.setBackground(Color.WHITE);
-        graphics2D.clearRect(0, 0, (int)getWidth(), (int)getHeight());
+        graphics2D.clearRect(0, 0, (int) getWidth(), (int) getHeight());
         graphics2D.setFont(new Font(Font.DIALOG, Font.PLAIN, 25));
 
         // verticale lijnen van het tijdvak
@@ -160,23 +163,23 @@ public class MainWindow extends ResizableCanvas
 
         // Tekenen van de lessen
         graphics2D.setFont(new Font(Font.DIALOG, Font.PLAIN, 20));
-        for (Rectangle2D rectangle2D : this.lessonShapes.keySet()) {
+        for (Rectangle2D rectangle2D : this.lessonShapes.keySet())
+        {
             graphics2D.setColor(Color.GRAY);
             graphics2D.fill(rectangle2D);
             graphics2D.setColor(Color.BLACK);
             Lesson lesson = this.lessonShapes.get(rectangle2D);
             Teacher teacher = lesson.getTeacher();
-            graphics2D.drawString(teacher.getSubject(), (int)rectangle2D.getX(), (int)(rectangle2D.getY() + 20));
-            graphics2D.drawString(teacher.getName(), (int)rectangle2D.getX(), (int)(rectangle2D.getY() + 40));
-            graphics2D.drawString(lesson.getGroupNames(this.lessonShapes.get(rectangle2D).getGroups()), (int)rectangle2D.getX(), (int)(rectangle2D.getY() + 60));
+            graphics2D.drawString(teacher.getSubject(), (int) rectangle2D.getX(), (int) (rectangle2D.getY() + 20));
+            graphics2D.drawString(teacher.getName(), (int) rectangle2D.getX(), (int) (rectangle2D.getY() + 40));
+            graphics2D.drawString(lesson.getGroupNames(this.lessonShapes.get(rectangle2D).getGroups()), (int) rectangle2D.getX(), (int) (rectangle2D.getY() + 60));
             int studentCount = 0;
-            for (Group group : lesson.getGroups()) {
+            for (Group group : lesson.getGroups())
+            {
                 studentCount += group.getStudents().size();
             }
-            graphics2D.drawString("Aantal studenten: " + studentCount, (int)rectangle2D.getX(), (int)rectangle2D.getY() + 80);
+            graphics2D.drawString("Aantal studenten: " + studentCount, (int) rectangle2D.getX(), (int) rectangle2D.getY() + 80);
         }
-
-
 
 
         // verticale lijnen van het rooster
@@ -188,9 +191,10 @@ public class MainWindow extends ResizableCanvas
 
 
         // alle lokalen tekenen
-        for (int i = 0; i < amountOfClassrooms; i++)
+        ArrayList<Classroom> classrooms = schedule.getClassroomArrayList();
+        for (int i = 0; i < classrooms.size(); i++)
         {
-            graphics2D.drawString(Classroom.classRooms.values()[i].roomName, distanceOfClassroomsFromLeft + i * classroomTableWidth, distanceOfClassroomsFromTop + 20);
+            graphics2D.drawString("Lokaal: " + classrooms.get(i).getName(), distanceOfClassroomsFromLeft + i * classroomTableWidth, distanceOfClassroomsFromTop + 20);
         }
     }
 }

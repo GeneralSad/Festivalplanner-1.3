@@ -24,6 +24,18 @@ public class Pathfinding
     // Normally npcs should be given a new pathfinding object when they need to go somewhere else
     private ArrayList<NPC> npcs;
 
+    public Pathfinding(ArrayList<ArrayList<PathfindingTile>> pathfindingtiles, int tileWidth, int tileHeight, int totalWidth, int totalHeight, PathfindingTile destinationTile, Point2D exactDestination, ArrayList<NPC> npcs)
+    {
+        this.pathfindingtiles = pathfindingtiles;
+        this.tileWidth = tileWidth;
+        this.tileHeight = tileHeight;
+        this.totalWidth = totalWidth;
+        this.totalHeight = totalHeight;
+        this.destinationTile = destinationTile;
+        this.exactDestination = exactDestination;
+        this.npcs = npcs;
+    }
+
     public Pathfinding(TiledMap tiledMapBase)
     {
         this.npcs = new ArrayList<>();
@@ -46,15 +58,18 @@ public class Pathfinding
         init();
     }
 
-    public void addNpc(NPC npc) {
+    public void addNpc(NPC npc)
+    {
         this.npcs.add(npc);
     }
 
-    public void addNpcs(ArrayList<NPC> npcs) {
+    public void addNpcs(ArrayList<NPC> npcs)
+    {
         this.npcs.addAll(npcs);
     }
 
-    public void removeNpc(NPC npc) {
+    public void removeNpc(NPC npc)
+    {
         this.npcs.remove(npc);
     }
 
@@ -236,4 +251,9 @@ public class Pathfinding
     }
 
 
+    @Override
+    public Object clone()
+    {
+        return new Pathfinding((ArrayList<ArrayList<PathfindingTile>>) pathfindingtiles.clone(), tileWidth, tileHeight, totalWidth, totalHeight, destinationTile, exactDestination, (ArrayList<NPC>) npcs.clone());
+    }
 }
