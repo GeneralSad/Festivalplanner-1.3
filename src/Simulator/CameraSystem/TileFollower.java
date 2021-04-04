@@ -38,7 +38,7 @@ public class TileFollower
         if (tile != null)
         {
             fxGraphics2D.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 20));
-            fxGraphics2D.drawString("Selected npc information:", x + 10, y + 19);
+            fxGraphics2D.drawString("Selected tile information:", x + 10, y + 19);
 
             fxGraphics2D.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 15));
             fxGraphics2D.drawString("Selected tile at: " + tile.getX() + " " + tile.getY(), x + 10, y + 35);
