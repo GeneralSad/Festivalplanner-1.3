@@ -39,7 +39,7 @@ public class TabTeacher extends PopUpTab
         BorderPane mainPane = new BorderPane();
 
 
-        //left side of the menu teacher
+        //linkerkant van het lerarenmenu
         Label currentTeacher = new Label("Bestaande Docenten");
         ListView<Teacher> listView = new ListView<>();
         listView.setItems(schedule.getTeacherObservableList());

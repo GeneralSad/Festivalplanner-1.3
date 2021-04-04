@@ -18,7 +18,6 @@ import java.util.List;
 public class Schedule implements Serializable
 {
 
-
     private ArrayList<Lesson> lessonArrayList;
     private ObservableList<Lesson> lessonObservableList;
     private ArrayList<Teacher> teacherArrayList;

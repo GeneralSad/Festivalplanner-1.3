@@ -51,13 +51,13 @@ public class TabClassroom extends PopUpTab
     protected BorderPane getPane()
     {
 
-        //left side of the menu lesson
+        //linkerkant van het lesmenu
         Label currentLesson = new Label("Bestaande Klaslokalen");
         listView.setPrefWidth(500);
         VBox leftVbox = PopupController.awesomeVBox(currentLesson, listView);
 
 
-        //middle side of menu lesson
+        //midden van hget lesmenu
         Label selectedLesson = new Label("Geselecteerde klaslokaal");
         FlowPane classroomData = new FlowPane();
         classroomData.setOrientation(Orientation.VERTICAL);

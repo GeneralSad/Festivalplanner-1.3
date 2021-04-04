@@ -139,7 +139,7 @@ public class GUI extends Application {
             simulator.disaster();
         });
 
-        // update the label so text is displayed at startup
+        //Update het labal zodat de tekst wordt laten zien bij het opstarten
         speedFactorLabel.setText("De simulatie speelt op normale snelheid");
 
         vBox.getChildren().addAll(speedFactorLabel, speedSettingsBox);
@@ -341,7 +341,7 @@ public class GUI extends Application {
                     lastY = event.getY();
                 }
 
-                // if statement to limit dragging to certain areas of the map
+                //if statement om het slepen te limiteren naar bepaalde gebieden op de map
                 if ((camera.getX() + (event.getX() - lastX)) > -1200 && (camera.getY() + (event.getY() - lastY)) > -1200 && (camera.getX() + (event.getX() - lastX)) < 1500 && (camera.getY() + (event.getY() - lastY)) < 550) {
 
                     camera.addToPosition(event.getX() - lastX, event.getY() - lastY);
