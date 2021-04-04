@@ -13,11 +13,19 @@ import java.util.ArrayList;
 
 public class StudentController {
 
-    private ArrayList<NPC> npcStudentsOnScreen = new ArrayList<>();
-    private ArrayList<NPC> inAula = new ArrayList<>();
-    private ArrayList<Lesson> lessonsPassed = new ArrayList<>();
-    private TiledMap tiledmap = new TiledMap("/TiledMaps/MapFinal.json");
-    private ArrayList<NPC> skippable = new ArrayList<>();
+    private ArrayList<NPC> npcStudentsOnScreen;
+    private ArrayList<NPC> inAula;
+    private ArrayList<Lesson> lessonsPassed;
+    private TiledMap tiledmap;
+    private ArrayList<NPC> skippable;
+
+    public StudentController() {
+        this.npcStudentsOnScreen = new ArrayList<>();
+        this.inAula =  new ArrayList<>();
+        this.lessonsPassed = new ArrayList<>();
+        this.tiledmap = new TiledMap("/TiledMaps/MapFinal.json");
+        this.skippable = new ArrayList<>();
+    }
 
     public void update(ArrayList<Lesson> lessons, LocationManager locationManager, NPCManager npcManager, Schedule schedule){
 
@@ -195,6 +203,4 @@ public class StudentController {
     public ArrayList<NPC> getNpcStudentsOnScreen() {
         return npcStudentsOnScreen;
     }
-
-
 }

@@ -110,7 +110,7 @@ public class NPC
 
     public NPC(Person person, int x, int y)
     {
-        this(person, x, y, 8, 16, randomSprite());
+        this(person, x, y, 8, 8, randomSprite());
     }
 
     /**
@@ -137,7 +137,7 @@ public class NPC
             }
 
             if (collisionEnabler) {
-                npcCollisionUpdate(npcs, deltaTime);
+//                npcCollisionUpdate(npcs, deltaTime);
             }
 
             // Destination check

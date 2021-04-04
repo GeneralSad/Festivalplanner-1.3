@@ -39,7 +39,7 @@ import java.util.Set;
  */
 
 
-public class Simulator
+public class Simulator implements Cloneable
 {
 
     //time managers stuff
@@ -68,6 +68,8 @@ public class Simulator
     private Clip clip;
     private boolean cacheChange = false;
 
+    private Map<LocalTime, NPCManager> timeNPCManagerMap = new LinkedHashMap<>();
+
 
     public Simulator(Schedule schedule)
     {
@@ -79,7 +81,7 @@ public class Simulator
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(this.getClass().getResource("/Music/ring sound.wav"));
             clip = AudioSystem.getClip();
             clip.open(audioInputStream);
-            clip.start();
+           // clip.start();
             audioInputStream.close();
         }
         catch(Exception e)
@@ -172,7 +174,7 @@ public class Simulator
     public void draw(FXGraphics2D fxGraphics2D, double canvasWidth, double canvasHeight)
     {
         tiledmap.draw(fxGraphics2D);
-        npcManager.draw(fxGraphics2D, false);
+        npcManager.draw(fxGraphics2D, true);
 
 
         //debug for all the part in the simulator that have something to do with the seats and locations
@@ -277,7 +279,7 @@ public class Simulator
         return timeManager.getSpeedFactor();
     }
 
-    private Map<LocalTime, NPCManager> timeNPCManagerMap = new LinkedHashMap<>();
+
 
     public void setSpeedfactor(int speedFactor)
     {
@@ -306,6 +308,7 @@ public class Simulator
                 npcOnScreen.addAll(npcManager.getNpcs());
                 timeNPCManagerMap.remove(localTime);
                 lastSave = localTime;
+
             }
         }
     }
@@ -319,7 +322,6 @@ public class Simulator
         {
             newNpcManager.addNPC(npc.clone());
         }
-
         timeNPCManagerMap.put(timeManager.getTime(), newNpcManager);
 
         System.out.println("npcs saved");

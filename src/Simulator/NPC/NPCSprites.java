@@ -89,9 +89,6 @@ public class NPCSprites
      */
 
     public void draw(FXGraphics2D graphics2D, boolean atDestination, double x, double y, String name){
-
-
-
         //draws the standing still behavior this is not updated.
         if (atDestination){
 
@@ -100,7 +97,7 @@ public class NPCSprites
                     if (sittingRotation == 0){
                         graphics2D.drawImage(getSitting()[frame], (int) x-4, (int)y-14, null);
                     } else {
-                        graphics2D.drawImage(getSitting()[frame + 6], (int) x+2, (int)y-14, null);
+                        graphics2D.drawImage(getSitting()[frame + 6], (int) x-4, (int)y-14, null);
                     }
 
                 } else {

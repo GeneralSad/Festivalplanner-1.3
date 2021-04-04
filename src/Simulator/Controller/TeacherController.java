@@ -12,17 +12,25 @@ import Simulator.Pathfinding.Pathfinding;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
-public class TeacherController {
+public class TeacherController{
 
 
-    private ArrayList<NPC> npcTeacherOnScreen = new ArrayList<>();
-    private ArrayList<NPC> inAula = new ArrayList<>();
-    private ArrayList<Lesson> lessonsPassed = new ArrayList<>();
-    private TiledMap tiledmap = new TiledMap("/TiledMaps/MapFinal.json");
-    private ArrayList<NPC> skippable = new ArrayList<>();
+    private ArrayList<NPC> npcTeacherOnScreen;
+    private ArrayList<NPC> inAula;
+    private ArrayList<Lesson> lessonsPassed;
+    private TiledMap tiledmap;
+    private ArrayList<NPC> skippable;
+
+    public TeacherController() {
+        this.npcTeacherOnScreen = new ArrayList<>();
+        this.inAula = new ArrayList<>();
+        this.lessonsPassed = new ArrayList<>();
+        this.tiledmap = new TiledMap("/TiledMaps/MapFinal.json");
+        this.skippable = new ArrayList<>();
+    }
+
 
     public void update(ArrayList<Lesson> lessons, LocationManager locationManager, NPCManager npcManager, Schedule schedule){
-
 
         ArrayList<Lesson> lessonsAllday = schedule.getLessonArrayList();
 
@@ -162,9 +170,11 @@ public class TeacherController {
         }
     }
 
-
-
     public ArrayList<NPC> getNpcTeacherOnScreen() {
         return npcTeacherOnScreen;
     }
+
+
+
+
 }

@@ -172,7 +172,7 @@ public class TiledLayer
 
                         // rotation for seats
 
-                        System.out.println(gid - tiledSet.getFirstGID());
+//                        System.out.println(gid - tiledSet.getFirstGID());
                         double rotation = 0.0;
                         if ((gid - tiledSet.getFirstGID() == 0))
                         {

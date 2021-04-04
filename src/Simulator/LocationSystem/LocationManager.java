@@ -1,21 +1,20 @@
 package Simulator.LocationSystem;
 
-import Data.Schedule;
-import Data.Teacher;
-import Simulator.NPC.NPC;
-import Simulator.Pathfinding.Pathfinding;
 
-import java.io.Serializable;
+import Simulator.NPC.NPC;
 import java.util.ArrayList;
 
 public class LocationManager
 {
-    private LocationDatabase locations = new LocationDatabase();
+    private LocationDatabase locations;
     private ArrayList<ClassRoomBehavior> classRoomBehaviors;
     private AuditoriumBehavior auditorium;
 
+
+
     public LocationManager()
     {
+        locations = new LocationDatabase();
         classRoomBehaviors = locations.ClassRoomData();
         auditorium = locations.AudioriumData();
     }
@@ -29,6 +28,8 @@ public class LocationManager
             {
                 if (student.getCurrentLocation().distance(classRoomBehaviors.get(i).getEntry()) < 10)
                 {
+
+                    student.setCollisionEnabler(false);
                     classRoomBehaviors.get(i).ScriptedStudentStart(student);
                     return true;
                 }
@@ -54,6 +55,7 @@ public class LocationManager
             {
                 if (teacher.getCurrentLocation().distance(classRoomBehaviors.get(i).getEntry()) < 10)
                 {
+                    teacher.setCollisionEnabler(false);
                     classRoomBehaviors.get(i).ScriptedTeacherStart(teacher);
                     return true;
                 }
@@ -81,4 +83,5 @@ public class LocationManager
         //does the same but then for auditorium
         auditorium.leaveFilledSeat(student);
     }
+
 }
