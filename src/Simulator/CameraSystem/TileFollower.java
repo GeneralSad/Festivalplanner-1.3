@@ -42,7 +42,7 @@ public class TileFollower
 
             fxGraphics2D.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 15));
             fxGraphics2D.drawString("Selected tile at: " + tile.getX() + " " + tile.getY(), x + 10, y + 35);
-            fxGraphics2D.drawString("Amount of people walked on this tile: " + tile.getWalkedOnCounter(), x  + 10, y + 50);
+            fxGraphics2D.drawString("Amount of times this tile was walked on: " + tile.getWalkedOnCounter(), x  + 10, y + 50);
         }
 
     }

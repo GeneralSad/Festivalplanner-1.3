@@ -33,13 +33,13 @@ public class TiledMap
         init();
     }
 
-    public TiledMap(String jsonFileName, boolean bool)
-    {
-        this.jsonFileName = jsonFileName;
-        this.tiledLayers = new ArrayList<>();
-        this.tiledSets = new ArrayList<>();
-        walkInit();
-    }
+//    public TiledMap(String jsonFileName, boolean bool)
+//    {
+//        this.jsonFileName = jsonFileName;
+//        this.tiledLayers = new ArrayList<>();
+//        this.tiledSets = new ArrayList<>();
+//        walkInit();
+//    }
 
 
     public int getTileHeight()

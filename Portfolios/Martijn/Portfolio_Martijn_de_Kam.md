@@ -306,10 +306,7 @@ De informatie alleen uitgezoemd zien is prima en het is beter om de tijd verder 
 
 Naast het volgen van npcs heb ik ook problemen gehad met de npc collision verbeteren.
 
-Ik heb hier meerdere kleine aanpassingen en tweaks aan geprobeerd te maken, maar er waren telkens wat kleine problemen dat npcs bleven haken, dat ze buiten de muren vielen of dat er weer een ander probleem op kwam.
-Uiteindelijk heb ik besloten om het hele collision systeem te herschrijven naar een methode die meer vergelijkbaar is aan wat ik heb gebruikt voor de 2DGraphics eindopdracht met de particle flow.
-Het essentiële verschil hierbij is dat het oude systeem veel meer werkt met de positie direct verplaatsen en dat wil ik veranderen naar een systeem dat de snelheid aanpast die dan daarna de positie aanpast.
-Hiermee wil ik problemen oplossen dat npcs in muren belanden omdat ze te ver met een gefixte afstand worden weggeduwt en dat npcs niet in elkaar vast komen te zitten en er niet meer uit kunnen naast drastische bewegingen maken. 
+Hier zijn een aantal problemen mee dat npcs in elkaar vast komen te zitten, waardoor ze niet meer vooruit kunnen bewegen.
 
 
 # Reflectie op stelling over bedrijfsleven

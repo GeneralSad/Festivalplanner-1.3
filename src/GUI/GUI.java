@@ -51,7 +51,8 @@ public class GUI extends Application {
     private boolean followingNPC;
     private NPC npcBeingFollowed;
 
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
         launch(GUI.class);
     }
 
