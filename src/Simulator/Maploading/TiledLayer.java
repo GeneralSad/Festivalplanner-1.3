@@ -240,7 +240,7 @@ public class TiledLayer
     }
 
     private long getData(int index) {
-        if (index >= this.data.size()) {
+        if (index >= this.data.size() || index < 0) {
             return 0;
         }
         return this.data.get(index);
