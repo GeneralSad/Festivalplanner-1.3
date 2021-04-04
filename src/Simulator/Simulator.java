@@ -7,6 +7,7 @@ import Simulator.CameraSystem.TileFollower;
 import Simulator.Controller.StudentController;
 import Simulator.Controller.TeacherController;
 import Simulator.LocationSystem.LocationDatabase;
+import Simulator.LocationSystem.LocationLabels;
 import Simulator.LocationSystem.LocationManager;
 import Simulator.Maploading.Tile;
 import Simulator.Maploading.TiledMap;
@@ -48,7 +49,6 @@ public class Simulator implements Cloneable
     private int speedfactor = 1;
     private boolean ringing = true;
 
-
     //chache
     private ArrayList<NPC> npcOnScreen = new ArrayList<>();
 
@@ -67,6 +67,8 @@ public class Simulator implements Cloneable
     private Clip schoolAlarm;
     private Clip airAlarm;
     private boolean cacheChange = false;
+    private LocationLabels locationLabels = new LocationLabels();
+    private  ArrayList<Lesson> lessons = new ArrayList<>();
 
     private Map<LocalTime, NPCManager> timeNPCManagerMap = new LinkedHashMap<>();
     private boolean disaster = true;
@@ -141,7 +143,7 @@ public class Simulator implements Cloneable
                 }
 
 
-                ArrayList<Lesson> lessons = timeManager.getCurrentLessons();
+               lessons = timeManager.getCurrentLessons();
 
                 //updates the students and teachers controls
                 studentController.update(lessons, locationManager, npcManager, schedule);
@@ -231,6 +233,7 @@ public class Simulator implements Cloneable
         if (camera.getTileFollower().isFollowingATile())
         {
             camera.getTileFollower().draw(fxGraphics2D);
+            locationLabels.draw(fxGraphics2D, schedule, lessons);
         }
     }
 

@@ -1,9 +1,7 @@
 package Simulator.LocationSystem;
 
-import GUI.GUI;
-import Simulator.NPC.NPC;
-import Simulator.Pathfinding.Pathfinding;
 
+import Simulator.NPC.NPC;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
@@ -14,13 +12,16 @@ public class ClassRoomBehavior
     private Point2D entry;
     private ArrayList<NPC> handeld = new ArrayList<>();
     private int ofSett;
+    private Point2D draw;
 
-    public ClassRoomBehavior(ArrayList<Seat> seats, Seat teacherSeat, Point2D entry, int ofSett)
+
+    public ClassRoomBehavior(ArrayList<Seat> seats, Seat teacherSeat, Point2D entry, int ofSett, Point2D draw)
     {
         this.seats = seats;
         this.teacherSeat = teacherSeat;
         this.entry = entry;
         this.ofSett = ofSett;
+        this.draw = draw;
     }
 
     public void ScriptedStudentStart(NPC student)
@@ -101,5 +102,9 @@ public class ClassRoomBehavior
     public int getOfSett()
     {
         return ofSett;
+    }
+
+    public Point2D getDraw() {
+        return draw;
     }
 }

@@ -5,6 +5,7 @@ import org.jfree.fx.FXGraphics2D;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
+import java.awt.geom.RoundRectangle2D;
 
 public class TileFollower
 {
@@ -21,24 +22,29 @@ public class TileFollower
 
     public void draw(FXGraphics2D fxGraphics2D)
     {
-        fxGraphics2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
 
         int x = (int) camera.getRelativeWidth() - 500;
-        int y = (int) -camera.getY() + 200;
+        int y = (int) -camera.getY() + 220;
 
-        fxGraphics2D.setColor(Color.CYAN);
-        fxGraphics2D.fill(new Rectangle2D.Double(x, y, 500, 50));
-        fxGraphics2D.setColor(Color.BLACK);
+        float alpha = 0.75f;
+        Color colorField = new Color(0, 0, 0, alpha);
+        fxGraphics2D.setColor(colorField);
+
+        fxGraphics2D.fill(new RoundRectangle2D.Double(x, y, 500, 60, 20 ,20));
+        fxGraphics2D.setColor(Color.WHITE);
+
 
         // Draw npc information
         if (tile != null)
         {
+            fxGraphics2D.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 20));
+            fxGraphics2D.drawString("Selected tile information:", x + 10, y + 19);
+
             fxGraphics2D.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 15));
-            fxGraphics2D.drawString("Selected tile at: " + tile.getX() + " " + tile.getY(), x, y + 30);
-            fxGraphics2D.drawString("Amount of people walked on this tile: " + tile.getWalkedOnCounter(), x, y + 45);
+            fxGraphics2D.drawString("Selected tile at: " + tile.getX() + " " + tile.getY(), x + 10, y + 35);
+            fxGraphics2D.drawString("Amount of people walked on this tile: " + tile.getWalkedOnCounter(), x  + 10, y + 50);
         }
 
-        fxGraphics2D.setComposite(AlphaComposite.Clear);
     }
 
     public Tile getTile()
