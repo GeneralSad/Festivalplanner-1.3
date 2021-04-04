@@ -129,13 +129,13 @@ public class NPC
             if (currentPathfinding.getDestinationTile() != null && !onTargetTile)
             {
                 pathfindingUpdate(deltaTime);
-                wallCollisionUpdate(deltaTime);
             }
             else
             {
                 rotationAndMovementUpdate(deltaTime);
             }
 
+            wallCollisionUpdate(deltaTime);
             if (collisionEnabler) {
 //                npcCollisionUpdate(npcs, deltaTime);
             }
