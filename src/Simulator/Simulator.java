@@ -2,6 +2,7 @@ package Simulator;
 
 import Data.*;
 import Simulator.CameraSystem.Camera;
+import Simulator.CameraSystem.NPCFollower;
 import Simulator.CameraSystem.TileFollower;
 import Simulator.Controller.StudentController;
 import Simulator.Controller.TeacherController;
@@ -10,9 +11,7 @@ import Simulator.LocationSystem.LocationManager;
 import Simulator.Maploading.Tile;
 import Simulator.Maploading.TiledMap;
 import Simulator.NPC.NPC;
-import Simulator.CameraSystem.NPCFollower;
 import Simulator.NPC.NPCManager;
-import Simulator.Pathfinding.PathfindingTile;
 import Simulator.Time.NormalTime;
 import Simulator.Time.TimeManager;
 import org.jfree.fx.FXGraphics2D;
@@ -70,7 +69,7 @@ public class Simulator implements Cloneable
     private boolean cacheChange = false;
 
     private Map<LocalTime, NPCManager> timeNPCManagerMap = new LinkedHashMap<>();
-    public boolean disaster = true;
+    private boolean disaster = true;
 
 
     public Simulator(Schedule schedule)
@@ -125,14 +124,7 @@ public class Simulator implements Cloneable
         timeManager.update(deltatime);
 
         //checks when to ring the bell
-        if (timeManager.getTime().isAfter(timeManager.nextChange) && cacheChange)
-        {
-            ringing = false;
-        }
-        else
-        {
-            ringing = true;
-        }
+        ringing = !timeManager.getTime().isAfter(timeManager.getNextChange()) || !cacheChange;
         cacheChange = timeManager.isChanged();
 
         if (disaster)
@@ -217,9 +209,9 @@ public class Simulator implements Cloneable
             fxGraphics2D.setColor(Color.BLACK);
 
             //draws npc targets
-            for (int j = 0; j < npcOnScreen.size(); j++)
+            for (NPC npc : npcOnScreen)
             {
-                Point2D test = npcOnScreen.get(j).getCurrentPathfinding().getDestinationTile().getMiddlePoint();
+                Point2D test = npc.getCurrentPathfinding().getDestinationTile().getMiddlePoint();
                 fxGraphics2D.fill(new Rectangle.Double(test.getX() - 5, test.getY() - 5, 10, 10));
             }
 
@@ -337,9 +329,34 @@ public class Simulator implements Cloneable
                 this.timeManager.setTimeType(new NormalTime(localTime));
                 setSpeedfactor(0);
                 npcOnScreen.clear();
-                npcOnScreen.addAll(npcManager.getNpcs());
+                ArrayList<NPC> npcs = npcManager.getNpcs();
+                npcOnScreen.addAll(npcs);
+
+                ArrayList<NPC> studentOnScreen = new ArrayList<>();
+                ArrayList<NPC> teacherOnScreen = new ArrayList<>();
+
+
+                for (NPC npc : npcs)
+                {
+                    Person person = npc.getPerson();
+                    if (person instanceof Student)
+                    {
+                        studentOnScreen.add(npc);
+                    }
+                    else if (person instanceof Teacher)
+                    {
+                        teacherOnScreen.add(npc);
+                    }
+                }
+
+                studentController.setNpcStudentsOnScreen(studentOnScreen);
+                teacherController.setNpcTeacherOnScreen(teacherOnScreen);
+
+
                 timeNPCManagerMap.remove(localTime);
                 lastSave = localTime;
+                timeManager.setNextChange(localTime);
+                disaster = true;
 
             }
         }
@@ -352,7 +369,7 @@ public class Simulator implements Cloneable
 
         for (NPC npc : this.npcManager.getNpcs())
         {
-            newNpcManager.addNPC(npc.clone());
+            newNpcManager.addNPC((NPC) npc.clone());
         }
         timeNPCManagerMap.put(timeManager.getTime(), newNpcManager);
 

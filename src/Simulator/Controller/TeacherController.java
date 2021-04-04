@@ -44,7 +44,7 @@ public class TeacherController
                 boolean stillLesson = true;
                 for (Lesson lesson : lessonsAllday)
                 {
-                    if (lesson.getTeacher() == npc.getPerson())
+                    if (lesson.getTeacher().equals(npc.getPerson()))
                     {
                         if (lessonsPassed.contains(lesson) && !lessons.contains(lesson))
                         {
@@ -81,7 +81,7 @@ public class TeacherController
                         {
                             for (int i = 0; i < inAula.size(); i++)
                             {
-                                if (lesson.getTeacher() == inAula.get(i).getPerson())
+                                if (lesson.getTeacher().equals(inAula.get(i).getPerson()))
                                 {
                                     inAula.remove(i);
                                 }
@@ -118,7 +118,7 @@ public class TeacherController
         {
             for (NPC npc : npcTeacherOnScreen)
             {
-                if (npc.getPerson() == lesson.getTeacher())
+                if (npc.getPerson().equals(lesson.getTeacher()))
                 {
                     used.add(npc);
                 }
@@ -127,26 +127,26 @@ public class TeacherController
 
 
         //sends to auditorium
-        for (int i = 0; i < npcTeacherOnScreen.size(); i++)
+        for (NPC npc : npcTeacherOnScreen)
         {
             boolean onscreen = true;
-            for (int j = 0; j < used.size(); j++)
+            for (NPC npc1 : used)
             {
-                if (used.get(j) == npcTeacherOnScreen.get(i))
+                if (npc1.equals(npc))
                 {
                     onscreen = false;
                 }
             }
-            for (int j = 0; j < inAula.size(); j++)
+            for (NPC npc1 : inAula)
             {
-                if (inAula.get(j) == npcTeacherOnScreen.get(i))
+                if (npc1.equals(npc))
                 {
                     onscreen = false;
                 }
             }
-            for (int j = 0; j < skippable.size(); j++)
+            for (NPC npc1 : skippable)
             {
-                if (skippable.get(j) == npcTeacherOnScreen.get(i))
+                if (npc1.equals(npc))
                 {
                     onscreen = false;
                 }
@@ -154,10 +154,10 @@ public class TeacherController
 
             if (onscreen)
             {
-                locationManager.scriptedEndLesson(npcTeacherOnScreen.get(i));
-                npcTeacherOnScreen.get(i).resetDestination();
-                npcTeacherOnScreen.get(i).getCurrentPathfinding().setDestination((int) AuditoriumBehavior.entry.getX(), (int) AuditoriumBehavior.entry.getY());
-                inAula.add(npcTeacherOnScreen.get(i));
+                locationManager.scriptedEndLesson(npc);
+                npc.resetDestination();
+                npc.getCurrentPathfinding().setDestination((int) AuditoriumBehavior.entry.getX(), (int) AuditoriumBehavior.entry.getY());
+                inAula.add(npc);
             }
         }
 
@@ -182,7 +182,7 @@ public class TeacherController
 
                 for (int j = 0; j < npcTeacherOnScreen.size(); j++)
                 {
-                    if (npcTeacherOnScreen.get(j) == skippable.get(i))
+                    if (npcTeacherOnScreen.get(j).equals(skippable.get(i)))
                     {
                         npcTeacherOnScreen.remove(j);
                     }
@@ -212,4 +212,17 @@ public class TeacherController
     }
 
 
+    public void setNpcTeacherOnScreen(ArrayList<NPC> npcTeacherOnScreen)
+    {
+        reset();
+        this.npcTeacherOnScreen.addAll(npcTeacherOnScreen);
+    }
+
+    private void reset()
+    {
+        npcTeacherOnScreen.clear();
+        inAula.clear();
+        lessonsPassed.clear();
+        skippable.clear();
+    }
 }

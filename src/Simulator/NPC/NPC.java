@@ -72,9 +72,9 @@ public class NPC
 
 
     @Override
-    public NPC clone()
+    public Object clone()
     {
-        return new NPC(person, x, y, width, height, destination, rotation, rotationDirection, currentTile, speed, targetRotation, rotationSpeed, atDestination, appearance, currentPathfinding, onTargetTile);
+        return new NPC(person, x, y, width, height, destination, rotation, rotationDirection, currentTile, speed, targetRotation, rotationSpeed, atDestination, appearance, (Pathfinding) currentPathfinding.clone(), onTargetTile);
     }
 
 
@@ -227,11 +227,7 @@ public class NPC
     private boolean wallCollisionCheck()
     {
         TiledLayer walkableTiledLayer = Simulator.getTiledmap().getWalkableLayer();
-        if (!walkableTiledLayer.isPositionValidTile(getCurrentLocation()))
-        {
-            return true;
-        }
-        return false;
+        return !walkableTiledLayer.isPositionValidTile(getCurrentLocation());
     }
 
     /**
@@ -613,9 +609,9 @@ public class NPC
         return new Rectangle2D.Double(this.x, this.y, this.width, this.height);
     }
 
-    public Rectangle2D getBigHitbox()
+    private Rectangle2D getBigHitbox()
     {
-        return new Rectangle2D.Double(this.x - this.width / 2, this.y - this.height / 2, this.width * 2, this.height * 2);
+        return new Rectangle2D.Double(this.x - this.width / 2.0, this.y - this.height / 2.0, this.width * 2, this.height * 2);
     }
 
     public Point2D getDestination()

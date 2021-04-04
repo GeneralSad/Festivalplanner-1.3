@@ -48,7 +48,7 @@ public class StudentController
                     {
                         for (Student student : group.getStudents())
                         {
-                            if (student == npc.getPerson())
+                            if (student.equals(npc.getPerson()))
                             {
                                 if (lessonsPassed.contains(lesson) && !lessons.contains(lesson))
                                 {
@@ -99,7 +99,7 @@ public class StudentController
                                 {
                                     for (int i = 0; i < inAula.size(); i++)
                                     {
-                                        if (inAula.get(i).getPerson() == student)
+                                        if (inAula.get(i).getPerson().equals(student))
                                         {
                                             inAula.remove(i);
                                         }
@@ -147,7 +147,7 @@ public class StudentController
                 {
                     for (NPC npc : npcStudentsOnScreen)
                     {
-                        if (npc.getPerson() == person)
+                        if (npc.getPerson().equals(person))
                         {
                             used.add(npc);
                         }
@@ -158,26 +158,26 @@ public class StudentController
 
 
         //sends to auditorium
-        for (int i = 0; i < npcStudentsOnScreen.size(); i++)
+        for (NPC npc : npcStudentsOnScreen)
         {
             boolean onscreen = true;
-            for (int j = 0; j < used.size(); j++)
+            for (NPC npc1 : used)
             {
-                if (used.get(j) == npcStudentsOnScreen.get(i))
+                if (npc1.equals(npc))
                 {
                     onscreen = false;
                 }
             }
-            for (int j = 0; j < inAula.size(); j++)
+            for (NPC npc1 : inAula)
             {
-                if (inAula.get(j) == npcStudentsOnScreen.get(i))
+                if (npc1.equals(npc))
                 {
                     onscreen = false;
                 }
             }
-            for (int j = 0; j < skippable.size(); j++)
+            for (NPC npc1 : skippable)
             {
-                if (skippable.get(j) == npcStudentsOnScreen.get(i))
+                if (npc1.equals(npc))
                 {
                     onscreen = false;
                 }
@@ -185,11 +185,11 @@ public class StudentController
 
             if (onscreen)
             {
-                locationManager.scriptedEndLesson(npcStudentsOnScreen.get(i));
-                npcStudentsOnScreen.get(i).resetDestination();
-                npcStudentsOnScreen.get(i).setCollisionEnabler(false);
-                npcStudentsOnScreen.get(i).getCurrentPathfinding().setDestination((int) AuditoriumBehavior.entry.getX(), (int) AuditoriumBehavior.entry.getY());
-                inAula.add(npcStudentsOnScreen.get(i));
+                locationManager.scriptedEndLesson(npc);
+                npc.resetDestination();
+                npc.setCollisionEnabler(false);
+                npc.getCurrentPathfinding().setDestination((int) AuditoriumBehavior.entry.getX(), (int) AuditoriumBehavior.entry.getY());
+                inAula.add(npc);
 
             }
         }
@@ -215,7 +215,7 @@ public class StudentController
 
                 for (int j = 0; j < npcStudentsOnScreen.size(); j++)
                 {
-                    if (npcStudentsOnScreen.get(j) == skippable.get(i))
+                    if (npcStudentsOnScreen.get(j).equals(skippable.get(i)))
                     {
                         npcStudentsOnScreen.remove(j);
                     }
@@ -243,5 +243,20 @@ public class StudentController
             npc.getCurrentPathfinding().setDestination(1425, 725);
             skippable.add(npc);
         }
+    }
+
+    public void setNpcStudentsOnScreen(ArrayList<NPC> npcStudentsOnScreen)
+    {
+        reset();
+        this.npcStudentsOnScreen.addAll(npcStudentsOnScreen);
+
+    }
+
+    private void reset()
+    {
+        this.npcStudentsOnScreen.clear();
+        inAula.clear();
+        lessonsPassed.clear();
+        skippable.clear();
     }
 }

@@ -11,7 +11,7 @@ public class TimeManager
 
     private TimeType timeType;
     private Schedule schedule;
-    public LocalTime nextChange;
+    private LocalTime nextChange;
     private ArrayList<Lesson> lessons;
 
     public TimeManager(Schedule schedule, TimeType timeType)
@@ -58,6 +58,16 @@ public class TimeManager
     {
 
         return timeType.getTime().isAfter(nextChange);
+    }
+
+    public LocalTime getNextChange()
+    {
+        return nextChange;
+    }
+
+    public void setNextChange(LocalTime nextChange)
+    {
+        this.nextChange = nextChange;
     }
 
     public LocalTime getTime()

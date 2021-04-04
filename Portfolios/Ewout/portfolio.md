@@ -105,7 +105,7 @@ deze lijst zaten dus nog niet de lessen die nog moeste beginnen, hierdoor werden
     {
 
         lessons = schedule.getOverlappingLessons(getTime());
-        nextChange = null;
+        nextChange = null;\\\\\
         for (Lesson lesson : lessons)
         {
             LocalTime endTime = lesson.getEndTime();
@@ -127,6 +127,29 @@ deze lijst zaten dus nog niet de lessen die nog moeste beginnen, hierdoor werden
 
 ![Screenshot van gui simulator.](tijdscreenshot.png)
 zo is het er uit eindelijk uit komen te zien, met de tijd bovenin in het midden, en rechtsonder de knoppen om de tijdsverloop aan te passen, en een knop om terug te gaan na het laatste kwartier.
+
+#week 8 
+
+Deze week heb ik gewerkt aan het terugspoelen van de tijd, er waren meerdere manieren om dit te doen. het eerste idee was gewoon de tijd achteruit laten lopen
+dan gaan mensen gewoon het rooster verkeerde kant op af, maar dit zorgt veel problemen, zoals onderandere dat de mensen nog wel vooruit lopen, en dat er veel bugs onstaan met de deltatime
+waardoor mensen door de muren heen gaan lopen en vast blijven zitten. 
+de optie waar ik uiteindelijk voor heb gekozen is elk kwartier alle npc's te clonen, en dan in een nieuwe npc manager te stoppen, en deze dan in een map samen met de tijd op te slaan.
+
+    public void saveNPCs()
+    {
+        NPCManager newNpcManager = new NPCManager();
+
+        for (NPC npc : this.npcManager.getNpcs())
+        {
+            newNpcManager.addNPC(npc.clone());
+        }
+        timeNPCManagerMap.put(timeManager.getTime(), newNpcManager);
+
+        System.out.println("npcs saved");
+
+    }
+hier kan je zien hoe het opslaan gebeurd, maar dat is maar het eerste deel van terug in de tijd kunnen, het andere deel het inladen van een geschienis punt is natuurlijk ook belangrijk.
+
 
 
 #javaFX in het bedrijfsleven

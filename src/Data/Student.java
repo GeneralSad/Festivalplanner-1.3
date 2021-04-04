@@ -13,7 +13,6 @@ public class Student extends Person implements Serializable
 
 
     private Group group;
-    private Classroom classroom;
 
     public Student(String name, int age, Group group)
     {
@@ -31,5 +30,4 @@ public class Student extends Person implements Serializable
     {
         return "Naam: " + super.name + "\nLeeftijd: " + super.age;
     }
-
 }
