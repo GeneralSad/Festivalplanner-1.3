@@ -174,11 +174,11 @@ public class TiledLayer
 
                         System.out.println(gid - tiledSet.getFirstGID());
                         double rotation = 0.0;
-                        if ((gid - tiledSet.getFirstGID() == 896))
+                        if ((gid - tiledSet.getFirstGID() == 0))
                         {
                             rotation = 0.0;
                         }
-                        else if ((int) gid - tiledSet.getFirstGID() == 5)
+                        else if ((int) gid - tiledSet.getFirstGID() == 5 || (int) gid - tiledSet.getFirstGID() == 1)
                         {
                             rotation = 180.0;
                         }
@@ -186,7 +186,7 @@ public class TiledLayer
                         {
                             rotation = 90;
                         }
-                        else if ((int) gid - tiledSet.getFirstGID() == 2)
+                        else if ((int) gid - tiledSet.getFirstGID() == 2 ||(int) gid - tiledSet.getFirstGID() == 3 )
                         {
                             rotation = 270;
                         }

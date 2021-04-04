@@ -18,8 +18,10 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.awt.geom.RoundRectangle2D;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -181,9 +183,17 @@ public class Simulator
             int number = 0;
             for (Tile tile : getTiledmap().getSeatableLayer().getTilesInLayer())
             {
+                AffineTransform af = new AffineTransform();
+                af.translate(tile.getX(), tile.getY());
+                af.rotate(Math.toRadians(tile.getRotation()));
+                af.translate(10, 0);
+
+                fxGraphics2D.fill(af.createTransformedShape(new Rectangle2D.Double(0,0 , 20 ,3)));
                 number++;
                 fxGraphics2D.drawString(("" + number), tile.getX(), tile.getY());
             }
+
+
 
             fxGraphics2D.setColor(Color.BLACK);
 
