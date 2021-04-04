@@ -108,6 +108,7 @@ public class Simulator
         npcManager.update((deltatime / 1e9) * deltaTimeMultiplier);
         timeManager.update(deltatime);
 
+        //checks when to ring the bell
         if (timeManager.getTime().isAfter(timeManager.nextChange) && cacheChange){
             ringing = false;
         } else {

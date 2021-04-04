@@ -171,6 +171,8 @@ public class TiledLayer
                         imageGraphics.drawRenderedImage(srcImage, affineTransform);
 
                         // rotation for seats
+
+                        System.out.println(gid - tiledSet.getFirstGID());
                         double rotation = 0.0;
                         if ((gid - tiledSet.getFirstGID() == 896))
                         {

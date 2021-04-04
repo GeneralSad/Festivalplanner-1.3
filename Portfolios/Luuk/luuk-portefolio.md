@@ -473,14 +473,37 @@ Geciteerd voorbeeld van: wiki/JSON
 
 
 ####Aplicaties:
-//todo van deze bron de applicaties bekijken en andere voorbeelden zoeken!
-https://www.sitepoint.com/google-maps-json-file/
+
+#####Google Maps:
+Google maps maakt gebruik van json files om markers op te slaan. Google maps API gebruikt namelijk json voor veel dingen. De manier waarop de markers in de api van google maps worden opgeslagen als json is als volgende:
+
+
+![WireFrameDiagramWeek5.jpg](voorbeeld van json.jpg)
+
+
+#####Youtube:
+Ook youtube maakt gebruik van json files om data terug te geven. Json wordt namelijk gebruikt in de Youtube search API. Een voorbeeld van dat die youtube terug geeft zijn search results:
+
+
+![WireFrameDiagramWeek5.jpg](voorbeeld van json2.jpg)
+
+#####Twitter:
+Twitter maakt gebruik van een rest api die ook json files gebruikt. Daarom wordt er json in twitter gebruikt. Een voorbeeld hier van is:
+
+![WireFrameDiagramWeek5.jpg](voorbeeld van json3.jpg)
+
+
+
+
+#####Conclusie
+JSON wordt dus in veel applicaties gebruikt om data op te slaan. Dit komt waarschijnelijk door het wijde gebruik van dit type.
 
 
 ##Bronnen:
 - Computer Simulations Are Better — and More Affordable — than Ever ( Willy C. Shih) - Geschreven op: Harvard Business Review - Bron: https://hbr.org/2020/10/computer-simulations-are-better-and-more-affordable-than-ever
 - Simulation Software Market Outlook: 2025 - Geschreven op: alliedmarketresearch - Bron: https://www.alliedmarketresearch.com/simulation-and-analysis-software-market
 - JSON - Geschreven op: https://nl.wikipedia.org/wiki/JSON
+- 10 JSON Examples to Use in Your Projects - Geschreven op: SitePoint - Bron: https://www.sitepoint.com/10-example-json-files/
 
 
 
