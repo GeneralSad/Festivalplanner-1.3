@@ -9,10 +9,12 @@ import java.util.ArrayList;
 public class NPCManager
 {
     private ArrayList<NPC> npcs;
+    public static NPCSubImage subImage;
 
-    public NPCManager()
+    public NPCManager(NPCSubImage subImage)
     {
         this.npcs = new ArrayList<>();
+        this.subImage = subImage;
     }
 
     public ArrayList<NPC> getNpcs()

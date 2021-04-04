@@ -12,7 +12,6 @@ import java.util.ArrayList;
 public class NPCSprites
 {
     //sprites loading
-    private BufferedImage sprite;
     private ArrayList<BufferedImage[]> movements;
 
     //cache
@@ -33,31 +32,10 @@ public class NPCSprites
     private int ofset = 0;
 
 
-    public NPCSprites(String image)
+    public NPCSprites()
     {
-        this.movements = new ArrayList<>();
-
-        try
-        {
-            this.sprite = ImageIO.read(getClass().getResource(image));
-        }
-        catch (Exception e)
-        {
-            System.out.println("Image not found");
-        }
-
-        for (int i = 0; i < 7; i++)
-        {
-            BufferedImage[] temp = new BufferedImage[24];
-            for (int j = 0; j < 24; j++)
-            {
-                temp[j] = this.sprite.getSubimage(16 * j, 32 * i, 16, 32);
-            }
-            this.movements.add(temp);
-        }
-
+        this.movements = NPCManager.subImage.randomSprite();
     }
-
 
     /**
      * responsible for het framesdata of the image.

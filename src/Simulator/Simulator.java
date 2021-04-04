@@ -13,6 +13,7 @@ import Simulator.Maploading.Tile;
 import Simulator.Maploading.TiledMap;
 import Simulator.NPC.NPC;
 import Simulator.NPC.NPCManager;
+import Simulator.NPC.NPCSubImage;
 import Simulator.Time.NormalTime;
 import Simulator.Time.TimeManager;
 import org.jfree.fx.FXGraphics2D;
@@ -43,7 +44,8 @@ public class Simulator implements Cloneable
 {
 
     //time managers stuff
-    private NPCManager npcManager = new NPCManager();
+    private NPCSubImage subImage = new NPCSubImage();
+    private NPCManager npcManager = new NPCManager(subImage);
     private TimeManager timeManager;
     private static TiledMap tiledmap = new TiledMap("/TiledMaps/MapFinal.json");
     private int speedfactor = 1;
@@ -60,6 +62,7 @@ public class Simulator implements Cloneable
     private LocalTime lastSave;
     private LocationDatabase base = new LocationDatabase();
     private Schedule schedule;
+
 
     private double yComponent = 450;
     private double xComponent = 1300;
@@ -186,7 +189,7 @@ public class Simulator implements Cloneable
     public void draw(FXGraphics2D fxGraphics2D, double canvasWidth, double canvasHeight)
     {
         tiledmap.draw(fxGraphics2D);
-        npcManager.draw(fxGraphics2D, false);
+        npcManager.draw(fxGraphics2D, true);
 
 
         //debug for all the part in the simulator that have something to do with the seats and locations
@@ -368,7 +371,7 @@ public class Simulator implements Cloneable
 
     public void saveNPCs()
     {
-        NPCManager newNpcManager = new NPCManager();
+        NPCManager newNpcManager = new NPCManager(subImage);
 
         for (NPC npc : this.npcManager.getNpcs())
         {

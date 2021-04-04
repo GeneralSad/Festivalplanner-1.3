@@ -78,7 +78,7 @@ public class NPC
     }
 
 
-    public NPC(Person person, double x, double y, int width, int height, int rotation, int speed, int rotationSpeed, String npcAppearance)
+    public NPC(Person person, double x, double y, int width, int height, int rotation, int speed, int rotationSpeed)
     {
         this.person = person;
         this.x = x;
@@ -92,25 +92,25 @@ public class NPC
         this.targetRotation = rotation;
         this.rotationSpeed = rotationSpeed;
         this.atDestination = true;
-        this.appearance = new NPCSprites(npcAppearance);
+        this.appearance = new NPCSprites();
     }
 
 
-    public NPC(Person person, double x, double y, int width, int height, String imageLocation)
+    public NPC(Person person, double x, double y, int width, int height)
     {
-        this(person, x, y, width, height, 0, 10, 20, imageLocation);
+        this(person, x, y, width, height, 0, 10, 20);
     }
 
     public NPC(Person person)
     {
         //Math.floor(Math.random() * (max - min + 1)) + min;
-        this(person, xComponent(), yComponent(), 8, 8, randomSprite());
+        this(person, xComponent(), yComponent(), 8, 8);
         generateComponents();
     }
 
     public NPC(Person person, int x, int y)
     {
-        this(person, x, y, 8, 8, randomSprite());
+        this(person, x, y, 8, 8);
     }
 
     /**
@@ -494,16 +494,6 @@ public class NPC
         return new Point2D.Double(this.x, this.y);
     }
 
-    public static String randomSprite()
-    {
-        ArrayList<String> imagePaths = new ArrayList<>();
-        imagePaths.add("/NPC/NPC1 male.png");
-        imagePaths.add("/NPC/NPC2 male.png");
-        imagePaths.add("/NPC/NPC3 female.png");
-        imagePaths.add("/NPC/NPC4 female.png");
-
-        return imagePaths.get((int) (Math.random() * 4));
-    }
 
 
     public void generateComponents()
