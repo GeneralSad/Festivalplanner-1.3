@@ -223,7 +223,11 @@ public class Schedule implements Serializable
         {
             LocalTime tempBeginTime = existingLesson.getBeginTime();
             LocalTime tempEndTime = existingLesson.getEndTime();
-            if ((beginTime.equals(tempBeginTime) && endTime.equals(tempEndTime)) || (endTime.isBefore(tempEndTime) && endTime.isAfter(tempBeginTime)) || (beginTime.isAfter(tempBeginTime) && beginTime.isBefore(tempEndTime)))
+            if ((beginTime.equals(tempBeginTime) && endTime.equals(tempEndTime)) ||
+                    (endTime.isBefore(tempEndTime) && endTime.isAfter(tempBeginTime)) ||
+                    (beginTime.isAfter(tempBeginTime) && beginTime.isBefore(tempEndTime)) ||
+                    (tempBeginTime.isAfter(beginTime) && tempBeginTime.isBefore(endTime)) ||
+                    (tempEndTime.isBefore(endTime) && tempEndTime.isAfter(beginTime)))
             {
                 overlappingTimeLesson.add(existingLesson);
             }
