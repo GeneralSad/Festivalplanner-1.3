@@ -189,7 +189,7 @@ public class Simulator
     public void draw(FXGraphics2D fxGraphics2D, double canvasWidth, double canvasHeight)
     {
         tiledmap.draw(fxGraphics2D);
-        npcManager.draw(fxGraphics2D, true);
+        npcManager.draw(fxGraphics2D, false);
 
 
         //debug for all the part in the simulator that have something to do with the seats and locations
