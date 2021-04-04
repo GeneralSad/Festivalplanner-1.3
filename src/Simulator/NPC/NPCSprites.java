@@ -31,6 +31,7 @@ public class NPCSprites
     private boolean onName = true;
     private boolean sitting = false;
     private int sittingRotation = 0;
+    private int ofset = 0;
 
 
     public NPCSprites(String image)
@@ -101,7 +102,7 @@ public class NPCSprites
                     }
 
                 } else {
-                    graphics2D.drawImage(getStanding()[sittingRotation], (int) x-8, (int)y-12, null);
+                    graphics2D.drawImage(getStanding()[sittingRotation], (int) x-8 + ofset, (int)y-12, null);
                 }
 
             } else if (onPhone){
@@ -220,5 +221,9 @@ public class NPCSprites
         } else if (angleDegrees > 225  && angleDegrees < 315){
             sittingRotation = 18;
         }
+    }
+
+    public void setOfset(int ofset) {
+        this.ofset = ofset;
     }
 }

@@ -13,12 +13,14 @@ public class ClassRoomBehavior
     public Seat teacherSeat;
     private Point2D entry;
     private ArrayList<NPC> handeld = new ArrayList<>();
+    private int ofSett;
 
-    public ClassRoomBehavior(ArrayList<Seat> seats, Seat teacherSeat, Point2D entry)
+    public ClassRoomBehavior(ArrayList<Seat> seats, Seat teacherSeat, Point2D entry, int ofSett)
     {
         this.seats = seats;
         this.teacherSeat = teacherSeat;
         this.entry = entry;
+        this.ofSett = ofSett;
     }
 
     public void ScriptedStudentStart(NPC student)
@@ -29,11 +31,11 @@ public class ClassRoomBehavior
             {
                 Seat selectedSeat = claimEmptySeat(student);
                 student.appearance.setSitting(true, selectedSeat.getOrientation());
+                student.appearance.setOfset(ofSett);
                 student.resetDestination();
                 student.getCurrentPathfinding().setDestination((int) selectedSeat.getSeat().getX(), (int) selectedSeat.getSeat().getY());
                 handeld.add(student);
             } catch (IllegalArgumentException e) {
-
             }
         }
     }
@@ -87,5 +89,9 @@ public class ClassRoomBehavior
     public Point2D getEntry()
     {
         return entry;
+    }
+
+    public int getOfSett() {
+        return ofSett;
     }
 }
