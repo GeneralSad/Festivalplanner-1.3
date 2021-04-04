@@ -178,34 +178,49 @@ om de simulatie niet meer de wereld correct voor te stellen. Dit kan echter wel 
 Het simuleren van dingen heeft een groot voordeel in het bedrijfsleven waar er wordt gewerkt aan het verbeteren van technologie en waar er onderzoek wordt gedaan.
 Dit komt doordat er vaak dingen worden getest die nog niet echt bestaan, maar wel willen gaan kijken of het een goed materiaal of product is die geproduceerd kan worden.
 
-Als ik een voorbeeld ga noemen van een scenario waar simulaties steeds meer gebruikt worden is het het simuleren van organismes.
-In de biomedische industrie wordt het steeds meer gebruikt doordat computers nu genoeg rekenkracht hebben om deze simulaties te kunnen uitvoeren binnen een accepteerbare tijd.
-Het simuleren van organismen, vooral vaccins en proteines kan veel sneller en goedkoper zijn dan het zelf uitvoeren doordat het geen materiaal gebruikt en minder mankracht.
-Hierdoor schakelt de biomedidische sector nu over naar het simuleren en dit wordt dus ook steeds maar groter omdat het steeds maar aantrekkelijker wordt voor deze bedrijven en zij minder tijd verdoen aan het testen van niet werkende prototypes.
+Als ik een voorbeeld ga noemen van een scenario waar simulaties steeds meer gebruikt worden is het het simuleren van proteines.
+Ongeveer een jaar geleden is er een nieuwe vorm van simuleren aan het licht gekomen, deze vorm is een groot netwerk van computers waar de eigenaars toestemming geven om de computer simulaties te laten berekenen.
+Deze methode heet Folding@Home, Folding@Home is een open-source project die erg populair is geworden doordat dat elk persoon met een computer en een internetconnectie kan meehelpen met simuleren.
+Dit is zo groot geworden dat de gecombineerde kracht is sterker dan de nummer 1 supercomputer van de wereld in 2020(Patrizio, 2020). Dit is een erg goede indicator dat het simuleren van proteines een erg groot is en ook een goede model is doordat dit alleen een project is dat naast heel wat andere supercomputers loopt en meehelpt met het zoeken naar medicijnen voor ziektes.
 
-Hierdoor denk ik dat er in het bedrijfsleven inderdaad steeds meer in software wordt gesimuleerd.
-
-//TODO een onderzoeksmethodiek (hoe ben je te werk gegaan) een conclusie en bronvermeldingen
+##Conclusie
+Ik denk dat er in het bedrijfsleven inderdaad steeds meer in software wordt gesimuleerd, doordat het simuleren van erg complexe proteines al en goed business model is zou ik de conclusie kunnen trekken dat simulaties van minder complexe simulaties ook een goede keuze zou zijn voor bedrijven, waardoor simuleren ook steeds meer wordt gebruikt.
 
 ##Applicaties die het JSON format gebruiken
 In meerdere programma's wordt het JSON format gebruikt. Hier een lijst met de programma's samen met wat ik denk waarvoor JSON wordt gebruikt.
-- Websites die gebuik maken van Ajax
+###Websites die gebuik maken van Ajax
 
 Websites die gebruik maken van Ajax gebruiken ook JSON of XML, maar vaker wordt voor JSON gekozen als datastructuur.
 JSON wordt hier gebruikt om data op te slaan die door Ajax geupdated wordt.
 
-- Tiled
+###Tiled
 
 In tiled wordt JSON optioneel gebruikt om de data in op te slaan. Hier wordt de map in opgeslagen met de path naar de tilesets toe en de plaatsing van de tiles zelf met mog wat andere extra informatie zoals welke layer wat staat.
 
-- Minecraft
+###Minecraft,
+ In minecraft wordt JSON door meerdere dingen gebruikt:
+ - Het opslaan van data van signs met de tekst en commands.
+ - Voor resource packs en data packs waarin nodige informatie staat voor die packs.
+ - Voor het opslaan van statistieken, versie informatie en data voor de launcher.
 
-In minecraft wordt JSON door meerdere dingen gebruikt:
-- Het opslaan van data van signs met de tekst en commands.
-- Voor resource packs en data packs waarin nodige informatie staat voor die packs.
-- Voor het opslaan van statistieken, versie informatie en data voor de launcher.
+###GTA V
 
-#Bron vermelding
+Een paar weken geleden kwam er bij mij in het nieuws voorbij dat een GTA V fan een manier had gevonden om de laadtijden te versnellen.
+
+Die fan had na wat onderzoek gedaan te hebben in de code van het laden van GTA V online bevonden dat GTA moeite had met het laden van een JSON bestand. Dit had hij kunnen oplossen door kleine aanpassingen te maken in de code. (t0st, 2021)
+
+Hier is een foto dat goed laat zien dat er JSON code wordt gebruikt in GTA V met een stuk tekst erbij van T0st:
+
+
+![Screenshot van JSON code](JSON.jpg)
+
+(t0st, 2021)
+
+
+#Bronvermelding
 
 Shih, W. C. (2020, October 2). Computer simulations are better — And more affordable — Than ever. Harvard Business Review. https://hbr.org/2020/10/computer-simulations-are-better-and-more-affordable-than-ever
 
+Patrizio, A. (2020, April 14). The coronavirus pandemic turned Folding@Home into an exaFLOP supercomputer. Ars Technica. https://arstechnica.com/science/2020/04/how-the-pandemic-revived-a-distributed-computing-project-and-made-history/
+
+T. (2021, February 28). How i cut GTA online loading times by 70%. Meh. https://nee.lv/2021/02/28/How-I-cut-GTA-Online-loading-times-by-70/
