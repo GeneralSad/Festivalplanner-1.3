@@ -151,7 +151,7 @@ public class NPCSprites
             Color colorField = new Color(0, 0, 0, alpha);
             graphics2D.setColor(colorField);
 
-            RoundRectangle2D nameSign = new RoundRectangle2D.Double(x - 20, y - 15, 40, 10, 5, 5);
+            RoundRectangle2D nameSign = new RoundRectangle2D.Double(x - 20, y - 15, 50, 10, 5, 5);
             graphics2D.fill(nameSign);
 
             Font font = new Font(Font.MONOSPACED, Font.PLAIN, 10);
