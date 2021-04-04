@@ -15,25 +15,6 @@ public class NPCManager
         this.npcs = new ArrayList<>();
     }
 
-    public void addNPC(Person person, double x, double y, int width, int height, int rotation, int speed, int rotationSpeed, String image)
-    {
-        // only add an npc if the person doesn't already exist
-        if (getNPCFromPerson(person) == null)
-        {
-            this.npcs.add(new NPC(person, x, y, width, height, rotation, speed, rotationSpeed, image));
-        }
-    }
-
-    public void addNPC(Person person, double x, double y, int width, int height, String image)
-    {
-        // only add an npc if the person doesn't already exist
-        if (getNPCFromPerson(person) == null)
-        {
-            this.npcs.add(new NPC(person, x, y, width, height, image));
-        }
-    }
-
-
     public ArrayList<NPC> getNpcs()
     {
         return npcs;

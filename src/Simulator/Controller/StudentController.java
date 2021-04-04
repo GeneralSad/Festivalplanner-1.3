@@ -53,7 +53,7 @@ public class StudentController {
 
                 //if there are non the de-spawn is initiated
                 if (stillLesson) {
-                    System.out.println(npc.getPerson().getName() + "Is going to be removed");
+//                    System.out.println(npc.getPerson().getName() + "Is going to be removed");
                     locationManager.scriptedEndLesson(npc);
                     npc.resetDestination();
                     npc.getCurrentPathfinding().setDestination(1425, 725);
@@ -78,7 +78,7 @@ public class StudentController {
                         //if the npc existed lesson change will be iniated
                         if (npcStudentsOnScreen.contains(new NPC(student)))
                         {
-                            System.out.println(student.getName() + ": Student word van huidige locatie naar nieuwe les verplaatst");
+//                            System.out.println(student.getName() + ": Student word van huidige locatie naar nieuwe les verplaatst");
                             for (NPC npc : npcStudentsOnScreen)
                             {
                                 if (npc.getPerson().equals(student))
@@ -100,7 +100,7 @@ public class StudentController {
                         //else there will spawn a new npc
                         else
                         {
-                            System.out.println(student.getName() + ": de student komt de school binnen en gaat naar zijn les");
+//                            System.out.println(student.getName() + ": de student komt de school binnen en gaat naar zijn les");
                             NPC npc = new NPC(student);
                             Pathfinding pathfinding = new Pathfinding(tiledmap/*GUI.getWalkablemap()*/);
                             npc.setPathfinding(pathfinding);

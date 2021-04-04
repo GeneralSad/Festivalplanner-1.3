@@ -3,8 +3,6 @@ package Data;
 import java.awt.geom.Point2D;
 import java.io.Serializable;
 
-//TODO change name of classroom
-
 /**
  * Auteurs: Leon
  *

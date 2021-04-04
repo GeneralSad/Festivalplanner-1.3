@@ -29,8 +29,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-//TODO making time go backward can be done by saving npc data every ~15 min and allowing to go backwards to the saved points
-
 /**
  * Auteurs: Leon, Luuk
  * <p>
@@ -179,7 +177,7 @@ public class Simulator implements Cloneable
     public void draw(FXGraphics2D fxGraphics2D, double canvasWidth, double canvasHeight)
     {
         tiledmap.draw(fxGraphics2D);
-        npcManager.draw(fxGraphics2D, true);
+        npcManager.draw(fxGraphics2D, false);
 
 
         //debug for all the part in the simulator that have something to do with the seats and locations
@@ -329,7 +327,7 @@ public class Simulator implements Cloneable
         }
         timeNPCManagerMap.put(timeManager.getTime(), newNpcManager);
 
-        System.out.println("npcs saved");
+//        System.out.println("npcs saved");
 
     }
 
@@ -347,11 +345,11 @@ public class Simulator implements Cloneable
     public void mouseClicked(double x, double y) {
         NPCFollower npcFollower = camera.getNpcFollower();
         NPC npc = getNPCAtPosition(x, y);
-        System.out.println("Clicking on: " + (x) + " " + (y));
+//        System.out.println("Clicking on: " + (x) + " " + (y));
         if (npc != null) {
             npcFollower.setNpc(npc);
             npcFollower.setFollowing(true);
-            System.out.println("Following an npc");
+//            System.out.println("Following an npc");
         } else {
             npcFollower.setNpc(null);
             npcFollower.setFollowing(false);

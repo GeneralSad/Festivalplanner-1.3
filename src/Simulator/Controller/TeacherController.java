@@ -65,7 +65,7 @@ public class TeacherController{
             if (!lessonsPassed.contains(lesson)) {
                 if (npcTeacherOnScreen.contains(new NPC(lesson.getTeacher())))
                 {
-                    System.out.println(lesson.getTeacher().getName() + ": Teacher word van huidige locatie naar nieuwe les verplaatst");
+//                    System.out.println(lesson.getTeacher().getName() + ": Teacher word van huidige locatie naar nieuwe les verplaatst");
                     for (NPC npc : npcTeacherOnScreen)
                     {
                         if (npc.getPerson().equals(lesson.getTeacher()))
@@ -83,7 +83,7 @@ public class TeacherController{
                 }
                 else
                 {
-                    System.out.println(lesson.getTeacher().getName() + ": de Teacher komt de school binnen en gaat naar zijn les");
+//                    System.out.println(lesson.getTeacher().getName() + ": de Teacher komt de school binnen en gaat naar zijn les");
                     NPC npc = new NPC(lesson.getTeacher());
                     npc.setCollisionEnabler(true);
                     Pathfinding pathfinding = new Pathfinding(tiledmap/*GUI.getWalkablemap()*/);

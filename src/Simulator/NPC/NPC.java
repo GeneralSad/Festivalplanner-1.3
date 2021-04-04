@@ -15,10 +15,10 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
-//TODO make collision better so npcs don't get stuck when moving in opposite directions
-
 public class NPC
 {
+    public static boolean collisionEnabled = true;
+
     private Person person;
     private double x;
     private double y;
@@ -44,9 +44,8 @@ public class NPC
     private boolean collidedRecently;
     private boolean collisionEnabler;
 
-    //TODO Temporary for testing class behavior.
     private static double yComponent = 450;
-    private static double xComponent = 1300;
+    private static double xComponent = 1326;
 
 
     public NPC(Person person, double x, double y, int width, int height, Point2D destination, double rotation, int rotationDirection, PathfindingTile currentTile, int speed, double targetRotation, int rotationSpeed, boolean atDestination, NPCSprites appearance, Pathfinding currentPathfinding, boolean onTargetTile)
@@ -137,7 +136,10 @@ public class NPC
 
             wallCollisionUpdate(deltaTime);
             if (collisionEnabler) {
-//                npcCollisionUpdate(npcs, deltaTime);
+                if (collisionEnabled)
+                {
+                    npcCollisionUpdate(npcs, deltaTime);
+                }
             }
 
             // Destination check
@@ -184,7 +186,7 @@ public class NPC
                 {
                     hasCollided = true;
                     // reverse the previously made movement, so the npc stays in place
-                    movementUpdate(-0.999 * deltaTime);
+                    movementUpdate(-deltaTime);
 
                     // To prevent eternal standoffs
                     // if the rotation difference is 180 degrees, so directly opposite, then the npc positions are swapped
@@ -197,19 +199,7 @@ public class NPC
                         npc.x = thisX;
                         npc.y = thisY;
                     }
-
-                    // if this npc is reaching inside of the other npc then step back a bit in addition to stopping the movement made
-                    // or if after the previous stepback the npc is still inside of another npcs personal space then also step back a bit
-                    if (hitbox.intersects(npc.getHitbox()))
-                    {
-                        movementUpdate(-0.1 * deltaTime);
-                        if (wallCollisionCheck()) {
-                            // but if that gets this npc stuck in a wall instead push the other npc forward a bit
-                            // reset own position and push forward other npc
-                            movementUpdate(0.11 * deltaTime);
-                            npc.movementUpdate(0.1 * deltaTime);
-                        }
-                    }
+                    break;
                 }
             }
         }
@@ -508,13 +498,12 @@ public class NPC
         xComponent += 16;
         if (xComponent > 1575)
         {
-            xComponent = 1310;
+            xComponent = 1326;
             yComponent += 16;
         }
 
     }
 
-    //TODO temporary for testing
     public static int yComponent()
     {
         if (yComponent > 750)
@@ -524,7 +513,6 @@ public class NPC
         return (int) yComponent;
     }
 
-    //TODO temporary for testing
     public static int xComponent()
     {
         return (int) xComponent;

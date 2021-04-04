@@ -16,6 +16,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
@@ -297,20 +299,6 @@ public class GUI extends Application
                 node.setScaleY(node.getScaleY() * zoomFactor);
             }
 
-//            double zoomFactor = 1.05;
-//            double deltaY = event.getDeltaY();
-//            if (deltaY < 0)
-//            {
-//                zoomFactor = 2.0 - zoomFactor;
-//            }
-//
-//            Camera camera = simulator.getCamera();
-//            if (!(camera.getScaleY() * zoomFactor > 5) && !(camera.getScaleY() * zoomFactor < 1))
-//            {
-//                camera.setScaleX(camera.getScaleX() * zoomFactor);
-//                camera.setScaleY(camera.getScaleY() * zoomFactor);
-//            }
-
         });
     }
 
@@ -323,6 +311,11 @@ public class GUI extends Application
             double x = (-camera.getX()) + event.getX();
             double y = (-camera.getY()) + event.getY();
             simulator.mouseClicked(x, y);
+
+            if (event.getButton().equals(MouseButton.MIDDLE))
+            {
+                NPC.collisionEnabled = !NPC.collisionEnabled;
+            }
         });
 
         node.setOnMouseDragged((event) ->
@@ -353,7 +346,7 @@ public class GUI extends Application
             lastX = -10000;
             lastY = -10000;
 
-            System.out.println("X: " + event.getX() + "Y: " +  event.getY());
+//            System.out.println("X: " + event.getX() + "Y: " +  event.getY());
 
         });
 
