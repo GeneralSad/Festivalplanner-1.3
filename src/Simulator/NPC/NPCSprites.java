@@ -147,7 +147,7 @@ public class NPCSprites
 
         if (onName)
         {
-            float alpha = 0.45f;
+            float alpha = 0.75f;
             Color colorField = new Color(0, 0, 0, alpha);
             graphics2D.setColor(colorField);
 

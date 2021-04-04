@@ -1,5 +1,6 @@
 package Simulator.LocationSystem;
 
+import Data.Schedule;
 import GUI.GUI;
 import Simulator.Maploading.Tile;
 import Simulator.Maploading.TiledMap;
@@ -88,40 +89,40 @@ public class LocationDatabase
 
         //room1
         ArrayList<Seat> seats = collectSeats(24, 32);
-        classRoomBehaviors.add(new ClassRoomBehavior(seats, seats.get(12), new Point2D.Double(550, 550), 0));
+        classRoomBehaviors.add(new ClassRoomBehavior(seats, seats.get(12), new Point2D.Double(550, 550), 0, new Point2D.Double(560 , 400)));
 
         //room2
         seats = collectSeats(24, 52);
-        classRoomBehaviors.add(new ClassRoomBehavior(seats, seats.get(12), new Point2D.Double(1000, 550), 0));
+        classRoomBehaviors.add(new ClassRoomBehavior(seats, seats.get(12), new Point2D.Double(1000, 550), 0, new Point2D.Double(880, 400)));
 
         //room3
         seats = collectSeats(45, 21);
-        classRoomBehaviors.add(new ClassRoomBehavior(seats, seats.get(0), new Point2D.Double(500, 820), 0));
+        classRoomBehaviors.add(new ClassRoomBehavior(seats, seats.get(0), new Point2D.Double(500, 820), 0, new Point2D.Double(336, 800)));
 
 
         //room4
         seats = collectSeats(45, 38);
-        classRoomBehaviors.add(new ClassRoomBehavior(seats, seats.get(0), new Point2D.Double(600, 820), 8));
+        classRoomBehaviors.add(new ClassRoomBehavior(seats, seats.get(0), new Point2D.Double(600, 820), 8, new Point2D.Double(604, 800)));
 
 
         //room5
         seats = collectSeats(45, 49);
-        classRoomBehaviors.add(new ClassRoomBehavior(seats, seats.get(0), new Point2D.Double(950, 820), 0));
+        classRoomBehaviors.add(new ClassRoomBehavior(seats, seats.get(0), new Point2D.Double(950, 820), 0, new Point2D.Double(784, 800)));
 
 
         //room6
         seats = collectSeats(45, 66);
-        classRoomBehaviors.add(new ClassRoomBehavior(seats, seats.get(0), new Point2D.Double(1050, 820), 8));
+        classRoomBehaviors.add(new ClassRoomBehavior(seats, seats.get(0), new Point2D.Double(1050, 820), 8, new Point2D.Double(1056, 800)));
 
 
         //room7
         seats = collectSeats(62, 21);
-        classRoomBehaviors.add(new ClassRoomBehavior(seats, seats.get(0), new Point2D.Double(500, 1110), 0));
+        classRoomBehaviors.add(new ClassRoomBehavior(seats, seats.get(0), new Point2D.Double(500, 1110), 0, new Point2D.Double(336, 1070)));
 
 
         //room8
         seats = collectSeats(62, 38);
-        classRoomBehaviors.add(new ClassRoomBehavior(seats, seats.get(0), new Point2D.Double(600, 1110), 8));
+        classRoomBehaviors.add(new ClassRoomBehavior(seats, seats.get(0), new Point2D.Double(600, 1110), 8, new Point2D.Double(604, 1070)));
 
 
         return classRoomBehaviors;
