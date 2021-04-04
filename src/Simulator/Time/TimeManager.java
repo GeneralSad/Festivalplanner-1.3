@@ -11,7 +11,7 @@ public class TimeManager
 
     private TimeType timeType;
     private Schedule schedule;
-    private LocalTime nextChange;
+    public LocalTime nextChange;
     private ArrayList<Lesson> lessons;
 
     public TimeManager(Schedule schedule, TimeType timeType)
@@ -40,7 +40,7 @@ public class TimeManager
             }
         }
 
-        if (nextChange == null || schedule.nextLesson(timeType.getTime()).isBefore(nextChange))
+        if (nextChange == null /*|| schedule.nextLesson(timeType.getTime()).isBefore(nextChange)*/)
         {
             nextChange = schedule.nextLesson(timeType.getTime());
         }
@@ -58,7 +58,8 @@ public class TimeManager
 
     public boolean isChanged()
     {
-        return timeType.getTime().isAfter(nextChange);
+
+            return timeType.getTime().isAfter(nextChange);
     }
 
     public LocalTime getTime()

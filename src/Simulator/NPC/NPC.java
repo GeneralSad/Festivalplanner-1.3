@@ -110,7 +110,7 @@ public class NPC
 
     public NPC(Person person, int x, int y)
     {
-        this(person, x, y, 8, 8, randomSprite());
+        this(person, x, y, 8, 16, randomSprite());
     }
 
     /**

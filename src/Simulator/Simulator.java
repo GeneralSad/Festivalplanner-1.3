@@ -45,6 +45,7 @@ public class Simulator
     private TimeManager timeManager;
     private static TiledMap tiledmap = new TiledMap("/TiledMaps/MapFinal.json");
     private int speedfactor = 1;
+    private boolean ringing = true;
 
 
     //chache
@@ -63,6 +64,7 @@ public class Simulator
     private double xComponent = 1300;
     private Camera camera;
     private Clip clip;
+    private boolean cacheChange = false;
 
 
     public Simulator(Schedule schedule)
@@ -106,11 +108,24 @@ public class Simulator
         npcManager.update((deltatime / 1e9) * deltaTimeMultiplier);
         timeManager.update(deltatime);
 
+        if (timeManager.getTime().isAfter(timeManager.nextChange) && cacheChange){
+            ringing = false;
+        } else {
+            ringing = true;
+        }
+        cacheChange = timeManager.isChanged();
+
         //if the time is changed the location will be updated
         if (timeManager.isChanged() || speedfactor < 0) {
 
-            clip.setFramePosition(0);
-            clip.start();
+
+
+
+            if (ringing) {
+               clip.setFramePosition(0);
+               clip.start();
+            }
+
 
 
             ArrayList<Lesson> lessons = timeManager.getCurrentLessons();
