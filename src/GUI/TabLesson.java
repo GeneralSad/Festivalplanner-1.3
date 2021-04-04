@@ -180,15 +180,11 @@ public class TabLesson extends PopUpTab
         {
             try
             {
-                LocalTime startTime = startTimeSelect.getValue();
-                LocalTime endTime = endTimeSelect.getValue();
-                Teacher teacher = teacherSelect.getValue();
-                Classroom classroom = locationSelect.getValue();
-
-                if (teacher != null && classroom != null && this.selectedGroups.size() != 0)
+                if (teacherSelect.getValue() != null && locationSelect.getValue() != null && this.selectedGroups.size() != 0)
                 {
                     this.schedule.addLesson(new Lesson(startTimeSelect.getValue(), endTimeSelect.getValue(), teacherSelect.getValue(), locationSelect.getValue(), this.selectedGroups));
                 } else {
+                    // not everything was filled in
                     throw new NullPointerException();
                 }
             }

@@ -188,9 +188,10 @@ public class MainWindow extends ResizableCanvas
 
 
         // alle lokalen tekenen
-        for (int i = 0; i < amountOfClassrooms; i++)
+        ArrayList<Classroom> classrooms = schedule.getClassroomArrayList();
+        for (int i = 0; i < classrooms.size(); i++)
         {
-            graphics2D.drawString(Classroom.classRooms.values()[i].roomName, distanceOfClassroomsFromLeft + i * classroomTableWidth, distanceOfClassroomsFromTop + 20);
+            graphics2D.drawString("Lokaal: " + classrooms.get(i).getName(), distanceOfClassroomsFromLeft + i * classroomTableWidth, distanceOfClassroomsFromTop + 20);
         }
     }
 }
