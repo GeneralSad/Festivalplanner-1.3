@@ -203,4 +203,12 @@ public class StudentController {
     public ArrayList<NPC> getNpcStudentsOnScreen() {
         return npcStudentsOnScreen;
     }
+
+    public void sendToExit(){
+        for (NPC npc : npcStudentsOnScreen) {
+            npc.resetDestination();
+            npc.getCurrentPathfinding().setDestination(1425, 725);
+            skippable.add(npc);
+        }
+    }
 }

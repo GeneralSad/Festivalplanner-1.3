@@ -175,6 +175,14 @@ public class TeacherController{
     }
 
 
+    public void sendToExit(){
+        for (NPC npc : npcTeacherOnScreen) {
+            npc.resetDestination();
+            npc.getCurrentPathfinding().setDestination(1425, 725);
+            skippable.add(npc);
+        }
+    }
+
 
 
 }

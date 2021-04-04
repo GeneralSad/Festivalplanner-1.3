@@ -146,12 +146,17 @@ public class GUI extends Application
             updateLabel();
         });
 
+        Button ramp = new Button("Ramp");
+        ramp.setOnAction(event -> {
+            simulator.disaster();
+        });
+
         // update the label so text is displayed at startup
         speedFactorLabel.setText("De simulatie speelt op normale snelheid");
 
         vBox.getChildren().addAll(speedFactorLabel, speedSettingsBox);
         speedFactorLabel.setFont(new Font("Arial", 16));
-        speedSettingsBox.getChildren().addAll(slowDownButton, speedUpButton, magic2);
+        speedSettingsBox.getChildren().addAll(slowDownButton, speedUpButton, magic2, ramp);
         speedSettingsBox.setAlignment(Pos.BOTTOM_LEFT);
         borderPane.setBottom(vBox);
 

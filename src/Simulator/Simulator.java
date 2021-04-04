@@ -21,7 +21,6 @@ import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import java.awt.geom.RoundRectangle2D;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -65,10 +64,12 @@ public class Simulator implements Cloneable
     private double yComponent = 450;
     private double xComponent = 1300;
     private Camera camera;
-    private Clip clip;
+    private Clip schoolAlarm;
+    private Clip airAlarm;
     private boolean cacheChange = false;
 
     private Map<LocalTime, NPCManager> timeNPCManagerMap = new LinkedHashMap<>();
+    public boolean disaster = true;
 
 
     public Simulator(Schedule schedule)
@@ -78,11 +79,17 @@ public class Simulator implements Cloneable
         lastSave = LocalTime.of(8, 0, 0);
         //plays the music
         try{
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(this.getClass().getResource("/Music/ring sound.wav"));
-            clip = AudioSystem.getClip();
-            clip.open(audioInputStream);
-           // clip.start();
-            audioInputStream.close();
+            AudioInputStream audioInputStream1 = AudioSystem.getAudioInputStream(this.getClass().getResource("/Music/ring sound.wav"));
+            AudioInputStream audioInputStream2 = AudioSystem.getAudioInputStream(this.getClass().getResource("/Music/alarm.wav"));
+            schoolAlarm = AudioSystem.getClip();
+            schoolAlarm.open(audioInputStream1);
+
+            airAlarm = AudioSystem.getClip();
+            airAlarm.open(audioInputStream2);
+
+
+            audioInputStream1.close();
+            audioInputStream2.close();
         }
         catch(Exception e)
         { e.printStackTrace();}
@@ -120,39 +127,37 @@ public class Simulator implements Cloneable
         }
         cacheChange = timeManager.isChanged();
 
-        //if the time is changed the location will be updated
-        if (timeManager.isChanged() || speedfactor < 0) {
+        if (disaster) {
+            //if the time is changed the location will be updated
+            if (timeManager.isChanged() || speedfactor < 0) {
 
 
+                if (ringing) {
+                    schoolAlarm.setFramePosition(0);
+                    schoolAlarm.start();
+                }
 
 
-            if (ringing) {
-               clip.setFramePosition(0);
-               clip.start();
+                ArrayList<Lesson> lessons = timeManager.getCurrentLessons();
+
+                //updates the students and teachers controls
+                studentController.update(lessons, locationManager, npcManager, schedule);
+                teacherController.update(lessons, locationManager, npcManager, schedule);
+
+                //clears the cache
+                npcOnScreen.clear();
+
+                //loads the cache that is needed for other parts of this class
+                npcOnScreen.addAll(studentController.getNpcStudentsOnScreen());
+                npcOnScreen.addAll(teacherController.getNpcTeacherOnScreen());
             }
 
+            //checks if it is at the entrance of a classroom or autrium if that is true then
+            //it will collect a seat
+            studentController.checkingFunction(locationManager);
+            teacherController.checkingFunction(locationManager);
 
-
-            ArrayList<Lesson> lessons = timeManager.getCurrentLessons();
-
-            //updates the students and teachers controls
-            studentController.update(lessons, locationManager, npcManager, schedule);
-            teacherController.update(lessons, locationManager, npcManager, schedule);
-
-            //clears the cache
-            npcOnScreen.clear();
-
-            //loads the cache that is needed for other parts of this class
-            npcOnScreen.addAll(studentController.getNpcStudentsOnScreen());
-            npcOnScreen.addAll(teacherController.getNpcTeacherOnScreen());
         }
-
-        //checks if it is at the entrance of a classroom or autrium if that is true then
-        //it will collect a seat
-        studentController.checkingFunction(locationManager);
-        teacherController.checkingFunction(locationManager);
-
-
 
         //save a backup of the npc for going backward
         if (!npcOnScreen.isEmpty() && lastSave.until(timeManager.getTime(), ChronoUnit.MINUTES) > 15)
@@ -362,4 +367,16 @@ public class Simulator implements Cloneable
     {
         this.camera = camera;
     }
+
+    public void disaster(){
+        if (disaster) {
+
+            airAlarm.start();
+            disaster = false;
+
+            teacherController.sendToExit();
+            studentController.sendToExit();
+        }
+    }
+
 }
