@@ -77,9 +77,11 @@ public class GUI extends Application {
         });
 
 
+
+
         Button saveScheduleButton = new Button("Rooster Opslaan");
         saveScheduleButton.setOnAction(event -> dataStorage.saveSchedule(this.filePath, this.schedule));
-
+        bottomHBox.getChildren().add(saveScheduleButton);
 
         Pane pane = new Pane();
         BorderPane borderPane = new BorderPane();
@@ -192,8 +194,22 @@ public class GUI extends Application {
 
 
 
+        Button reloadSchedule = new Button("Rooster Reset");
+        reloadSchedule.setOnAction(event ->
+        {
+            Schedule loaded = DataStorage.loadSchedule(filePath);
+            if (loaded != null)
+            {
+                System.out.println("Setting new schedule");
+                this.schedule.setScheduleTo(loaded);
+            }
+            else
+            {
+                System.out.println("Loaded was null");
+            }
+        });
 
-        Button reloadSchedule = new Button("Simulatie Herladen");
+        Button reloadSim = new Button("Simulatie Herladen");
         reloadSchedule.setOnAction(event -> {
             Schedule loaded = DataStorage.loadSchedule(filePath);
             if (loaded != null) {
@@ -217,8 +233,8 @@ public class GUI extends Application {
             }
         });
 
-        bottomHBox.getChildren().add(saveScheduleButton);
         bottomHBox.getChildren().add(reloadSchedule);
+        bottomHBox.getChildren().add(reloadSim);
         canvasContainer.setBottom(bottomHBox);
 
         stage.setScene(scene);
