@@ -1,4 +1,4 @@
-# portefolio Luuk van Berkel 2169248
+#Portefolio Luuk van Berkel 2169248
 
 ##Weekelijks log:
 ### week 3
@@ -151,7 +151,10 @@ van de npc sprite klasse. De functie die mij het meeste tijd
 ###week 6
 Deze week heb ik de npc sprite klasse van vorige week uitgebreid en aangepast ook heb ik behavior aan de npc toegevoegd als hij op locatie aan komt. Dit doet random bepalen. Ook heb ik de frames op een random punt te laten starten zodat een massa er natuurlijker uit ziet. Dit heb ik deze week aangepast aan de klasse NPC sprites er zijn nog andere verandering maar deze worden nog besproken in de andere alinea want deze waren noodzakelijk om de npc te laten zitten.
 
+Ik ben ook samen bezig geweest om een loop te maken voor het spawnen en naar de lessen gaan. Deze is uiteindelijk niet gebruikt door ontbrekend functionaliteit
+
 Naar mijn mening had er deze week meer moeten gebeuren maar ik had niet echt een taak deze week wat jammer was. Dit kan ik volgende week beter doen.
+
 
 ### week 7
 Deze week ben ik begonnen aan het maken van de functie die er 
@@ -363,26 +366,26 @@ De functie is nog niet gerefactord deze week dat moet nog gebeuren.
         //sends to auditorium
         for (int i = 0; i < npcStudentsOnScreen.size(); i++)
         {
-            boolean onscreen = true;
+            boolean ofscreen = true;
             for (int j = 0; j < used.size(); j++)
             {
                 if (used.get(j) == npcStudentsOnScreen.get(i))
                 {
-                    onscreen = false;
+                    ofscreen = false;
                 }
             }
             for (int j = 0; j < inAula.size(); j++) {
                 if (inAula.get(j) == npcStudentsOnScreen.get(i)){
-                    onscreen = false;
+                    ofscreen = false;
                 }
             }
             for (int j = 0; j < skippable.size(); j++) {
                 if (skippable.get(j) == npcStudentsOnScreen.get(i)){
-                    onscreen = false;
+                    ofscreen = false;
                 }
             }
 
-            if (onscreen)
+            if (ofscreen)
             {
                 locationManager.scriptedEndLesson(npcStudentsOnScreen.get(i));
                 npcStudentsOnScreen.get(i).resetDestination();

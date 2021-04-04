@@ -40,7 +40,7 @@ import java.util.Set;
  */
 
 
-public class Simulator implements Cloneable
+public class Simulator
 {
 
     //time managers stuff
@@ -74,7 +74,7 @@ public class Simulator implements Cloneable
     private  ArrayList<Lesson> lessons = new ArrayList<>();
 
     private Map<LocalTime, NPCManager> timeNPCManagerMap = new LinkedHashMap<>();
-    private boolean disaster = true;
+    private boolean noDisaster = true;
 
 
     public Simulator(Schedule schedule)
@@ -132,7 +132,7 @@ public class Simulator implements Cloneable
         ringing = !timeManager.getTime().isAfter(timeManager.getNextChange()) || !cacheChange;
         cacheChange = timeManager.isChanged();
 
-        if (disaster)
+        if (noDisaster)
         {
             //if the time is changed the location will be updated
             if (timeManager.isChanged() || speedfactor < 0)
@@ -189,7 +189,7 @@ public class Simulator implements Cloneable
     public void draw(FXGraphics2D fxGraphics2D, double canvasWidth, double canvasHeight)
     {
         tiledmap.draw(fxGraphics2D);
-        npcManager.draw(fxGraphics2D, true);
+        npcManager.draw(fxGraphics2D, false);
 
 
         //debug for all the part in the simulator that have something to do with the seats and locations
@@ -362,7 +362,7 @@ public class Simulator implements Cloneable
                 timeNPCManagerMap.remove(localTime);
                 lastSave = localTime;
                 timeManager.setNextChange(localTime);
-                disaster = true;
+                noDisaster = true;
 
             }
         }
@@ -422,11 +422,11 @@ public class Simulator implements Cloneable
 
     public void disaster()
     {
-        if (disaster)
+        if (noDisaster)
         {
 
             airAlarm.start();
-            disaster = false;
+            noDisaster = false;
 
             teacherController.sendToExit();
             studentController.sendToExit();

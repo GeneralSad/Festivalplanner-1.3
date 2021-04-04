@@ -11,6 +11,11 @@ de klaslokalen stonden niet in schedule daardoor als klaslokalen waren aangemaak
 Er was een vbox met standaard spacing en padding, deze werd heel vaak gekopieerd en her gebruikt, dus heb een methode gemaakt waar je alle nodes aan kan meegeven en die zo'n vbox terug geeft, zodat je niet heel veel duplicaten code hebt.
 
 deze week is goed verlopen en alles was af voor de deadline.
+
+
+![Screenshot van gui lessen toevoegen verwijderen en wijzingen.](guiLessen.png)
+hier op de foto kan je de comboBox zien en de rest van de gui die gemaakt is, ook als je goed kijkt kan je de spacing zien.
+
 ## Week 4
 
 deze week heb ik ervoor gezord dat lessen minimaal een half uur kunnen zijn, en dat dat ook juist word weergegeven.
@@ -88,7 +93,10 @@ ook heb ik er voor gezorgd dat als je klas vult met leerlingen dat je geen dubbe
         return false;
     }
 
+ik heb hier gebruik gemaakt van een boolean, zodat als het niet gelukt is er een error getoond kan worden, dit is iets wat ik vaker zie
+in proffesionele settings, waar een void ook zou werken, maar toch een boolean word gebruikt om te kijken of het geslaagd is.
 
+deze week ging goed, iedereen was actief bezig, samenwerken met luuk ging fijn.
 
 
 
@@ -150,6 +158,9 @@ de optie waar ik uiteindelijk voor heb gekozen is elk kwartier alle npc's te clo
     }
 hier kan je zien hoe het opslaan gebeurd, maar dat is maar het eerste deel van terug in de tijd kunnen, het andere deel het inladen van een geschienis punt is natuurlijk ook belangrijk.
 
+het laden was een stuk ingewikkelder, want hiermee moest ik rekenning houden met wat er al geladen was en dit goed afhandelen. uiteindelijk heb ik gekozen, voor het uitladen van alle npc's op het scher, en dan alle npcs
+die geladen moeten worden toevoegen met de lijst van npc's die op het scherm zijn. daarna moet ik ook de tijd goed zetten anders klopt het verloop van de lessen niet.
+
 
 
 #javaFX in het bedrijfsleven
@@ -191,17 +202,18 @@ de manier waarop JavaFX gebruikt is meestal als front-end van een server of Data
 het is dus wel duidelijk dat javaFX is door een hele breede groep mensen word gebruikt, waaronder dus ook het bedrijfsleven.
 
 
-
-
-
 # Json in Applicaties
 
+Json word op veel plekken gbruikt, en is onmisbaar in de digitale wereld van vandaag. je kan het zo gek niet bedenken en het gebruikt wel Json,
+soms vraag je af wat gebruikt er niet Json inplaats van wat gebruikt het wel, want het zijn zoveel dingen die het gebruiken, maar hier zijn een paar concrete voorbeelden met waar json word gebruikt, en waarvoor.
 
 ##GTA V
 Hoe weet ik dat, nou GTA V was laatst in het nieuws doordat een fan een manier had gevonden om de laadtijden van GTA Online te versnellen.
 
 De GTA 5-fan plaatste zijn bevindingen online nadat hij erin was geslaagd de laadtijden met ongeveer 70% te versnellen.  De korte versie is dat hij een CPU-bottleneck met één thread gevonden heeft tijdens het opstarten van GTA Online. De komt omdat GTA V moeite heeft om een 10 MB JSON-bestand te ontleden, aangezien de JSON-parser slecht gemaakt was. 
 (t0st,2021)
+
+Json werd hier gebruikt om van een server alle informatie te krijgen over de extra items die de online wereld van gta heefd, zoals de prijs van elk product.
 
 ## Rest Api
 
