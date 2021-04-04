@@ -109,9 +109,9 @@ public class NPCManager
 
     public void draw(FXGraphics2D fxGraphics2D, boolean debug) {
         for (NPC npc : this.npcs) {
-            npc.draw(fxGraphics2D, debug);
+            npc.draw(fxGraphics2D);
         }
-        if (debug)
+        if (true)
         {
             for (NPC npc : this.npcs)
             {

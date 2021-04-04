@@ -25,11 +25,16 @@ public class ClassRoomBehavior
     {
         if (!handeld.contains(student))
         {
-            Seat selectedSeat = claimEmptySeat(student);
-            student.appearance.setSitting(true, selectedSeat.getOrientation());
-            student.resetDestination();
-            student.getCurrentPathfinding().setDestination((int) selectedSeat.getSeat().getX(), (int) selectedSeat.getSeat().getY());
-            handeld.add(student);
+            try
+            {
+                Seat selectedSeat = claimEmptySeat(student);
+                student.appearance.setSitting(true, selectedSeat.getOrientation());
+                student.resetDestination();
+                student.getCurrentPathfinding().setDestination((int) selectedSeat.getSeat().getX(), (int) selectedSeat.getSeat().getY());
+                handeld.add(student);
+            } catch (IllegalArgumentException e) {
+
+            }
         }
     }
 

@@ -43,7 +43,7 @@ public class LocationDatabase
                         if (selected != null)
                         {
                             // if the tile is walkable, seatable and exists in the seatablelayer then add a new seat at that tile position
-                            seats.add(new Seat(new Point2D.Double(selected.getX() + 8, selected.getY()), null, selected.getRotation()));
+                            seats.add(new Seat(new Point2D.Double(selected.getX() + 8, selected.getY() + 8), null, selected.getRotation()));
                         }
                     }
                     position.setLocation(position.getX() + tiledMap.getTileWidth(), position.getY());
