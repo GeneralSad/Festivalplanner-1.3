@@ -7,6 +7,7 @@ import Simulator.Maploading.TiledMap;
 import Simulator.NPC.NPC;
 import Simulator.NPC.NPCManager;
 import Simulator.Pathfinding.Pathfinding;
+import Simulator.Simulator;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ public class StudentController
         this.npcStudentsOnScreen = new ArrayList<>();
         this.inAula = new ArrayList<>();
         this.lessonsPassed = new ArrayList<>();
-        this.tiledmap = new TiledMap("/TiledMaps/MapFinal.json");
+        this.tiledmap = Simulator.getTiledmap();
         this.skippable = new ArrayList<>();
     }
 
@@ -116,7 +117,7 @@ public class StudentController
                         {
                             //                            System.out.println(student.getName() + ": de student komt de school binnen en gaat naar zijn les");
                             NPC npc = new NPC(student);
-                            Pathfinding pathfinding = new Pathfinding(tiledmap/*GUI.getWalkablemap()*/);
+                            Pathfinding pathfinding = new Pathfinding(tiledmap);
                             npc.setPathfinding(pathfinding);
                             pathfinding.addNpc(npc);
                             npc.setCollisionEnabler(true);
