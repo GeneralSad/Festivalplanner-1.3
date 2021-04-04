@@ -210,7 +210,7 @@ public class GUI extends Application {
         });
 
         Button reloadSim = new Button("Simulatie Herladen");
-        reloadSchedule.setOnAction(event -> {
+        reloadSim.setOnAction(event -> {
             Schedule loaded = DataStorage.loadSchedule(filePath);
             if (loaded != null) {
                 System.out.println("Setting new schedule");
