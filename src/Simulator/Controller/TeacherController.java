@@ -111,7 +111,7 @@ public class TeacherController
         }
 
 
-        //used list
+        //gebruikte lijst
         ArrayList<NPC> used = new ArrayList<>();
 
         //checks if npc is used else it is send to the auditorium
@@ -127,7 +127,7 @@ public class TeacherController
         }
 
 
-        //sends to auditorium
+        //zend naar aula
         for (NPC npc : npcTeacherOnScreen)
         {
             boolean onscreen = true;
@@ -167,7 +167,7 @@ public class TeacherController
 
     public void checkingFunction(LocationManager locationManager)
     {
-        //sends to seats
+        //zend naar stoelen
         for (NPC npc : npcTeacherOnScreen)
         {
             locationManager.scriptedStartedTeacherLesson(npc);

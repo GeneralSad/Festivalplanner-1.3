@@ -33,7 +33,7 @@ public class StudentController
     public void update(ArrayList<Lesson> lessons, LocationManager locationManager, NPCManager npcManager, Schedule schedule)
     {
 
-        //de-spawning logic
+        //de-spawning logica
         ArrayList<Lesson> lessonsAllday = schedule.getLessonArrayList();
 
         for (NPC npc : npcStudentsOnScreen)
@@ -41,7 +41,7 @@ public class StudentController
 
             if (!skippable.contains(npc))
             {
-                //checks if there are still lessons
+                //checkt of er nog lessen zijn
                 boolean stillLesson = true;
                 for (Lesson lesson : lessonsAllday)
                 {
@@ -64,7 +64,7 @@ public class StudentController
                     }
                 }
 
-                //if there are non the de-spawn is initiated
+                //als er geen lessen zijn wordt er naar het despawn punt gestuurd
                 if (stillLesson)
                 {
                     //                    System.out.println(npc.getPerson().getName() + "Is going to be removed");
@@ -77,12 +77,11 @@ public class StudentController
             }
         }
 
-        //lesssons change and spawn logic
+        //lesssons verander and spawn logica
         for (Lesson lesson : lessons)
         {
             if (!lessonsPassed.contains(lesson))
             {
-                // for the students
                 ArrayList<Group> groups = lesson.getGroups();
                 for (Group group : groups)
                 {
@@ -90,7 +89,7 @@ public class StudentController
                     for (Student student : students)
                     {
 
-                        //if the npc existed lesson change will be iniated
+                        //als de npc bestaat wordt de npc naar een andere klas gestuurt
                         if (npcStudentsOnScreen.contains(new NPC(student)))
                         {
                             //                            System.out.println(student.getName() + ": Student word van huidige locatie naar nieuwe les verplaatst");
@@ -112,7 +111,7 @@ public class StudentController
                             }
                         }
 
-                        //else there will spawn a new npc
+                        //anders wordt er een nieuwe npc aan gemaakt
                         else
                         {
                             //                            System.out.println(student.getName() + ": de student komt de school binnen en gaat naar zijn les");
@@ -131,15 +130,15 @@ public class StudentController
                         }
                     }
                 }
-                //add lesson in list of passed ones
+                //lesson toevoegen aan verleden
                 lessonsPassed.add(lesson);
             }
         }
 
-        //used list
+        //used list houdt de despawing bij van de npcs
         ArrayList<NPC> used = new ArrayList<>();
 
-        //checks if npc is used else it is send to the auditorium
+        //checkt of een npc is gebruikt anders naar aula sturen
         for (Lesson lesson : lessons)
         {
             for (Group group : lesson.getGroups())
@@ -158,7 +157,7 @@ public class StudentController
         }
 
 
-        //sends to auditorium
+        //als de conditie niet is aangepast wordt hij naar de aula gestuurt
         for (NPC npc : npcStudentsOnScreen)
         {
             boolean onscreen = true;
@@ -200,7 +199,7 @@ public class StudentController
 
     public void checkingFunction(LocationManager locationManager)
     {
-        //sends to seats
+        //zend naar stoelen
         for (NPC npc : npcStudentsOnScreen)
         {
             locationManager.scriptedStartedStudentLesson(npc);

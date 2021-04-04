@@ -14,9 +14,9 @@ public class LocationDatabase
 {
 
     /**
-     * Searches for seats in a rectangle part of tiles marked as being in the area for classrooms
-     * Starts looking at the given row and column, searches each row untill the end of the area is reached
-     * Stops when on a new row the tile is no longer part of the area
+     * zoekt voor stoelen in de vierkant van de tiles van de area die is gemarkeerd in de json file
+     * Start op de tile van de gegeven rij en colom en zoekt elke rij totdat het einde van area is bereikt
+     * Stop waaneer een nieuwe rij niet meer onderdeel is van de area
      *
      * @param rowFrom
      * @param columnFrom
@@ -31,13 +31,13 @@ public class LocationDatabase
         Tile start = Simulator.getTiledmap().getAreaLayer().getTile(rowFrom, columnFrom);
         if (start != null)
         {
-            // position keeps track of the position of tiles to check
+            // postie houdt de postie bij van de tiles
             Point2D position = new Point2D.Double(start.getX(), start.getY());
 
             boolean running = true;
             while (running)
             {
-                // check for the row of the current tile all subsequent tiles untill a tile was found which is not walkable
+                //checkt of een rij van de current tile alle volgende tiles todat een tile is gevonden die neit walkable is.
                 if (tiledMap.isPartOfArea(position))
                 {
                     if (tiledMap.isSitableTile(position))
@@ -45,7 +45,7 @@ public class LocationDatabase
                         Tile selected = tiledMap.getSeatableLayer().getTile(position);
                         if (selected != null)
                         {
-                            // if the tile is walkable, seatable and exists in the seatablelayer then add a new seat at that tile position
+                            // Als de tile walkable, seatable en bestaat in de laag seatable dan voeg de stoel toe met de momentele postie van de tile
                             seats.add(new Seat(new Point2D.Double(selected.getX() + 8, selected.getY() + 8), null, selected.getRotation()));
                         }
                     }
@@ -54,9 +54,10 @@ public class LocationDatabase
                 }
                 else
                 {
-                    // go to a row lower
+                    // ga een rij lager
                     position.setLocation(start.getX(), position.getY() + tiledMap.getTileHeight());
-                    // if the tile on the lower row is not walkable, then the classroom is finished so stop looking for seats
+
+                    //als de tile op een lagere rij is en niet walkable, dan is de klaslook af en stop het met zoeken
                     if (!tiledMap.isPartOfArea(position))
                     {
                         running = false;
@@ -82,45 +83,45 @@ public class LocationDatabase
      */
     public ArrayList<ClassRoomBehavior> ClassRoomData()
     {
-        //return type
+        //teruggeef bestand
         ArrayList<ClassRoomBehavior> classRoomBehaviors = new ArrayList<>();
 
-        // Rows and columns are read from Tiled, hovering with the mouse shows the column and row of the tile hovered over, which allows for seeing the starting part of an area
+        // Rijen en coloms zijn alleen van tiled, met je muis over het iets toont het colomn en de rij van de tile waar over een wordt bewogen, wat toelaaat om te zien voor een arau onderdeel
 
-        //room1
+        //lokaal 1
         ArrayList<Seat> seats = collectSeats(24, 32);
         classRoomBehaviors.add(new ClassRoomBehavior(seats, seats.get(12), new Point2D.Double(550, 550), 0, new Point2D.Double(560 , 400)));
 
-        //room2
+        //lokaal 2
         seats = collectSeats(24, 52);
         classRoomBehaviors.add(new ClassRoomBehavior(seats, seats.get(12), new Point2D.Double(1000, 550), 0, new Point2D.Double(880, 400)));
 
-        //room3
+        //lokaal 3
         seats = collectSeats(45, 21);
         classRoomBehaviors.add(new ClassRoomBehavior(seats, seats.get(0), new Point2D.Double(500, 820), 0, new Point2D.Double(336, 800)));
 
 
-        //room4
+        //lokaal 4
         seats = collectSeats(45, 38);
         classRoomBehaviors.add(new ClassRoomBehavior(seats, seats.get(0), new Point2D.Double(600, 820), 8, new Point2D.Double(604, 800)));
 
 
-        //room5
+        //lokaal 5
         seats = collectSeats(45, 49);
         classRoomBehaviors.add(new ClassRoomBehavior(seats, seats.get(0), new Point2D.Double(950, 820), 0, new Point2D.Double(784, 800)));
 
 
-        //room6
+        //lokaal 6
         seats = collectSeats(45, 66);
         classRoomBehaviors.add(new ClassRoomBehavior(seats, seats.get(0), new Point2D.Double(1050, 820), 8, new Point2D.Double(1056, 800)));
 
 
-        //room7
+        //lokaal 7
         seats = collectSeats(62, 21);
         classRoomBehaviors.add(new ClassRoomBehavior(seats, seats.get(0), new Point2D.Double(500, 1110), 0, new Point2D.Double(336, 1070)));
 
 
-        //room8
+        //lokaal 8
         seats = collectSeats(62, 38);
         classRoomBehaviors.add(new ClassRoomBehavior(seats, seats.get(0), new Point2D.Double(600, 1110), 8, new Point2D.Double(604, 1070)));
 
