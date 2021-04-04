@@ -201,6 +201,9 @@ public class NPC
                         npc.x = thisX;
                         npc.y = thisY;
                     }
+
+                    // If an npc was found, then stop searching further
+                    // Multiple collision adjustments at the same time are not allowed
                     break;
                 }
             }
