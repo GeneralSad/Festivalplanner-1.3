@@ -35,6 +35,13 @@ het ontwerp en het klasse diagram. Ook heb ik met leon
 samen gekeken hoe tiled werkt. Van deze week ben ik dus
  geen grote problemen tegen gekomen.
  
+ Mischien was het beter geweest dat we dit hadden kunnen verdelen. Maar daar is het nu te laat voor.
+ Ook is het diagram anders en is er niet of niet echt aan gehouden. Dit is ook jammer.
+ 
+ Voor de volgende keer is het beter overleggen over het ontwerp. waardoor dit soor dingen iet meer kunnen gebeuren.
+ 
+ 
+ 
  ####Diagram:
 ![ClassDiagramWeek4.jpg](ClassDiagramWeek4.jpg)
 
@@ -144,11 +151,13 @@ van de npc sprite klasse. De functie die mij het meeste tijd
 ###week 6
 Deze week heb ik de npc sprite klasse van vorige week uitgebreid en aangepast ook heb ik behavior aan de npc toegevoegd als hij op locatie aan komt. Dit doet random bepalen. Ook heb ik de frames op een random punt te laten starten zodat een massa er natuurlijker uit ziet. Dit heb ik deze week aangepast aan de klasse NPC sprites er zijn nog andere verandering maar deze worden nog besproken in de andere alinea want deze waren noodzakelijk om de npc te laten zitten.
 
+Naar mijn mening had er deze week meer moeten gebeuren maar ik had niet echt een taak deze week wat jammer was. Dit kan ik volgende week beter doen.
+
 ### week 7
 Deze week ben ik begonnen aan het maken van de functie die er 
 voor zorgt dat de npc worden aangroepen en naar de lokalen gaan 
 en pauze houden. Ik moest dus eigenlijk de simulatie tot leven helpen. 
-Dit heb  ik gedaan om aan mijn gedragsklase extra funties toe te voegen. 
+Dit heb  ik gedaan door nieuwe gedragsklase te schrijven en extra funties toe te voegen. 
 De aula functie was namelijk nog niet geschreven. Ook moest ik functie bedenken 
 die er voorzorgde dat er npc spawnen en verdwijnen deze heb ik in twee 
 nieuwe klasse gezet, dit zijn grote algoritme die veel data nodig hebbben 
