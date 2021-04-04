@@ -602,7 +602,7 @@ public class NPC
         return new Rectangle2D.Double(this.x, this.y, this.width, this.height);
     }
 
-    private Rectangle2D getBigHitbox()
+    public Rectangle2D getBigHitbox()
     {
         return new Rectangle2D.Double(this.x - this.width / 2.0, this.y - this.height / 2.0, this.width * 2, this.height * 2);
     }

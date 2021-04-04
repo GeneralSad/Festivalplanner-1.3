@@ -387,7 +387,7 @@ public class Simulator implements Cloneable
     {
         for (NPC npc : this.npcOnScreen)
         {
-            Rectangle2D hitbox = npc.getHitbox();
+            Rectangle2D hitbox = npc.getBigHitbox();
             if (hitbox.contains(x, y))
             {
                 return npc;
