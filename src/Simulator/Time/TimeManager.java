@@ -40,14 +40,12 @@ public class TimeManager
             }
         }
 
-        if (nextChange == null /*|| schedule.nextLesson(timeType.getTime()).isBefore(nextChange)*/)
+        if (nextChange == null || schedule.nextLesson(timeType.getTime()).isBefore(nextChange))
         {
             nextChange = schedule.nextLesson(timeType.getTime());
         }
 
         return lessons;
-
-
     }
 
 
@@ -59,7 +57,7 @@ public class TimeManager
     public boolean isChanged()
     {
 
-            return timeType.getTime().isAfter(nextChange);
+        return timeType.getTime().isAfter(nextChange);
     }
 
     public LocalTime getTime()

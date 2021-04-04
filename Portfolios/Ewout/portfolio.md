@@ -19,8 +19,6 @@ terwijl ik bezig was heb ik ook nog meegeluisterd en input gegeven op het ontwer
 
 er miste een zwarte lijn aan het eind van een les dit kwam omdat er een grijze rechthoek overheen werd getekend, maar het omdraaien ging ook niet want dan stond er een lijn halverwege lessen die 2 tijd increments duren, de fixs was rechthoek 1 pixel kleiner maken zodat het er niet overheen werd getekend.
 
-deze week was vooral veel uitzoek werk en deels trail en error, om het goed werkende te krijgen, hierdoor is de code van deze week niet het mooiste geworden.
-
 ##### Van Arraylist naar ObservableList 
 we gebruikte eerst overal een arraylist voor, dit zorgde er alleen voor dat zodra er iets van data werd veranderd, dat we dan ook het rooster handmatig moest vertellen dat er iets veranderd was. Een Observable list doet dit automatisch hierdoor word de listview met alle lessen automatisch geüpdatet als er een les is toegevoegd.
 de makkelijkste manier om dit aan te passen, was het aanpassen van de klassen schedule, maar wel zodat alle code die werkt met deze klassen wel blijft werken, in de klassen schedule zaten namelijk al die verwijder en toevoeg functies. deze heb ik aangepast om te werken met observable lists
@@ -40,6 +38,8 @@ de makkelijkste manier om dit aan te passen, was het aanpassen van de klassen sc
             lessonObservableList.remove(lesson);  
     }
 het was dus makkelijk toe te passen door bij de verwijderd methodes de arraylist te vervangen voor de observable list.
+
+deze week was vooral veel uitzoek werk en deels trail en error, om het goed werkende te krijgen, hierdoor is de code van deze week niet het mooiste geworden.
 
 ##week 5
 
@@ -71,10 +71,25 @@ het verloop van tijd achteruit verschild heel weinig van de normale tijd enigste
 
 om de huidige lessen om te halen, word een al bestaande methode gebruikt, deze was origneel bedoeld om met de begin en eindtijd van een les te kijken welke lessen er tijdens die tijd nog meer plaats vinden, maar als je hier de huidige tijd 2 maal instopt krijg je alle lessen die bezig zijn op dat moment.
 
+
 #week 6
 deze week heb ik gewerkt samen met luuk, voor een deel. we zijn aan de slag gegaan met het samenvoegen van de het tekenen van npc's en het tijdsysteem
 dit zorgt ervoor dat npc's op de juiste locaties worden getekend op het juiste moment.
+
 ook heb ik er voor gezorgd dat als je klas vult met leerlingen dat je geen dubbele krijgt.
+
+    public boolean addStudent(Student student)
+    {
+        if (!students.contains(student))
+        {
+            students.add(student);
+            return true;
+        }
+        return false;
+    }
+
+
+
 
 
 #week 7
@@ -84,6 +99,34 @@ bug gefixed dat 10 uur werd geskipped, kwam omdat er niet naar veranderingen wer
 het viel me op dat dezen les gebeurde tijdens een andere les. dus dat is waar ik begon met kijken, en toen 
 zag ik dat de check voor wanneer de volgende actie was niet kloptie want die pakte alle lessen van het huidige tijdstip en keer naar het eerst volgende eindtijd of begin tijd welk ook eerder was, maar in 
 deze lijst zaten dus nog niet de lessen die nog moeste beginnen, hierdoor werden deze niet megenomen, dit heb ik gefixed door de tijd die gecontrolleerd word uittebreiden dus er word gecheckt vanaf de begintijd van de huidige les tot de eindtijd.
+
+
+    public ArrayList<Lesson> getCurrentLessons()
+    {
+
+        lessons = schedule.getOverlappingLessons(getTime());
+        nextChange = null;
+        for (Lesson lesson : lessons)
+        {
+            LocalTime endTime = lesson.getEndTime();
+            if (nextChange == null || endTime.isBefore(nextChange))
+            {
+                nextChange = endTime;
+            }
+        }
+
+        if (nextChange == null || schedule.nextLesson(timeType.getTime()).isBefore(nextChange))
+        {
+            nextChange = schedule.nextLesson(timeType.getTime());
+        }
+
+        return lessons;
+    }
+    
+ schedule.nextLesson(timeType.getTime()).isBefore(nextChange) deze regel zorgt ervoor dat als er een les verandering is tijdens een les dat deze dan alsnog word meegenomen.
+
+![Screenshot van gui simulator.](tijdscreenshot.png)
+zo is het er uit eindelijk uit komen te zien, met de tijd bovenin in het midden, en rechtsonder de knoppen om de tijdsverloop aan te passen, en een knop om terug te gaan na het laatste kwartier.
 
 
 #javaFX in het bedrijfsleven

@@ -1,17 +1,17 @@
 package GUI;
 
-import Data.*;
-import javafx.collections.FXCollections;
+import Data.Classroom;
+import Data.Group;
+import Data.Schedule;
+import Data.Teacher;
 import javafx.collections.ListChangeListener;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 
@@ -149,24 +149,6 @@ public class TabClassroom extends PopUpTab
         {
             classUpdater();
         }
-    }
-
-    private ComboBox<LocalTime> timeComboBox(boolean isStartTime)
-    {
-        ComboBox<LocalTime> comboBox = new ComboBox<>();
-        comboBox.setMinWidth(200);
-
-        if (isStartTime)
-        {
-            comboBox.setItems(FXCollections.observableArrayList(schedule.getAllStartingTimes()));
-        }
-        else
-        {
-            comboBox.setItems(FXCollections.observableArrayList(schedule.getAllEndingTimes()));
-        }
-
-        return comboBox;
-
     }
 
 }
