@@ -29,7 +29,7 @@ public class TiledSet
         this.lastGID = this.firstGID + this.tileCount;
         this.imagePath = jsonObject.getString("image");
         this.tileImages = new ArrayList<>();
-        // initialise loading the images
+        //initialiseer het laden van de afbeeldingen
         init();
     }
 

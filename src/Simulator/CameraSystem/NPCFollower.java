@@ -61,7 +61,7 @@ public class NPCFollower
         fxGraphics2D.fill(new RoundRectangle2D.Double(x, y, 500, 180, 20 ,20));
         fxGraphics2D.setColor(Color.white);
 
-        // Draw npc information
+        // teken NPC informatie
         if (npc != null)
         {
              y = y -25;

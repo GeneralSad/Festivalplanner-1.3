@@ -34,7 +34,7 @@ public class TileFollower
         fxGraphics2D.setColor(Color.WHITE);
 
 
-        // Draw npc information
+        // Teken NPC informatie
         if (tile != null)
         {
             fxGraphics2D.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 20));
