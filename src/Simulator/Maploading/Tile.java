@@ -30,8 +30,10 @@ public class Tile
         this.rotation = rotation;
     }
 
-    public void draw(FXGraphics2D fxGraphics2D) {
-        if (tileImage != null) {
+    public void draw(FXGraphics2D fxGraphics2D)
+    {
+        if (tileImage != null)
+        {
             fxGraphics2D.drawImage(tileImage, x, y, null);
         }
     }
@@ -61,7 +63,8 @@ public class Tile
         return column;
     }
 
-    public void incrementWalkedOnCounter() {
+    public void incrementWalkedOnCounter()
+    {
         this.walkedOnCounter++;
     }
 

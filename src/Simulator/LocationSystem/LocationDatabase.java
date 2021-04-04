@@ -16,12 +16,14 @@ public class LocationDatabase
      * Searches for seats in a rectangle part of tiles marked as being in the area for classrooms
      * Starts looking at the given row and column, searches each row untill the end of the area is reached
      * Stops when on a new row the tile is no longer part of the area
+     *
      * @param rowFrom
      * @param columnFrom
      * @return
      */
 
-    public ArrayList<Seat> collectSeats(int rowFrom, int columnFrom){
+    public ArrayList<Seat> collectSeats(int rowFrom, int columnFrom)
+    {
         ArrayList<Seat> seats = new ArrayList<>();
         TiledMap tiledMap = Simulator.getTiledmap();
 
@@ -62,7 +64,9 @@ public class LocationDatabase
             }
 
 
-        } else {
+        }
+        else
+        {
             System.out.println("Collecting seats, starting tile was null");
         }
 
@@ -70,9 +74,9 @@ public class LocationDatabase
     }
 
 
-
     /**
      * subjected to change with a area funtion that checks a area and reads all the seats.
+     *
      * @return
      */
     public ArrayList<ClassRoomBehavior> ClassRoomData()
@@ -107,7 +111,7 @@ public class LocationDatabase
 
         //room6
         seats = collectSeats(45, 66);
-        classRoomBehaviors.add(new ClassRoomBehavior(seats, seats.get(0), new Point2D.Double(1050, 820), 8) );
+        classRoomBehaviors.add(new ClassRoomBehavior(seats, seats.get(0), new Point2D.Double(1050, 820), 8));
 
 
         //room7
@@ -123,7 +127,8 @@ public class LocationDatabase
         return classRoomBehaviors;
     }
 
-    public AuditoriumBehavior AudioriumData(){
+    public AuditoriumBehavior AudioriumData()
+    {
         ArrayList<Seat> seats = collectSeats(62, 49);
         AuditoriumBehavior auditoriumBehavior = new AuditoriumBehavior(seats, new Point2D.Double(1000, 980));
 

@@ -89,7 +89,8 @@ public class TabClass extends PopUpTab
         studentData.setEditable(false);
         listViewStudent.setPrefWidth(250);
 
-        deleteClass.setOnAction(event -> {
+        deleteClass.setOnAction(event ->
+        {
             studentData.clear();
             schedule.removeGroup(listViewClass.getSelectionModel().getSelectedItem());
         });

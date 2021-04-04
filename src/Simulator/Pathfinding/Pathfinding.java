@@ -46,15 +46,18 @@ public class Pathfinding
         init();
     }
 
-    public void addNpc(NPC npc) {
+    public void addNpc(NPC npc)
+    {
         this.npcs.add(npc);
     }
 
-    public void addNpcs(ArrayList<NPC> npcs) {
+    public void addNpcs(ArrayList<NPC> npcs)
+    {
         this.npcs.addAll(npcs);
     }
 
-    public void removeNpc(NPC npc) {
+    public void removeNpc(NPC npc)
+    {
         this.npcs.remove(npc);
     }
 

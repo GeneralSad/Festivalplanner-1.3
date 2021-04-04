@@ -4,9 +4,8 @@ import java.io.Serializable;
 
 /**
  * Auteurs: Leon
- *
+ * <p>
  * Deze code zorgt ervoor dat een leraar aangemaakt kan worden en de nodige functies heeft die later nodig zijn
- *
  */
 
 public class Teacher extends Person implements Serializable
@@ -30,7 +29,8 @@ public class Teacher extends Person implements Serializable
         this.subject = subject;
     }
 
-    public String toDetailString() {
+    public String toDetailString()
+    {
         return "Naam: " + super.name + "\nLeeftijd: " + super.age + "\nVak: " + this.subject;
     }
 

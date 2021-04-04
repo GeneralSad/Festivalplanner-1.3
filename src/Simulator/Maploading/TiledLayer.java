@@ -172,7 +172,7 @@ public class TiledLayer
 
                         // rotation for seats
 
-//                        System.out.println(gid - tiledSet.getFirstGID());
+                        //                        System.out.println(gid - tiledSet.getFirstGID());
                         double rotation = 0.0;
                         if ((gid - tiledSet.getFirstGID() == 0))
                         {
@@ -186,7 +186,7 @@ public class TiledLayer
                         {
                             rotation = 90;
                         }
-                        else if ((int) gid - tiledSet.getFirstGID() == 2 ||(int) gid - tiledSet.getFirstGID() == 3 )
+                        else if ((int) gid - tiledSet.getFirstGID() == 2 || (int) gid - tiledSet.getFirstGID() == 3)
                         {
                             rotation = 270;
                         }
@@ -225,22 +225,27 @@ public class TiledLayer
      */
     public boolean isPositionValidTile(Point2D point2D)
     {
-        int row = (int)point2D.getY() / this.tiledMap.getTileHeight();
-        int column = (int)point2D.getX() / this.tiledMap.getTileWidth();
+        int row = (int) point2D.getY() / this.tiledMap.getTileHeight();
+        int column = (int) point2D.getX() / this.tiledMap.getTileWidth();
         boolean withinBounds = isPositionWithinBounds(row, column);
 
         // Don't allow multiplication by 0 when there is in fact a valid gid
-        if (row == 0 && column != 0) {
+        if (row == 0 && column != 0)
+        {
             row = 1;
-        } else if (row != 0 && column == 0) {
+        }
+        else if (row != 0 && column == 0)
+        {
             column = 1;
         }
         boolean validTile = getData(row * tiledMap.getWidth() + column) != 0;
         return withinBounds && validTile;
     }
 
-    private long getData(int index) {
-        if (index >= this.data.size() || index < 0) {
+    private long getData(int index)
+    {
+        if (index >= this.data.size() || index < 0)
+        {
             return 0;
         }
         return this.data.get(index);

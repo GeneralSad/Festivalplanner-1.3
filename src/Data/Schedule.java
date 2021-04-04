@@ -58,9 +58,11 @@ public class Schedule implements Serializable
     /**
      * Set all attributes of the schedule to be equal to the attributes of a different scheudle
      * The other schedule should then never be used again, so as to not make sudden changes to the lists
+     *
      * @param scheduleTo
      */
-    public void setScheduleTo(Schedule scheduleTo) {
+    public void setScheduleTo(Schedule scheduleTo)
+    {
         this.lessonArrayList = scheduleTo.lessonArrayList;
         this.teacherArrayList = scheduleTo.teacherArrayList;
         this.groupArrayList = scheduleTo.groupArrayList;
@@ -223,11 +225,7 @@ public class Schedule implements Serializable
         {
             LocalTime tempBeginTime = existingLesson.getBeginTime();
             LocalTime tempEndTime = existingLesson.getEndTime();
-            if ((beginTime.equals(tempBeginTime) && endTime.equals(tempEndTime)) ||
-                    (endTime.isBefore(tempEndTime) && endTime.isAfter(tempBeginTime)) ||
-                    (beginTime.isAfter(tempBeginTime) && beginTime.isBefore(tempEndTime)) ||
-                    (tempBeginTime.isAfter(beginTime) && tempBeginTime.isBefore(endTime)) ||
-                    (tempEndTime.isBefore(endTime) && tempEndTime.isAfter(beginTime)))
+            if ((beginTime.equals(tempBeginTime) && endTime.equals(tempEndTime)) || (endTime.isBefore(tempEndTime) && endTime.isAfter(tempBeginTime)) || (beginTime.isAfter(tempBeginTime) && beginTime.isBefore(tempEndTime)) || (tempBeginTime.isAfter(beginTime) && tempBeginTime.isBefore(endTime)) || (tempEndTime.isBefore(endTime) && tempEndTime.isAfter(beginTime)))
             {
                 overlappingTimeLesson.add(existingLesson);
             }
@@ -319,9 +317,12 @@ public class Schedule implements Serializable
     public boolean equals(Schedule schedule)
     {
 
-        if (schedule.getClassroomArrayList().size() == this.getClassroomArrayList().size() && schedule.getGroupArrayList().size() == this.getGroupArrayList().size() && schedule.getTeacherArrayList().size() == this.getTeacherArrayList().size() && schedule.getLessonArrayList().size() == this.getLessonArrayList().size()) {
+        if (schedule.getClassroomArrayList().size() == this.getClassroomArrayList().size() && schedule.getGroupArrayList().size() == this.getGroupArrayList().size() && schedule.getTeacherArrayList().size() == this.getTeacherArrayList().size() && schedule.getLessonArrayList().size() == this.getLessonArrayList().size())
+        {
             return true;
-        } else {
+        }
+        else
+        {
             return false;
         }
 

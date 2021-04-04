@@ -83,12 +83,16 @@ public class GUI extends Application
 
 
         Button reloadSchedule = new Button("Herladen");
-        reloadSchedule.setOnAction(event -> {
+        reloadSchedule.setOnAction(event ->
+        {
             Schedule loaded = DataStorage.loadSchedule(filePath);
-            if (loaded != null) {
+            if (loaded != null)
+            {
                 System.out.println("Setting new schedule");
                 this.schedule.setScheduleTo(loaded);
-            } else {
+            }
+            else
+            {
                 System.out.println("Loaded was null");
             }
         });
@@ -148,7 +152,8 @@ public class GUI extends Application
         });
 
         Button ramp = new Button("Ramp");
-        ramp.setOnAction(event -> {
+        ramp.setOnAction(event ->
+        {
             simulator.disaster();
         });
 
@@ -218,7 +223,7 @@ public class GUI extends Application
         this.schedule = DataStorage.loadSchedule(this.filePath);
         if (this.schedule == null)
         {
-           //  Manual schedule loading:
+            //  Manual schedule loading:
             System.out.println("Couldn't load a schedule");
             ArrayList<Teacher> teachers = new ArrayList<>();
             teachers.add(new Teacher("Etiënne", 30, "Hardware"));
@@ -306,7 +311,8 @@ public class GUI extends Application
 
     public void addMouseClickDrag(Node node, Camera camera)
     {
-        node.setOnMouseClicked(event -> {
+        node.setOnMouseClicked(event ->
+        {
             double x = (-camera.getX()) + event.getX();
             double y = (-camera.getY()) + event.getY();
             simulator.mouseClicked(x, y);
@@ -345,7 +351,7 @@ public class GUI extends Application
             lastX = -10000;
             lastY = -10000;
 
-//            System.out.println("X: " + event.getX() + "Y: " +  event.getY());
+            //            System.out.println("X: " + event.getX() + "Y: " +  event.getY());
 
         });
 

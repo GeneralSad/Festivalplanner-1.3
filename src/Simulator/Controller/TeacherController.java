@@ -12,7 +12,8 @@ import Simulator.Pathfinding.Pathfinding;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
-public class TeacherController{
+public class TeacherController
+{
 
 
     private ArrayList<NPC> npcTeacherOnScreen;
@@ -21,7 +22,8 @@ public class TeacherController{
     private TiledMap tiledmap;
     private ArrayList<NPC> skippable;
 
-    public TeacherController() {
+    public TeacherController()
+    {
         this.npcTeacherOnScreen = new ArrayList<>();
         this.inAula = new ArrayList<>();
         this.lessonsPassed = new ArrayList<>();
@@ -30,24 +32,33 @@ public class TeacherController{
     }
 
 
-    public void update(ArrayList<Lesson> lessons, LocationManager locationManager, NPCManager npcManager, Schedule schedule){
+    public void update(ArrayList<Lesson> lessons, LocationManager locationManager, NPCManager npcManager, Schedule schedule)
+    {
 
         ArrayList<Lesson> lessonsAllday = schedule.getLessonArrayList();
 
-        for (NPC npc: npcTeacherOnScreen) {
-            if (!skippable.contains(npc)) {
+        for (NPC npc : npcTeacherOnScreen)
+        {
+            if (!skippable.contains(npc))
+            {
                 boolean stillLesson = true;
-                for (Lesson lesson : lessonsAllday) {
-                    if (lesson.getTeacher() == npc.getPerson()) {
-                        if (lessonsPassed.contains(lesson) && !lessons.contains(lesson)) {
+                for (Lesson lesson : lessonsAllday)
+                {
+                    if (lesson.getTeacher() == npc.getPerson())
+                    {
+                        if (lessonsPassed.contains(lesson) && !lessons.contains(lesson))
+                        {
 
-                        } else {
+                        }
+                        else
+                        {
                             stillLesson = false;
                         }
                     }
                 }
 
-                if (stillLesson) {
+                if (stillLesson)
+                {
                     locationManager.scriptedEndLesson(npc);
                     npc.resetDestination();
                     npc.getCurrentPathfinding().setDestination(1425, 725);
@@ -57,21 +68,21 @@ public class TeacherController{
         }
 
 
-
-
-
-
         for (Lesson lesson : lessons)
-            if (!lessonsPassed.contains(lesson)) {
+        {
+            if (!lessonsPassed.contains(lesson))
+            {
                 if (npcTeacherOnScreen.contains(new NPC(lesson.getTeacher())))
                 {
-//                    System.out.println(lesson.getTeacher().getName() + ": Teacher word van huidige locatie naar nieuwe les verplaatst");
+                    //                    System.out.println(lesson.getTeacher().getName() + ": Teacher word van huidige locatie naar nieuwe les verplaatst");
                     for (NPC npc : npcTeacherOnScreen)
                     {
                         if (npc.getPerson().equals(lesson.getTeacher()))
                         {
-                            for (int i = 0; i < inAula.size(); i++) {
-                                if (lesson.getTeacher() == inAula.get(i).getPerson()){
+                            for (int i = 0; i < inAula.size(); i++)
+                            {
+                                if (lesson.getTeacher() == inAula.get(i).getPerson())
+                                {
                                     inAula.remove(i);
                                 }
                             }
@@ -83,7 +94,7 @@ public class TeacherController{
                 }
                 else
                 {
-//                    System.out.println(lesson.getTeacher().getName() + ": de Teacher komt de school binnen en gaat naar zijn les");
+                    //                    System.out.println(lesson.getTeacher().getName() + ": de Teacher komt de school binnen en gaat naar zijn les");
                     NPC npc = new NPC(lesson.getTeacher());
                     npc.setCollisionEnabler(true);
                     Pathfinding pathfinding = new Pathfinding(tiledmap/*GUI.getWalkablemap()*/);
@@ -96,15 +107,19 @@ public class TeacherController{
                 }
                 lessonsPassed.add(lesson);
             }
+        }
 
 
         //used list
         ArrayList<NPC> used = new ArrayList<>();
 
         //checks if npc is used else it is send to the auditorium
-        for (Lesson lesson : lessons) {
-            for ( NPC npc : npcTeacherOnScreen) {
-                if (npc.getPerson() == lesson.getTeacher()){
+        for (Lesson lesson : lessons)
+        {
+            for (NPC npc : npcTeacherOnScreen)
+            {
+                if (npc.getPerson() == lesson.getTeacher())
+                {
                     used.add(npc);
                 }
             }
@@ -122,13 +137,17 @@ public class TeacherController{
                     onscreen = false;
                 }
             }
-            for (int j = 0; j < inAula.size(); j++) {
-                if (inAula.get(j) == npcTeacherOnScreen.get(i)){
+            for (int j = 0; j < inAula.size(); j++)
+            {
+                if (inAula.get(j) == npcTeacherOnScreen.get(i))
+                {
                     onscreen = false;
                 }
             }
-            for (int j = 0; j < skippable.size(); j++) {
-                if (skippable.get(j) == npcTeacherOnScreen.get(i)){
+            for (int j = 0; j < skippable.size(); j++)
+            {
+                if (skippable.get(j) == npcTeacherOnScreen.get(i))
+                {
                     onscreen = false;
                 }
             }
@@ -145,7 +164,8 @@ public class TeacherController{
 
     }
 
-    public void checkingFunction(LocationManager locationManager){
+    public void checkingFunction(LocationManager locationManager)
+    {
         //sends to seats
         for (NPC npc : npcTeacherOnScreen)
         {
@@ -153,12 +173,17 @@ public class TeacherController{
         }
     }
 
-    public void teacherDespawining(NPCManager npcManager){
-        for (int i = 0; i < skippable.size(); i++) {
-            if (skippable.get(i).isAtDestination() && skippable.get(i).getCurrentLocation().distance(new Point2D.Double(1424, 725)) < 10){
+    public void teacherDespawining(NPCManager npcManager)
+    {
+        for (int i = 0; i < skippable.size(); i++)
+        {
+            if (skippable.get(i).isAtDestination() && skippable.get(i).getCurrentLocation().distance(new Point2D.Double(1424, 725)) < 10)
+            {
 
-                for (int j = 0; j < npcTeacherOnScreen.size(); j++) {
-                    if (npcTeacherOnScreen.get(j) == skippable.get(i)){
+                for (int j = 0; j < npcTeacherOnScreen.size(); j++)
+                {
+                    if (npcTeacherOnScreen.get(j) == skippable.get(i))
+                    {
                         npcTeacherOnScreen.remove(j);
                     }
                 }
@@ -170,19 +195,21 @@ public class TeacherController{
         }
     }
 
-    public ArrayList<NPC> getNpcTeacherOnScreen() {
+    public ArrayList<NPC> getNpcTeacherOnScreen()
+    {
         return npcTeacherOnScreen;
     }
 
 
-    public void sendToExit(){
-        for (NPC npc : npcTeacherOnScreen) {
+    public void sendToExit()
+    {
+        for (NPC npc : npcTeacherOnScreen)
+        {
             npc.resetDestination();
             npc.getCurrentPathfinding().setDestination(1425, 725);
             skippable.add(npc);
         }
     }
-
 
 
 }

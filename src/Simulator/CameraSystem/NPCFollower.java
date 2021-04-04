@@ -40,23 +40,26 @@ public class NPCFollower
         isFollowing = following;
     }
 
-    public void update() {
+    public void update()
+    {
         camera.setX(-npc.getCurrentLocation().getX() + camera.getTotalWidth() / 2);
         camera.setY(-npc.getCurrentLocation().getY() + camera.getTotalHeight() / 2);
     }
 
-    public void draw(FXGraphics2D fxGraphics2D) {
+    public void draw(FXGraphics2D fxGraphics2D)
+    {
         fxGraphics2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
 
-        int x = (int)camera.getRelativeWidth() - 500;
-        int y = (int)-camera.getY();
+        int x = (int) camera.getRelativeWidth() - 500;
+        int y = (int) -camera.getY();
 
         fxGraphics2D.setColor(Color.CYAN);
         fxGraphics2D.fill(new Rectangle2D.Double(x, y, 500, 200));
         fxGraphics2D.setColor(Color.BLACK);
 
         // Draw npc information
-        if (npc != null) {
+        if (npc != null)
+        {
             fxGraphics2D.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 15));
             int yOffset = 50;
             int yJump = 15;
@@ -72,7 +75,9 @@ public class NPCFollower
             if (npc.getDestination() != null)
             {
                 fxGraphics2D.drawString("Destination: " + decimalFormat.format(npc.getDestination().getX()) + " " + decimalFormat.format(npc.getDestination().getY()), x, y + yOffset);
-            } else {
+            }
+            else
+            {
                 fxGraphics2D.drawString("Destination: none", x, y + yOffset);
             }
             yOffset += yJump;
@@ -81,7 +86,9 @@ public class NPCFollower
             if (npc.getCurrentPathfinding() != null && npc.getCurrentPathfinding().getDestinationTile() != null)
             {
                 fxGraphics2D.drawString("Pathfinding destination tile column and row: " + npc.getCurrentPathfinding().getDestinationTile().getColumn() + " " + npc.getCurrentPathfinding().getDestinationTile().getRow(), x, y + yOffset);
-            } else {
+            }
+            else
+            {
                 fxGraphics2D.drawString("Pathfinding has no destination tile", x, y + yOffset);
             }
             yOffset += yJump;

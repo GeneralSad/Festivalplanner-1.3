@@ -19,7 +19,8 @@ public class TiledSet
     private int tileWidth;
     private ArrayList<BufferedImage> tileImages;
 
-    public TiledSet(JsonObject jsonObject) throws NullPointerException {
+    public TiledSet(JsonObject jsonObject) throws NullPointerException
+    {
         this.columns = jsonObject.getInt("columns");
         this.tileCount = jsonObject.getInt("tilecount");
         this.tileHeight = jsonObject.getInt("tileheight");
@@ -35,14 +36,19 @@ public class TiledSet
     /**
      * Slices all the tileImages from the original image and stores them as Tile objects in a list
      */
-    private void init() {
+    private void init()
+    {
 
-        try {
+        try
+        {
             BufferedImage image = ImageIO.read(getClass().getResource("/TiledMaps/" + this.imagePath));
-            for (int i = 0; i < this.tileCount; i++) {
-                tileImages.add(image.getSubimage(tileWidth * (i % columns),tileHeight * (i / columns), tileWidth, tileHeight));
+            for (int i = 0; i < this.tileCount; i++)
+            {
+                tileImages.add(image.getSubimage(tileWidth * (i % columns), tileHeight * (i / columns), tileWidth, tileHeight));
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             System.out.println(e);
         }
     }
@@ -59,11 +65,14 @@ public class TiledSet
 
     /**
      * Return the tile associated with the gid by taking that gid as an index out of the tileImages list
+     *
      * @param gid
      * @return
      */
-    public BufferedImage getTileImage(int gid) {
-        if (gid < tileImages.size()) {
+    public BufferedImage getTileImage(int gid)
+    {
+        if (gid < tileImages.size())
+        {
             return this.tileImages.get(gid);
         }
         return null;

@@ -17,9 +17,8 @@ import java.util.Comparator;
 
 /**
  * Auteurs:
- *
+ * <p>
  * Deze klasse is voor om de tab lesson goed te weergeven
- *
  */
 
 public class TabLesson extends PopUpTab
@@ -183,7 +182,9 @@ public class TabLesson extends PopUpTab
                 if (teacherSelect.getValue() != null && locationSelect.getValue() != null && this.selectedGroups.size() != 0)
                 {
                     this.schedule.addLesson(new Lesson(startTimeSelect.getValue(), endTimeSelect.getValue(), teacherSelect.getValue(), locationSelect.getValue(), this.selectedGroups));
-                } else {
+                }
+                else
+                {
                     // not everything was filled in
                     throw new NullPointerException();
                 }

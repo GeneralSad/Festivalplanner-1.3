@@ -5,9 +5,8 @@ import java.io.Serializable;
 
 /**
  * Auteurs: Leon
- *
+ * <p>
  * Deze code zorgt ervoor dat een klaslokaal aangemaakt kan worden en de nodige functies heeft die later nodig zijn
- *
  */
 
 

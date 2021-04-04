@@ -136,7 +136,8 @@ public class NPC
             }
 
             wallCollisionUpdate(deltaTime);
-            if (collisionEnabler) {
+            if (collisionEnabler)
+            {
                 if (collisionEnabled)
                 {
                     npcCollisionUpdate(npcs, deltaTime);
@@ -177,7 +178,7 @@ public class NPC
         for (NPC npc : npcs)
         {
             // this npc and sitting npcs (at destination) should be ignored
-            if (npc != this  && !npc.isAtDestination())
+            if (npc != this && !npc.isAtDestination())
             {
                 // find the other npc hitbox
                 // first the big hitbox (personal space) is used
@@ -223,7 +224,8 @@ public class NPC
         }
     }
 
-    private boolean wallCollisionCheck() {
+    private boolean wallCollisionCheck()
+    {
         TiledLayer walkableTiledLayer = Simulator.getTiledmap().getWalkableLayer();
         if (!walkableTiledLayer.isPositionValidTile(getCurrentLocation()))
         {
@@ -297,7 +299,7 @@ public class NPC
             // slowly rotate
             rotation += rotationModifier * deltaTime * rotationSpeed * rotationDirection;
 
-            if (rotation > Math.PI * 2 || rotation < - Math.PI * 2)
+            if (rotation > Math.PI * 2 || rotation < -Math.PI * 2)
             {
                 rotation = 0;
             }
@@ -364,6 +366,7 @@ public class NPC
 
     /**
      * Draw the hitbox of the npc
+     *
      * @param fxGraphics2D
      */
     public void debugDraw(FXGraphics2D fxGraphics2D)
@@ -437,7 +440,8 @@ public class NPC
             {
                 // walked on a new tile, so increment the counter for that tile
                 Tile tile = Simulator.getTiledmap().getWalkableLayer().getTile(newTile.getRow(), newTile.getColumn());
-                if (tile != null) {
+                if (tile != null)
+                {
                     tile.incrementWalkedOnCounter();
                 }
                 // if within the destination tile move towards the exact destination
@@ -449,7 +453,8 @@ public class NPC
             {
                 // walked on a new tile, so increment the counter for that tile
                 Tile tile = Simulator.getTiledmap().getWalkableLayer().getTile(newTile.getRow(), newTile.getColumn());
-                if (tile != null) {
+                if (tile != null)
+                {
                     tile.incrementWalkedOnCounter();
                 }
 
@@ -608,7 +613,8 @@ public class NPC
         return new Rectangle2D.Double(this.x, this.y, this.width, this.height);
     }
 
-    public Rectangle2D getBigHitbox() {
+    public Rectangle2D getBigHitbox()
+    {
         return new Rectangle2D.Double(this.x - this.width / 2, this.y - this.height / 2, this.width * 2, this.height * 2);
     }
 
@@ -643,7 +649,8 @@ public class NPC
     }
 
 
-    public void setCollisionEnabler(boolean collisionEnabler) {
+    public void setCollisionEnabler(boolean collisionEnabler)
+    {
         this.collisionEnabler = collisionEnabler;
     }
 }

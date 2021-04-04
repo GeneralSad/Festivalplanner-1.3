@@ -4,9 +4,8 @@ import javafx.scene.layout.BorderPane;
 
 /**
  * Auteurs:
- *
+ * <p>
  * Deze klasse is een abstracte klasse met de nodige methodes voor de specialisaties
- *
  */
 
 public abstract class PopUpTab

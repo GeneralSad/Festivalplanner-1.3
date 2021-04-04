@@ -15,9 +15,8 @@ import java.util.ArrayList;
 
 /**
  * Auteurs:
- *
+ * <p>
  * Deze code zorgt ervoor dat er een popup wordt aangemaakt
- *
  */
 
 public class PopupController extends Stage

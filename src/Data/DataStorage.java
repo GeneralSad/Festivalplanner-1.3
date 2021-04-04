@@ -7,9 +7,8 @@ import java.io.ObjectOutputStream;
 
 /**
  * Auteurs: Leon
- *
+ * <p>
  * Deze code zorgt ervoor dat een schedule ingeladen en opgeslagen kan worden
- *
  */
 
 public class DataStorage

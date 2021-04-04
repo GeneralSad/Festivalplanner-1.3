@@ -79,7 +79,8 @@ public class Simulator implements Cloneable
         timeManager = new TimeManager(schedule, new NormalTime(LocalTime.of(9, 0, 0)));
         lastSave = LocalTime.of(8, 0, 0);
         //plays the music
-        try{
+        try
+        {
             AudioInputStream audioInputStream1 = AudioSystem.getAudioInputStream(this.getClass().getResource("/Music/ring sound.wav"));
             AudioInputStream audioInputStream2 = AudioSystem.getAudioInputStream(this.getClass().getResource("/Music/alarm.wav"));
             schoolAlarm = AudioSystem.getClip();
@@ -92,8 +93,10 @@ public class Simulator implements Cloneable
             audioInputStream1.close();
             audioInputStream2.close();
         }
-        catch(Exception e)
-        { e.printStackTrace();}
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     public static TiledMap getTiledmap()
@@ -103,6 +106,7 @@ public class Simulator implements Cloneable
 
     /**
      * updates the canvas of the simulation and it assest and time managment.
+     *
      * @param deltatime is the time it took to draw the prevouis frame.
      */
     public void update(long deltatime)
@@ -121,19 +125,25 @@ public class Simulator implements Cloneable
         timeManager.update(deltatime);
 
         //checks when to ring the bell
-        if (timeManager.getTime().isAfter(timeManager.nextChange) && cacheChange){
+        if (timeManager.getTime().isAfter(timeManager.nextChange) && cacheChange)
+        {
             ringing = false;
-        } else {
+        }
+        else
+        {
             ringing = true;
         }
         cacheChange = timeManager.isChanged();
 
-        if (disaster) {
+        if (disaster)
+        {
             //if the time is changed the location will be updated
-            if (timeManager.isChanged() || speedfactor < 0) {
+            if (timeManager.isChanged() || speedfactor < 0)
+            {
 
 
-                if (ringing) {
+                if (ringing)
+                {
                     schoolAlarm.setFramePosition(0);
                     schoolAlarm.start();
                 }
@@ -168,13 +178,15 @@ public class Simulator implements Cloneable
         }
 
         // if the camera is following an npc, update it so it adjusts to the new npc positions
-        if (camera.getNpcFollower().isFollowing()) {
+        if (camera.getNpcFollower().isFollowing())
+        {
             camera.getNpcFollower().update();
         }
     }
 
     /**
      * draws the simulation with debug options
+     *
      * @param fxGraphics2D is the graphichs that draws everthing
      */
     public void draw(FXGraphics2D fxGraphics2D, double canvasWidth, double canvasHeight)
@@ -196,11 +208,10 @@ public class Simulator implements Cloneable
                 af.rotate(Math.toRadians(tile.getRotation()));
                 af.translate(10, 0);
 
-                fxGraphics2D.fill(af.createTransformedShape(new Rectangle2D.Double(0,0 , 20 ,3)));
+                fxGraphics2D.fill(af.createTransformedShape(new Rectangle2D.Double(0, 0, 20, 3)));
                 number++;
                 fxGraphics2D.drawString(("" + number), tile.getX(), tile.getY());
             }
-
 
 
             fxGraphics2D.setColor(Color.BLACK);
@@ -217,22 +228,26 @@ public class Simulator implements Cloneable
             {
                 fxGraphics2D.setColor(Color.red);
                 Point2D point2D = base.ClassRoomData().get(i).getEntry();
-                fxGraphics2D.fill(new Rectangle2D.Double(point2D.getX()-5, point2D.getY()-5, 10, 10));
+                fxGraphics2D.fill(new Rectangle2D.Double(point2D.getX() - 5, point2D.getY() - 5, 10, 10));
             }
         }
 
-        if (camera.getNpcFollower().isFollowing()) {
+        if (camera.getNpcFollower().isFollowing())
+        {
             camera.getNpcFollower().draw(fxGraphics2D);
         }
-        if (camera.getTileFollower().isFollowingATile()) {
+        if (camera.getTileFollower().isFollowingATile())
+        {
             camera.getTileFollower().draw(fxGraphics2D);
         }
     }
 
-    public void generateComponents() {
+    public void generateComponents()
+    {
 
         xComponent += 16;
-        if (xComponent > 1575) {
+        if (xComponent > 1575)
+        {
             xComponent = 1310;
             yComponent += 16;
         }
@@ -240,12 +255,16 @@ public class Simulator implements Cloneable
     }
 
 
-    public Point2D getAvailability(Point2D location) {
+    public Point2D getAvailability(Point2D location)
+    {
 
         generateComponents();
-        if (location.distance(new Point2D.Double(xComponent, yComponent)) > 16) {
+        if (location.distance(new Point2D.Double(xComponent, yComponent)) > 16)
+        {
             return new Point2D.Double(xComponent, yComponent);
-        } else {
+        }
+        else
+        {
             return getAvailability(location);
         }
 
@@ -253,17 +272,22 @@ public class Simulator implements Cloneable
 
     private ArrayList<Point2D> fullAvailableLocations = new ArrayList<>();
 
-    public Point2D getFullAvailability(ArrayList<Point2D> currentLocations, ArrayList<Point2D> availableLocations ) {
+    public Point2D getFullAvailability(ArrayList<Point2D> currentLocations, ArrayList<Point2D> availableLocations)
+    {
 
-        if (!fullAvailableLocations.isEmpty()) {
+        if (!fullAvailableLocations.isEmpty())
+        {
             fullAvailableLocations.remove(0);
         }
 
-        for (Point2D location : availableLocations){
+        for (Point2D location : availableLocations)
+        {
 
-            for (Point2D currentLocation : currentLocations) {
+            for (Point2D currentLocation : currentLocations)
+            {
 
-                if (currentLocation.distance(location) > 16 && !fullAvailableLocations.contains(location)) {
+                if (currentLocation.distance(location) > 16 && !fullAvailableLocations.contains(location))
+                {
 
                     fullAvailableLocations.add(location);
 
@@ -287,7 +311,6 @@ public class Simulator implements Cloneable
     {
         return timeManager.getSpeedFactor();
     }
-
 
 
     public void setSpeedfactor(int speedFactor)
@@ -333,14 +356,17 @@ public class Simulator implements Cloneable
         }
         timeNPCManagerMap.put(timeManager.getTime(), newNpcManager);
 
-//        System.out.println("npcs saved");
+        //        System.out.println("npcs saved");
 
     }
 
-    public NPC getNPCAtPosition(double x, double y) {
-        for (NPC npc : this.npcOnScreen) {
+    public NPC getNPCAtPosition(double x, double y)
+    {
+        for (NPC npc : this.npcOnScreen)
+        {
             Rectangle2D hitbox = npc.getHitbox();
-            if (hitbox.contains(x, y)) {
+            if (hitbox.contains(x, y))
+            {
                 return npc;
             }
         }
@@ -348,7 +374,8 @@ public class Simulator implements Cloneable
     }
 
 
-    public void mouseClicked(double x, double y) {
+    public void mouseClicked(double x, double y)
+    {
         NPCFollower npcFollower = camera.getNpcFollower();
         NPC npc = getNPCAtPosition(x, y);
         npcFollower.setNpc(npc);
@@ -370,8 +397,10 @@ public class Simulator implements Cloneable
         this.camera = camera;
     }
 
-    public void disaster(){
-        if (disaster) {
+    public void disaster()
+    {
+        if (disaster)
+        {
 
             airAlarm.start();
             disaster = false;

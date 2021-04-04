@@ -2,6 +2,7 @@ package Simulator.LocationSystem;
 
 
 import Simulator.NPC.NPC;
+
 import java.util.ArrayList;
 
 public class LocationManager
@@ -11,7 +12,6 @@ public class LocationManager
     private AuditoriumBehavior auditorium;
 
 
-
     public LocationManager()
     {
         locations = new LocationDatabase();
@@ -19,7 +19,8 @@ public class LocationManager
         auditorium = locations.AudioriumData();
     }
 
-    public boolean scriptedStartedStudentLesson(NPC student){
+    public boolean scriptedStartedStudentLesson(NPC student)
+    {
 
         if (student.isAtDestination())
         {
@@ -36,7 +37,8 @@ public class LocationManager
             }
 
             //checks if standing at a auditorium
-            if (student.getCurrentLocation().distance(auditorium.getEntry()) < 20){
+            if (student.getCurrentLocation().distance(auditorium.getEntry()) < 20)
+            {
                 student.setCollisionEnabler(false);
                 auditorium.ScriptedStart(student);
                 return true;
@@ -46,7 +48,8 @@ public class LocationManager
         return false;
     }
 
-    public boolean scriptedStartedTeacherLesson(NPC teacher){
+    public boolean scriptedStartedTeacherLesson(NPC teacher)
+    {
 
         if (teacher.isAtDestination())
         {
@@ -62,7 +65,8 @@ public class LocationManager
             }
 
             //checks if standing at a auditorium
-            if (teacher.getCurrentLocation().distance(auditorium.getEntry()) < 20){
+            if (teacher.getCurrentLocation().distance(auditorium.getEntry()) < 20)
+            {
                 teacher.setCollisionEnabler(false);
                 auditorium.ScriptedStart(teacher);
                 return true;
@@ -72,7 +76,8 @@ public class LocationManager
         return false;
     }
 
-    public void scriptedEndLesson(NPC student){
+    public void scriptedEndLesson(NPC student)
+    {
         //removes the student when leaving from classroom
         for (int i = 0; i < classRoomBehaviors.size(); i++)
         {

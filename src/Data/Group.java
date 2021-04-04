@@ -5,9 +5,8 @@ import java.util.ArrayList;
 
 /**
  * Auteurs: Leon
- *
+ * <p>
  * Deze code zorgt ervoor dat een klas aangemaakt kan worden en de nodige functies heeft die later nodig zijn
- *
  */
 
 public class Group implements Serializable

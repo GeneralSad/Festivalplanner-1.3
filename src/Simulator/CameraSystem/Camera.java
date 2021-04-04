@@ -42,12 +42,14 @@ public class Camera
         return npcFollower;
     }
 
-    public void addToPosition(double x, double y) {
+    public void addToPosition(double x, double y)
+    {
         this.x += x;
         this.y += y;
     }
 
-    public double getRelativeWidth() {
+    public double getRelativeWidth()
+    {
         return totalWidth - x;
     }
 

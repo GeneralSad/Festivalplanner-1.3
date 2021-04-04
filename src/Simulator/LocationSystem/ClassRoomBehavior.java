@@ -35,7 +35,9 @@ public class ClassRoomBehavior
                 student.resetDestination();
                 student.getCurrentPathfinding().setDestination((int) selectedSeat.getSeat().getX(), (int) selectedSeat.getSeat().getY());
                 handeld.add(student);
-            } catch (IllegalArgumentException e) {
+            }
+            catch (IllegalArgumentException e)
+            {
             }
         }
     }
@@ -50,20 +52,25 @@ public class ClassRoomBehavior
     public Seat claimEmptySeat(NPC student) throws IllegalArgumentException
     {
         Seat seat = getFurthestSeat(student.getCurrentLocation());
-        if (seat != null) {
+        if (seat != null)
+        {
             seat.setStudent(student);
             return seat;
         }
         throw new IllegalArgumentException("Not enough seats! Total seats is: " + seats.size());
     }
 
-    public Seat getFurthestSeat(Point2D from) {
+    public Seat getFurthestSeat(Point2D from)
+    {
         Seat furthest = null;
         double furthestDistanceSoFar = 0;
-        for (Seat s : seats) {
-            if (s.isEmpty() && s != teacherSeat) {
+        for (Seat s : seats)
+        {
+            if (s.isEmpty() && s != teacherSeat)
+            {
                 double distance = from.distance(s.getSeat());
-                if (distance > furthestDistanceSoFar) {
+                if (distance > furthestDistanceSoFar)
+                {
                     furthestDistanceSoFar = distance;
                     furthest = s;
                 }
@@ -91,7 +98,8 @@ public class ClassRoomBehavior
         return entry;
     }
 
-    public int getOfSett() {
+    public int getOfSett()
+    {
         return ofSett;
     }
 }

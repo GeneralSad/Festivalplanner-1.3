@@ -10,9 +10,8 @@ import javafx.stage.Stage;
 
 /**
  * Auteurs: Leon
- *
+ * <p>
  * Deze code zorgt ervoor dat een popupwindow aangemaakt kan worden en laten zien kan worden met een bepaalde tekst
- *
  */
 
 public class ErrorWindow
@@ -26,7 +25,8 @@ public class ErrorWindow
 
     }
 
-    public void ErrorStage(String message) {
+    public void ErrorStage(String message)
+    {
         Stage stage = new Stage();
         stage.setTitle(this.stageName);
 
@@ -35,7 +35,8 @@ public class ErrorWindow
         Label label = new Label(message);
         Button button = new Button("Ok");
 
-        button.setOnAction(event -> {
+        button.setOnAction(event ->
+        {
 
             stage.close();
 
