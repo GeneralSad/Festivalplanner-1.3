@@ -137,7 +137,7 @@ public class NPC
             }
 
             if (collisionEnabler) {
-                npcCollisionUpdate(npcs, deltaTime);
+//                npcCollisionUpdate(npcs, deltaTime);
             }
 
             // Destination check
@@ -364,12 +364,11 @@ public class NPC
      * Only draw the hitbox if the debug parameter is true
      *
      * @param fxGraphics2D
-     * @param debug
      */
-    public void draw(FXGraphics2D fxGraphics2D, boolean debug)
+    public void draw(FXGraphics2D fxGraphics2D)
     {
         //draws the sprite
-        this.appearance.draw(fxGraphics2D, this.atDestination, this.x, this.y, this.person.getName());
+        this.appearance.draw(fxGraphics2D, this.atDestination, this.x, this.y - this.height, this.person.getName());
     }
 
     /**
