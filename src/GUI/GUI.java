@@ -211,23 +211,20 @@ public class GUI extends Application {
         });
 
         Button reloadSim = new Button("Simulatie Herladen");
-        reloadSchedule.setOnAction(event -> {
-            Schedule loaded = DataStorage.loadSchedule(filePath);
-            if (loaded != null) {
-                System.out.println("Setting new schedule");
+        reloadSim.setOnAction(event -> {
+            if (this.schedule != null) {
+                System.out.println("Setting new Simulation");
 
+
+                //setting settings for new simulation!
                 canvas = new Canvas(1920, 1048);
-
-
-
                 Camera camera = this.simulator.getCamera();
-
                 this.simulator = new Simulator(this.schedule);
-
                 canvas = new Canvas(1920, 1048);
-
                 simulator.setCamera(camera);
                 fxGraphics2D.setTransform(new AffineTransform());
+
+
 
             } else {
                 System.out.println("Loaded was null");
