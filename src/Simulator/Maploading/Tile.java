@@ -17,6 +17,7 @@ public class Tile
     private int column;
     private long gid;
     double rotation;
+    private int walkedOnCounter;
 
     public Tile(BufferedImage tileImage, int x, int y, int row, int column, long gid, double rotation)
     {
@@ -58,5 +59,14 @@ public class Tile
     public int getColumn()
     {
         return column;
+    }
+
+    public void incrementWalkedOnCounter() {
+        this.walkedOnCounter++;
+    }
+
+    public int getWalkedOnCounter()
+    {
+        return walkedOnCounter;
     }
 }

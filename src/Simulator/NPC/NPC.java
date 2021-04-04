@@ -2,6 +2,7 @@ package Simulator.NPC;
 
 import Data.ClassroomEntryPoint;
 import Data.Person;
+import Simulator.Maploading.Tile;
 import Simulator.Maploading.TiledLayer;
 import Simulator.Pathfinding.Direction;
 import Simulator.Pathfinding.Pathfinding;
@@ -434,6 +435,11 @@ public class NPC
             }
             else if (newTile == currentPathfinding.getDestinationTile())
             {
+                // walked on a new tile, so increment the counter for that tile
+                Tile tile = Simulator.getTiledmap().getWalkableLayer().getTile(newTile.getRow(), newTile.getColumn());
+                if (tile != null) {
+                    tile.incrementWalkedOnCounter();
+                }
                 // if within the destination tile move towards the exact destination
                 Point2D exactDestination = currentPathfinding.getExactDestination();
                 onTargetTile = true;
@@ -441,6 +447,13 @@ public class NPC
             }
             else
             {
+                // walked on a new tile, so increment the counter for that tile
+                Tile tile = Simulator.getTiledmap().getWalkableLayer().getTile(newTile.getRow(), newTile.getColumn());
+                if (tile != null) {
+                    tile.incrementWalkedOnCounter();
+                }
+
+
                 this.currentTile = newTile;
                 // if within a new tile, get new directions to the next tile
                 Direction tileDirection = this.currentTile.getDirection();

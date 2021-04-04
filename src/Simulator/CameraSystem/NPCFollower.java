@@ -1,6 +1,6 @@
-package Simulator.NPC;
+package Simulator.CameraSystem;
 
-import Simulator.Camera;
+import Simulator.NPC.NPC;
 import org.jfree.fx.FXGraphics2D;
 
 import java.awt.*;

@@ -1,6 +1,8 @@
 package Simulator;
 
 import Data.*;
+import Simulator.CameraSystem.Camera;
+import Simulator.CameraSystem.TileFollower;
 import Simulator.Controller.StudentController;
 import Simulator.Controller.TeacherController;
 import Simulator.LocationSystem.LocationDatabase;
@@ -8,8 +10,9 @@ import Simulator.LocationSystem.LocationManager;
 import Simulator.Maploading.Tile;
 import Simulator.Maploading.TiledMap;
 import Simulator.NPC.NPC;
-import Simulator.NPC.NPCFollower;
+import Simulator.CameraSystem.NPCFollower;
 import Simulator.NPC.NPCManager;
+import Simulator.Pathfinding.PathfindingTile;
 import Simulator.Time.NormalTime;
 import Simulator.Time.TimeManager;
 import org.jfree.fx.FXGraphics2D;
@@ -221,6 +224,9 @@ public class Simulator implements Cloneable
         if (camera.getNpcFollower().isFollowing()) {
             camera.getNpcFollower().draw(fxGraphics2D);
         }
+        if (camera.getTileFollower().isFollowingATile()) {
+            camera.getTileFollower().draw(fxGraphics2D);
+        }
     }
 
     public void generateComponents() {
@@ -345,15 +351,13 @@ public class Simulator implements Cloneable
     public void mouseClicked(double x, double y) {
         NPCFollower npcFollower = camera.getNpcFollower();
         NPC npc = getNPCAtPosition(x, y);
-//        System.out.println("Clicking on: " + (x) + " " + (y));
-        if (npc != null) {
-            npcFollower.setNpc(npc);
-            npcFollower.setFollowing(true);
-//            System.out.println("Following an npc");
-        } else {
-            npcFollower.setNpc(null);
-            npcFollower.setFollowing(false);
-        }
+        npcFollower.setNpc(npc);
+        npcFollower.setFollowing(npc != null);
+
+        TileFollower tileFollower = camera.getTileFollower();
+        Tile tile = getTiledmap().getWalkableLayer().getTile(new Point2D.Double(x, y));
+        tileFollower.setTile(tile);
+        tileFollower.setFollowingATile(tile != null);
     }
 
     public Camera getCamera()
